@@ -150,49 +150,50 @@ class MySceneGraph {
     if ((index = nodeNames.indexOf("textures")) == -1)
     return "tag <textures> missing";
     else {
-    if (index != TEXTURES_INDEX)
-    this.onXMLMinorError("tag <textures> out of order");
+      if (index != TEXTURES_INDEX)
+      this.onXMLMinorError("tag <textures> out of order");
 
-    //Parse textures block
-    if ((error = this.parseTextures(nodes[index])) != null)
+      //Parse textures block
+      if ((error = this.parseTextures(nodes[index])) != null)
+      return error;
+    }
+
+
+    // <materials>
+    if ((index = nodeNames.indexOf("materials")) == -1)
+    return "tag <materials> missing";
+    else {
+      if (index != MATERIALS_INDEX)
+      this.onXMLMinorError("tag <materials> out of order");
+
+      //Parse textures block
+      if ((error = this.parseMaterials(nodes[index])) != null)
+      return error;
+    }
+
+    // <transformations>
+    if ((index = nodeNames.indexOf("transformations")) == -1)
+    return "tag <transformations> missing";
+    else {
+    if (index != TRANSFORMATIONS_INDEX)
+    this.onXMLMinorError("tag <transformations> out of order");
+
+    //Parse transformations block
+    if ((error = this.parseTransformations(nodes[index])) != null)
     return error;
   }
   /*
 
-  // <materials>
-  if ((index = nodeNames.indexOf("materials")) == -1)
-  return "tag <materials> missing";
+  // <primitives>
+  if ((index = nodeNames.indexOf("primitives")) == -1)
+  return "tag <primitives> missing";
   else {
-  if (index != MATERIALS_INDEX)
-  this.onXMLMinorError("tag <materials> out of order");
+  if (index != PRIMITIVES_INDEX)
+  this.onXMLMinorError("tag <primitives> out of order");
 
-  //Parse textures block
-  if ((error = this.parseMaterials(nodes[index])) != null)
+  //Parse primitives block
+  if ((error = this.parsePrimitives(nodes[index])) != null)
   return error;
-}
-
-// <transformations>
-if ((index = nodeNames.indexOf("transformations")) == -1)
-return "tag <transformations> missing";
-else {
-if (index != TRANSFORMATIONS_INDEX)
-this.onXMLMinorError("tag <transformations> out of order");
-
-//Parse transformations block
-if ((error = this.parseTransformations(nodes[index])) != null)
-return error;
-}
-
-// <primitives>
-if ((index = nodeNames.indexOf("primitives")) == -1)
-return "tag <primitives> missing";
-else {
-if (index != PRIMITIVES_INDEX)
-this.onXMLMinorError("tag <primitives> out of order");
-
-//Parse primitives block
-if ((error = this.parsePrimitives(nodes[index])) != null)
-return error;
 }
 
 // <components>
@@ -392,9 +393,9 @@ parseAmbient(ambientNode) {
     var a = this.reader.getFloat(children[ambientIndex], 'a');
 
     if(isNaN(r) || isNaN(g) || isNaN(b) || isNaN(a))
-      return "rgba should be numeric values on the ambient node from the ambient block";
+    return "rgba should be numeric values on the ambient node from the ambient block";
     else if(r > 1 || r < 0 || g > 1 || g < 0 || b > 1 || b < 0 || a > 1 || a < 0)
-      return "rgba should be numeric values between 0 and 1 on the ambient node from the ambient block";
+    return "rgba should be numeric values between 0 and 1 on the ambient node from the ambient block";
 
     if(r == null || g == null || b == null || a == null){
       this.ambient = [0,0,0,1]
@@ -452,7 +453,7 @@ parseLights(lightsNode) {
 
   // Checks if there are lights defined
   if(lightsNode.getElementsByTagName('omni').length == 0 && lightsNode.getElementsByTagName('spot').length == 0)
-    return "no lights are defined on the lights block";
+  return "no lights are defined on the lights block";
 
   // Creates variables
   this.omni = [];
@@ -468,7 +469,7 @@ parseLights(lightsNode) {
       var omniNodeNames = [];
 
       for (var j = 0; j < omniChildren.length; j++)
-        omniNodeNames.push(omniChildren[j].nodeName);
+      omniNodeNames.push(omniChildren[j].nodeName);
 
       this.omni[omniCounter] = [];
 
@@ -476,7 +477,7 @@ parseLights(lightsNode) {
       var omniEnabled = this.reader.getFloat(children[i], 'enabled');
 
       if(omniEnabled != 0 && omniEnabled != 1)
-        return "enabled on the omni node from the lights block should be either 0 or 1";
+      return "enabled on the omni node from the lights block should be either 0 or 1";
 
       if(omniEnabled == null || omniID == null){
         omniID = "omni" + omniCounter;
@@ -509,37 +510,37 @@ parseLights(lightsNode) {
           this.onXMLMinorError("unable to parse omni location; assuming (0,0,0,1)");
         }
         else
-          this.omni[omniCounter].location = [x,y,z,w]
+        this.omni[omniCounter].location = [x,y,z,w]
       }
       else {
         this.omni[omniCounter].location = [0,0,0,1]
         this.onXMLMinorError("omni location is not defined; assuming (0,0,0,1)");
       }
 
-        // Ambient
-        if(ambientIndex != -1){
-          var r = this.reader.getFloat(omniChildren[ambientIndex], 'r');
-          var g = this.reader.getFloat(omniChildren[ambientIndex], 'g');
-          var b = this.reader.getFloat(omniChildren[ambientIndex], 'b');
-          var a = this.reader.getFloat(omniChildren[ambientIndex], 'a');
+      // Ambient
+      if(ambientIndex != -1){
+        var r = this.reader.getFloat(omniChildren[ambientIndex], 'r');
+        var g = this.reader.getFloat(omniChildren[ambientIndex], 'g');
+        var b = this.reader.getFloat(omniChildren[ambientIndex], 'b');
+        var a = this.reader.getFloat(omniChildren[ambientIndex], 'a');
 
-          if(isNaN(r) || isNaN(g) || isNaN(b) || isNaN(a))
-          return "ambient should be numeric values on the omni node from the lights block";
-          else if(r > 1 || r < 0 || g > 1 || g < 0 || b > 1 || b < 0 || a > 1 || a < 0)
-          return "rgba should be numeric values between 0 and 1 on the ambient node from the omni block";
+        if(isNaN(r) || isNaN(g) || isNaN(b) || isNaN(a))
+        return "ambient should be numeric values on the omni node from the lights block";
+        else if(r > 1 || r < 0 || g > 1 || g < 0 || b > 1 || b < 0 || a > 1 || a < 0)
+        return "rgba should be numeric values between 0 and 1 on the ambient node from the omni block";
 
 
-          if(r == null || g == null || b == null || a == null){
-            this.omni[omniCounter].ambient = [0,0,0,1]
-            this.onXMLMinorError("unable to parse omni ambient; assuming (0,0,0,1)");
-          }
-          else
-            this.omni[omniCounter].ambient = [r,g,b,a]
-        }
-        else {
+        if(r == null || g == null || b == null || a == null){
           this.omni[omniCounter].ambient = [0,0,0,1]
-          this.onXMLMinorError("omni ambient is not defined; assuming (0,0,0,1)");
+          this.onXMLMinorError("unable to parse omni ambient; assuming (0,0,0,1)");
         }
+        else
+        this.omni[omniCounter].ambient = [r,g,b,a]
+      }
+      else {
+        this.omni[omniCounter].ambient = [0,0,0,1]
+        this.onXMLMinorError("omni ambient is not defined; assuming (0,0,0,1)");
+      }
 
       // Diffuse
       if(ambientIndex != -1){
@@ -558,7 +559,7 @@ parseLights(lightsNode) {
           this.onXMLMinorError("unable to parse omni diffuse; assuming (0,0,0,1)");
         }
         else
-          this.omni[omniCounter].diffuse = [r,g,b,a]
+        this.omni[omniCounter].diffuse = [r,g,b,a]
       }
       else {
         this.omni[omniCounter].diffuse = [0,0,0,1]
@@ -582,7 +583,7 @@ parseLights(lightsNode) {
           this.onXMLMinorError("unable to parse omni specular; assuming (0,0,0,1)");
         }
         else
-          this.omni[omniCounter].specular = [r,g,b,a]
+        this.omni[omniCounter].specular = [r,g,b,a]
       }
       else {
         this.omni[omniCounter].specular = [0,0,0,1]
@@ -597,7 +598,7 @@ parseLights(lightsNode) {
       var spotNodeNames = [];
 
       for (var j = 0; j < spotChildren.length; j++)
-        spotNodeNames.push(spotChildren[j].nodeName);
+      spotNodeNames.push(spotChildren[j].nodeName);
 
       this.spot[spotCounter] = [];
 
@@ -607,7 +608,7 @@ parseLights(lightsNode) {
       var spotExponent = this.reader.getFloat(children[i], 'exponent');
 
       if(spotEnabled != 0 && spotEnabled != 1)
-        return "enabled on the spot node from the lights block should be either 0 or 1";
+      return "enabled on the spot node from the lights block should be either 0 or 1";
 
       if(spotEnabled == null || spotID == null || spotAngle == null || spotExponent == null){
         spotID = "spot" + omniCounter;
@@ -645,7 +646,7 @@ parseLights(lightsNode) {
           this.onXMLMinorError("unable to parse spot location; assuming (0,0,0,1)");
         }
         else
-          this.spot[spotCounter].location = [x,y,z,w]
+        this.spot[spotCounter].location = [x,y,z,w]
       }
       else {
         this.spot[spotCounter].location = [0,0,0,1]
@@ -666,7 +667,7 @@ parseLights(lightsNode) {
           this.onXMLMinorError("unable to parse spot location; assuming (0,0,0)");
         }
         else
-          this.spot[spotCounter].target = [x,y,z]
+        this.spot[spotCounter].target = [x,y,z]
       }
       else {
         this.spot[spotCounter].target = [0,0,0]
@@ -691,7 +692,7 @@ parseLights(lightsNode) {
           this.onXMLMinorError("unable to parse spot ambient; assuming (0,0,0,1)");
         }
         else
-          this.spot[spotCounter].ambient = [r,g,b,a]
+        this.spot[spotCounter].ambient = [r,g,b,a]
       }
       else {
         this.spot[spotCounter].ambient = [0,0,0,1]
@@ -716,7 +717,7 @@ parseLights(lightsNode) {
           this.onXMLMinorError("unable to parse spot diffuse; assuming (0,0,0,1)");
         }
         else
-          this.spot[spotCounter].diffuse = [r,g,b,a]
+        this.spot[spotCounter].diffuse = [r,g,b,a]
       }
       else {
         this.spot[spotCounter].diffuse = [0,0,0,1]
@@ -741,7 +742,7 @@ parseLights(lightsNode) {
           this.onXMLMinorError("unable to parse spot specular; assuming (0,0,0,1)");
         }
         else
-          this.spot[spotCounter].specular = [r,g,b,a]
+        this.spot[spotCounter].specular = [r,g,b,a]
       }
       else {
         this.spot[spotCounter].specular = [0,0,0,1]
@@ -771,7 +772,7 @@ parseTextures(texturesNode) {
 
   // Checks if there are textures defined
   if(texturesNode.getElementsByTagName('texture').length == 0)
-    return "no textures are defined on the textures block";
+  return "no textures are defined on the textures block";
 
   // Creates variables
   var textureCounter = 0;
@@ -780,10 +781,19 @@ parseTextures(texturesNode) {
 
     this.textures[textureCounter] = [];
 
-    this.textures[textureCounter].id = this.reader.getString(children[i], 'id');
-    this.textures[textureCounter].file = this.reader.getString(children[i], 'file');
+    var id = this.reader.getString(children[i], 'id');
+    var file = this.reader.getString(children[i], 'file');
 
-    textureCounter++;s
+    // Verifies if the id is unique
+    for(var j = 0; j < this.textures.length; j++){
+      if(id == this.textures[j].id)
+      return "there can't be two textures with the same id";
+    }
+
+    this.textures[textureCounter].id = id;
+    this.textures[textureCounter].file = file;
+
+    textureCounter++;
   }
 
   this.log("Parsed textures");
@@ -794,6 +804,152 @@ parseTextures(texturesNode) {
 * Parses the <materials> block.
 */
 parseMaterials(materialsNode) {
+  var children = materialsNode.children;
+
+  var nodeNames = [];
+
+  for (var i = 0; i < children.length; i++)
+  nodeNames.push(children[i].nodeName);
+
+  // Checks if there are materials defined
+  if(materialsNode.getElementsByTagName('material').length == 0)
+  return "no materials are defined on the materials block";
+
+  // Creates variables
+  this.materials = [];
+  var materialCounter = 0;
+
+  for (var i = 0; i < children.length; i++){
+    var materialsChildren = children[i].children;
+
+    var materialsNodeNames = [];
+
+    for (var j = 0; j < materialsChildren.length; j++)
+      materialsNodeNames.push(materialsChildren[j].nodeName);
+
+    this.materials[materialCounter] = [];
+
+    var id = this.reader.getString(children[i], 'id');
+    var shininess = this.reader.getFloat(children[i], 'shininess');
+
+    // Verifies if the id is unique
+    for(var j = 0; j < this.materials.length; j++){
+      if(id == this.materials[j].id)
+      return "there can't be two materials with the same id";
+    }
+
+    this.materials[materialCounter].id = id;
+    this.materials[materialCounter].shininess = shininess;
+
+    // Gets indice of emission, ambient, diffuse and specular
+    var emissionIndex = materialsNodeNames.indexOf("emission");
+    var ambientIndex = materialsNodeNames.indexOf("ambient");
+    var diffuseIndex = materialsNodeNames.indexOf("diffuse");
+    var specularIndex = materialsNodeNames.indexOf("specular");
+
+    // Emission
+    if(emissionIndex != -1){
+      var r = this.reader.getFloat(materialsChildren[emissionIndex], 'r');
+      var g = this.reader.getFloat(materialsChildren[emissionIndex], 'g');
+      var b = this.reader.getFloat(materialsChildren[emissionIndex], 'b');
+      var a = this.reader.getFloat(materialsChildren[emissionIndex], 'a');
+
+      if(isNaN(r) || isNaN(g) || isNaN(b) || isNaN(a))
+      return "emission should be numeric values on the omni node from the material block";
+      else if(r > 1 || r < 0 || g > 1 || g < 0 || b > 1 || b < 0 || a > 1 || a < 0)
+      return "rgba should be numeric values between 0 and 1 on the emission node from the material block";
+
+
+      if(r == null || g == null || b == null || a == null){
+        this.materials[materialCounter].emission = [0,0,0,1]
+        this.onXMLMinorError("unable to parse material emission; assuming (0,0,0,1)");
+      }
+      else
+      this.materials[materialCounter].emission = [r,g,b,a]
+    }
+    else {
+      this.materials[materialCounter].emission = [0,0,0,1]
+      this.onXMLMinorError("material emission is not defined; assuming (0,0,0,1)");
+    }
+
+    // Ambient
+    if(ambientIndex != -1){
+      var r = this.reader.getFloat(materialsChildren[ambientIndex], 'r');
+      var g = this.reader.getFloat(materialsChildren[ambientIndex], 'g');
+      var b = this.reader.getFloat(materialsChildren[ambientIndex], 'b');
+      var a = this.reader.getFloat(materialsChildren[ambientIndex], 'a');
+
+      if(isNaN(r) || isNaN(g) || isNaN(b) || isNaN(a))
+      return "ambient should be numeric values on the omni node from the material block";
+      else if(r > 1 || r < 0 || g > 1 || g < 0 || b > 1 || b < 0 || a > 1 || a < 0)
+      return "rgba should be numeric values between 0 and 1 on the ambient node from the material block";
+
+
+      if(r == null || g == null || b == null || a == null){
+        this.materials[materialCounter].ambient = [0,0,0,1]
+        this.onXMLMinorError("unable to parse material ambient; assuming (0,0,0,1)");
+      }
+      else
+      this.materials[materialCounter].ambient = [r,g,b,a]
+    }
+    else {
+      this.materials[materialCounter].ambient = [0,0,0,1]
+      this.onXMLMinorError("material ambient is not defined; assuming (0,0,0,1)");
+    }
+
+    // Diffuse
+    if(diffuseIndex != -1){
+      var r = this.reader.getFloat(materialsChildren[diffuseIndex], 'r');
+      var g = this.reader.getFloat(materialsChildren[diffuseIndex], 'g');
+      var b = this.reader.getFloat(materialsChildren[diffuseIndex], 'b');
+      var a = this.reader.getFloat(materialsChildren[diffuseIndex], 'a');
+
+      if(isNaN(r) || isNaN(g) || isNaN(b) || isNaN(a))
+      return "diffuse should be numeric values on the omni node from the material block";
+      else if(r > 1 || r < 0 || g > 1 || g < 0 || b > 1 || b < 0 || a > 1 || a < 0)
+      return "rgba should be numeric values between 0 and 1 on the diffuse node from the material block";
+
+
+      if(r == null || g == null || b == null || a == null){
+        this.materials[materialCounter].diffuse = [0,0,0,1]
+        this.onXMLMinorError("unable to parse material diffuse; assuming (0,0,0,1)");
+      }
+      else
+      this.materials[materialCounter].diffuse = [r,g,b,a]
+    }
+    else {
+      this.materials[materialCounter].diffuse = [0,0,0,1]
+      this.onXMLMinorError("material diffuse is not defined; assuming (0,0,0,1)");
+    }
+
+    // Specular
+    if(specularIndex != -1){
+      var r = this.reader.getFloat(materialsChildren[specularIndex], 'r');
+      var g = this.reader.getFloat(materialsChildren[specularIndex], 'g');
+      var b = this.reader.getFloat(materialsChildren[specularIndex], 'b');
+      var a = this.reader.getFloat(materialsChildren[specularIndex], 'a');
+
+      if(isNaN(r) || isNaN(g) || isNaN(b) || isNaN(a))
+      return "specular should be numeric values on the omni node from the material block";
+      else if(r > 1 || r < 0 || g > 1 || g < 0 || b > 1 || b < 0 || a > 1 || a < 0)
+      return "rgba should be numeric values between 0 and 1 on the specular node from the material block";
+
+
+      if(r == null || g == null || b == null || a == null){
+        this.materials[materialCounter].specular = [0,0,0,1]
+        this.onXMLMinorError("unable to parse material specular; assuming (0,0,0,1)");
+      }
+      else
+      this.materials[materialCounter].specular = [r,g,b,a]
+    }
+    else {
+      this.materials[materialCounter].specular = [0,0,0,1]
+      this.onXMLMinorError("material specular is not defined; assuming (0,0,0,1)");
+    }
+
+    materialCounter++;
+  }
+
   this.log("Parsed materials");
   return null;
 }
@@ -802,6 +958,123 @@ parseMaterials(materialsNode) {
 * Parses the <transformations> block.
 */
 parseTransformations(transformationsNode) {
+  var children = transformationsNode.children;
+
+  var nodeNames = [];
+
+  for (var i = 0; i < children.length; i++)
+  nodeNames.push(children[i].nodeName);
+
+  // Checks if there are transformations defined
+  if(transformationsNode.getElementsByTagName('transformation').length == 0)
+  return "no transformations are defined on the transformations block";
+
+  // Creates variables
+  this.transformations = [];
+  var transformationCounter = 0;
+
+  for (var i = 0; i < children.length; i++){
+    var transformationsChildren = children[i].children;
+
+    var transformationsNodeNames = [];
+
+    for (var j = 0; j < transformationsChildren.length; j++)
+      transformationsNodeNames.push(transformationsChildren[j].nodeName);
+
+    this.transformations[transformationCounter] = [];
+
+    var id = this.reader.getString(children[i], 'id');
+
+    // Verifies if the id is unique
+    for(var j = 0; j < this.transformations.length; j++){
+      if(id == this.transformations[j].id)
+      return "there can't be two transformations with the same id";
+    }
+
+    this.transformations[transformationCounter].id = id;
+
+    // Gets indice of translate, rotate and scale
+    var translateIndex = transformationsNodeNames.indexOf("translate");
+    var rotateIndex = transformationsNodeNames.indexOf("rotate");
+    var scaleIndex = transformationsNodeNames.indexOf("scale");
+
+    // Translate
+    if(translateIndex != -1){
+      var x = this.reader.getFloat(transformationsChildren[translateIndex], 'x');
+      var y = this.reader.getFloat(transformationsChildren[translateIndex], 'y');
+      var z = this.reader.getFloat(transformationsChildren[translateIndex], 'z');
+
+      if(isNaN(x) || isNaN(y) || isNaN(z))
+      return "translation should be numeric values on the transformation node from the transformations block";
+
+
+      if(x == null || y == null || z == null){
+        this.transformations[transformationCounter].translate = [0,0,0]
+        this.onXMLMinorError("unable to parse transformation translation; assuming (0,0,0)");
+      }
+      else
+      this.transformations[transformationCounter].translate = [x,y,z]
+    }
+    else {
+      this.transformations[transformationCounter].translate = [0,0,0]
+      this.onXMLMinorError("transformation translation is not defined; assuming (0,0,0)");
+    }
+
+    // Rotation
+    if(rotateIndex != -1){
+      var axis = this.reader.getString(transformationsChildren[rotateIndex], 'axis');
+      var angle = this.reader.getFloat(transformationsChildren[rotateIndex], 'angle');
+
+      if(isNaN(angle))
+      return "rotation angle should be numeric values on the transformation node from the transformations block";
+      else if(angle < 0 || angle > 360)
+      return "rotation angle should be a numeric value between 0 and 360"
+      else if(axis != "x" && axis != "y" && axis != "z")
+      return "rotation axis should be x, y or z";
+
+      if(axis == null || angle == null){
+        this.transformations[transformationCounter].axis = "x";
+        this.transformations[transformationCounter].angle = 0;
+        this.onXMLMinorError("unable to parse transformation rotation; assuming axis=x and angle=0");
+      }
+      else{
+        this.transformations[transformationCounter].axis = axis;
+        this.transformations[transformationCounter].angle = angle;
+      }
+    }
+    else {
+      this.transformations[transformationCounter].axis = "x";
+      this.transformations[transformationCounter].angle = 0;
+      this.onXMLMinorError("transformation rotation is not defined; assuming axis=x and angle=0");
+    }
+
+    // Scaling
+    if(scaleIndex != -1){
+      var x = this.reader.getFloat(transformationsChildren[scaleIndex], 'x');
+      var y = this.reader.getFloat(transformationsChildren[scaleIndex], 'y');
+      var z = this.reader.getFloat(transformationsChildren[scaleIndex], 'z');
+
+      if(isNaN(x) || isNaN(y) || isNaN(z))
+      return "scaling should be numeric values on the transformation node from the transformations block";
+
+
+      if(x == null || y == null || z == null){
+        this.transformations[transformationCounter].scale = [0,0,0]
+        this.onXMLMinorError("unable to parse transformation scaling; assuming (0,0,0)");
+      }
+      else
+      this.transformations[transformationCounter].scale = [x,y,z]
+    }
+    else {
+      this.transformations[transformationCounter].scale = [0,0,0]
+      this.onXMLMinorError("transformation scaling is not defined; assuming (0,0,0)");
+    }
+
+    transformationCounter++;
+  }
+
+  //ALTERAR ISTO TUDO!!! PODE TER VARIAS SCALING/ROTATION/TRANSLATION
+
   this.log("Parsed transformations");
   return null;
 }
