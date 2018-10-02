@@ -76,6 +76,7 @@
         <!-- deve existir pelo menos uma transformacao -->
         <translate x="1" y="0" z="2" />
         <rotate axis="y" angle="90" />
+        <rotate axis="x" angle="90" />
         <scale x="1" y="1" z="2" />
       </transformation>
     </transformations>

@@ -175,37 +175,37 @@ class MySceneGraph {
     if ((index = nodeNames.indexOf("transformations")) == -1)
     return "tag <transformations> missing";
     else {
-    if (index != TRANSFORMATIONS_INDEX)
-    this.onXMLMinorError("tag <transformations> out of order");
+      if (index != TRANSFORMATIONS_INDEX)
+      this.onXMLMinorError("tag <transformations> out of order");
 
-    //Parse transformations block
-    if ((error = this.parseTransformations(nodes[index])) != null)
+      //Parse transformations block
+      if ((error = this.parseTransformations(nodes[index])) != null)
+      return error;
+    }
+    /*
+
+    // <primitives>
+    if ((index = nodeNames.indexOf("primitives")) == -1)
+    return "tag <primitives> missing";
+    else {
+    if (index != PRIMITIVES_INDEX)
+    this.onXMLMinorError("tag <primitives> out of order");
+
+    //Parse primitives block
+    if ((error = this.parsePrimitives(nodes[index])) != null)
     return error;
   }
-  /*
 
-  // <primitives>
-  if ((index = nodeNames.indexOf("primitives")) == -1)
-  return "tag <primitives> missing";
+  // <components>
+  if ((index = nodeNames.indexOf("components")) == -1)
+  return "tag <components> missing";
   else {
-  if (index != PRIMITIVES_INDEX)
-  this.onXMLMinorError("tag <primitives> out of order");
+  if (index != COMPONENTS_INDEX)
+  this.onXMLMinorError("tag <components> out of order");
 
-  //Parse primitives block
-  if ((error = this.parsePrimitives(nodes[index])) != null)
+  //Parse components block
+  if ((error = this.parseComponents(nodes[index])) != null)
   return error;
-}
-
-// <components>
-if ((index = nodeNames.indexOf("components")) == -1)
-return "tag <components> missing";
-else {
-if (index != COMPONENTS_INDEX)
-this.onXMLMinorError("tag <components> out of order");
-
-//Parse components block
-if ((error = this.parseComponents(nodes[index])) != null)
-return error;
 }
 
 */
@@ -825,7 +825,7 @@ parseMaterials(materialsNode) {
     var materialsNodeNames = [];
 
     for (var j = 0; j < materialsChildren.length; j++)
-      materialsNodeNames.push(materialsChildren[j].nodeName);
+    materialsNodeNames.push(materialsChildren[j].nodeName);
 
     this.materials[materialCounter] = [];
 
@@ -974,12 +974,16 @@ parseTransformations(transformationsNode) {
   var transformationCounter = 0;
 
   for (var i = 0; i < children.length; i++){
-    var transformationsChildren = children[i].children;
+    var transformationChildren = children[i].children;
 
-    var transformationsNodeNames = [];
+    var transformationNodeNames = [];
 
-    for (var j = 0; j < transformationsChildren.length; j++)
-      transformationsNodeNames.push(transformationsChildren[j].nodeName);
+    for (var j = 0; j < transformationChildren.length; j++)
+    transformationNodeNames.push(transformationChildren[j].nodeName);
+
+    // Checks if there are given instructions
+    if(transformationChildren.length == 0)
+    return "no transformation instructions are defined on the transformations block";
 
     this.transformations[transformationCounter] = [];
 
@@ -993,87 +997,96 @@ parseTransformations(transformationsNode) {
 
     this.transformations[transformationCounter].id = id;
 
-    // Gets indice of translate, rotate and scale
-    var translateIndex = transformationsNodeNames.indexOf("translate");
-    var rotateIndex = transformationsNodeNames.indexOf("rotate");
-    var scaleIndex = transformationsNodeNames.indexOf("scale");
+    // Create variables
+    this.transformations[transformationCounter].translate = [];
+    this.transformations[transformationCounter].rotate = [];
+    this.transformations[transformationCounter].scale = [];
+    var translateCounter = 0;
+    var rotateCounter = 0;
+    var scaleCounter = 0;
 
-    // Translate
-    if(translateIndex != -1){
-      var x = this.reader.getFloat(transformationsChildren[translateIndex], 'x');
-      var y = this.reader.getFloat(transformationsChildren[translateIndex], 'y');
-      var z = this.reader.getFloat(transformationsChildren[translateIndex], 'z');
+    for (var j = 0; j < transformationChildren.length; j++){
 
-      if(isNaN(x) || isNaN(y) || isNaN(z))
-      return "translation should be numeric values on the transformation node from the transformations block";
+      if(transformationChildren[j].nodeName == "translate"){
+        this.transformations[transformationCounter].translate[translateCounter] = [];
+
+        var x = this.reader.getFloat(transformationChildren[j], 'x');
+        var y = this.reader.getFloat(transformationChildren[j], 'y');
+        var z = this.reader.getFloat(transformationChildren[j], 'z');
 
 
-      if(x == null || y == null || z == null){
-        this.transformations[transformationCounter].translate = [0,0,0]
-        this.onXMLMinorError("unable to parse transformation translation; assuming (0,0,0)");
+        if(isNaN(x) || isNaN(y) || isNaN(z))
+        return "translation should be numeric values on the transformation node from the transformations block";
+
+        if(x == null || y == null || z == null){
+          this.transformations[transformationCounter].translate[translateCounter].x = 0;
+          this.transformations[transformationCounter].translate[translateCounter].y = 0;
+          this.transformations[transformationCounter].translate[translateCounter].z = 0;
+          this.onXMLMinorError("unable to parse transformation translation; assuming (0,0,0)");
+        }
+        else{
+          this.transformations[transformationCounter].translate[translateCounter].x = x;
+          this.transformations[transformationCounter].translate[translateCounter].y = y;
+          this.transformations[transformationCounter].translate[translateCounter].z = z;
+        }
+
+        translateCounter++;
       }
-      else
-      this.transformations[transformationCounter].translate = [x,y,z]
-    }
-    else {
-      this.transformations[transformationCounter].translate = [0,0,0]
-      this.onXMLMinorError("transformation translation is not defined; assuming (0,0,0)");
-    }
+      else if(transformationChildren[j].nodeName == "rotate"){
+        this.transformations[transformationCounter].rotate[rotateCounter] = [];
 
-    // Rotation
-    if(rotateIndex != -1){
-      var axis = this.reader.getString(transformationsChildren[rotateIndex], 'axis');
-      var angle = this.reader.getFloat(transformationsChildren[rotateIndex], 'angle');
+        var axis = this.reader.getString(transformationChildren[j], 'axis');
+        var angle = this.reader.getFloat(transformationChildren[j], 'angle');
 
-      if(isNaN(angle))
-      return "rotation angle should be numeric values on the transformation node from the transformations block";
-      else if(angle < 0 || angle > 360)
-      return "rotation angle should be a numeric value between 0 and 360"
-      else if(axis != "x" && axis != "y" && axis != "z")
-      return "rotation axis should be x, y or z";
+        if(isNaN(angle))
+        return "rotation angle should be numeric values on the transformation node from the transformations block";
+        else if(angle < 0 || angle > 360)
+        return "rotation angle should be a numeric value between 0 and 360"
+        else if(axis != "x" && axis != "y" && axis != "z")
+        return "rotation axis should be x, y or z";
 
-      if(axis == null || angle == null){
-        this.transformations[transformationCounter].axis = "x";
-        this.transformations[transformationCounter].angle = 0;
-        this.onXMLMinorError("unable to parse transformation rotation; assuming axis=x and angle=0");
+        if(axis == null || angle == null){
+          this.transformations[transformationCounter].rotate[rotateCounter].axis = "x";
+          this.transformations[transformationCounter].rotate[rotateCounter].angle = 0;
+          this.onXMLMinorError("unable to parse transformation rotation; assuming axis=x and angle=0");
+        }
+        else{
+          this.transformations[transformationCounter].rotate[rotateCounter].axis = axis;
+          this.transformations[transformationCounter].rotate[rotateCounter].angle = angle;
+        }
+
+        rotateCounter++;
       }
-      else{
-        this.transformations[transformationCounter].axis = axis;
-        this.transformations[transformationCounter].angle = angle;
+      else if(transformationChildren[j].nodeName == "scale"){
+        this.transformations[transformationCounter].scale[scaleCounter] = [];
+
+        var x = this.reader.getFloat(transformationChildren[j], 'x');
+        var y = this.reader.getFloat(transformationChildren[j], 'y');
+        var z = this.reader.getFloat(transformationChildren[j], 'z');
+
+        if(isNaN(x) || isNaN(y) || isNaN(z))
+          return "scaling should be numeric values on the transformation node from the transformations block";
+
+
+        if(x == null || y == null || z == null){
+          this.transformations[transformationCounter].scale[scaleCounter].x = 0;
+          this.transformations[transformationCounter].scale[scaleCounter].y = 0;
+          this.transformations[transformationCounter].scale[scaleCounter].z = 0;
+          this.onXMLMinorError("unable to parse transformation scaling; assuming (0,0,0)");
+        }
+        else{
+          this.transformations[transformationCounter].scale[scaleCounter].x = x;
+          this.transformations[transformationCounter].scale[scaleCounter].y = y;
+          this.transformations[transformationCounter].scale[scaleCounter].z = z;
+        }
+
+        scaleCounter++;
       }
-    }
-    else {
-      this.transformations[transformationCounter].axis = "x";
-      this.transformations[transformationCounter].angle = 0;
-      this.onXMLMinorError("transformation rotation is not defined; assuming axis=x and angle=0");
-    }
 
-    // Scaling
-    if(scaleIndex != -1){
-      var x = this.reader.getFloat(transformationsChildren[scaleIndex], 'x');
-      var y = this.reader.getFloat(transformationsChildren[scaleIndex], 'y');
-      var z = this.reader.getFloat(transformationsChildren[scaleIndex], 'z');
-
-      if(isNaN(x) || isNaN(y) || isNaN(z))
-      return "scaling should be numeric values on the transformation node from the transformations block";
-
-
-      if(x == null || y == null || z == null){
-        this.transformations[transformationCounter].scale = [0,0,0]
-        this.onXMLMinorError("unable to parse transformation scaling; assuming (0,0,0)");
-      }
-      else
-      this.transformations[transformationCounter].scale = [x,y,z]
-    }
-    else {
-      this.transformations[transformationCounter].scale = [0,0,0]
-      this.onXMLMinorError("transformation scaling is not defined; assuming (0,0,0)");
     }
 
     transformationCounter++;
   }
-
-  //ALTERAR ISTO TUDO!!! PODE TER VARIAS SCALING/ROTATION/TRANSLATION
 
   this.log("Parsed transformations");
   return null;
