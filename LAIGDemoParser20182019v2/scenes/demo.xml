@@ -71,7 +71,7 @@
       <!-- Deve existir um ou mais blocos "transformation" -->
       <!-- Os identificadores "id" nao podem ser repetidos -->
       <!-- Os angulos sao expressos em graus -->
-      <transformation id="ss">
+      <transformation id="transformation1">
         <!-- instrucoes a usar sem limite nem ordem -->
         <!-- deve existir pelo menos uma transformacao -->
         <translate x="1" y="0" z="2" />
@@ -85,37 +85,44 @@
       <!-- Uma "primitive" e' uma primitiva e pode ser usada em nos folha -->
       <!-- Deve existir um ou mais blocos "primitive" -->
       <!-- Os identificadores "id" nao podem ser repetidos -->
-      <primitive id="ss">
+      <primitive id="rectangle1">
         <!-- apenas pode existir UMA das seguintes tags: -->
         <!--    rectangle, triangle, cylinder, sphere, torus -->
         <!-- os parametros devem ser interpretados, genericamente, -->
         <!-- como em WebGL; o cilindro deve adicionalmente ter tampas -->
-        <rectangle x1="ff" y1="ff" x2="ff" y2="ff" />
-        <triangle   x1="ff" y1="ff" z1="ff"
-          x2="ff" y2="ff" z2="ff"
-          x3="ff" y3="ff" z3="ff" />
-          <cylinder base="ff" top="ff" height="ff" slices="ii" stacks="ii" />
-          <sphere radius="ff" slices="ii" stacks="ii" />
-          <torus inner="ff" outer="ff" slices="ii" loops="ii" />
+        <rectangle x1="0" y1="0" x2="5" y2="5" />
         </primitive >
+
+        <primitive id="triangle1">
+          <triangle   x1="0" y1="1" z1="2" x2="3" y2="4" z2="5" x3="6" y3="7" z3="8" />
+        </primitive>
+        <primitive id="cylinder1">
+          <cylinder base="0" top="10" height="5" slices="3" stacks="3" />
+        </primitive>
+        <primitive id="sphere1">
+          <sphere radius="1" slices="5" stacks="10" />
+        </primitive>
+        <primitive id="torus1">
+          <torus inner="0.2" outer="3" slices="2" loops="5" />
+        </primitive>
       </primitives >
 
       <components>
-        <component id="ss">
+        <component id="component1">
           <!-- Uma "component" e' um objeto composto e pode ser -->
           <!--      usada em nos intermédios -->
           <!-- bloco "transformation" e' obrigatorio -->
           <transformation>
             <!-- deve conter uma referencia a uma das "transformation" -->
             <!-- declaradas anteriormente -->
-            <transformationref id="ss" />
+            <!-- <transformationref id="transformation1" /> -->
             <!-- ou, ALTERNATIVAMENTE, transformacoes explicitas, -->
             <!-- usando zero ou mais das instrucoes seguintes, sem -->
             <!--        limite nem ordem -->
             <!-- ex: bloco transformation pode ficar sem conteudo -->
-            <translate x="ff" y="ff" z="ff" />
-            <rotate axis="cc" angle="ff" />
-            <scale x="ff" y="ff" z="ff" />
+            <translate x="1" y="2" z="3" />
+            <rotate axis="x" angle="90" />
+            <scale x="2" y="1" z="2" />
           </transformation>
           <!-- declaracao obrigatoria de pelo menos um material; -->
           <!-- o material id="inherit", mantem (herda) material do "pai" -->
@@ -124,7 +131,7 @@
           <!-- o material muda para o proximo material da lista; do -->
           <!-- ultimo material da lista volta ao primeiro -->
           <materials>
-            <material id="ss" />
+            <material id="material1" />
           </materials>
           <!-- declaracao obrigatoria de texture -->
           <!-- id="inherit" mantem (herda) a textura do objecto "pai" -->
@@ -141,14 +148,14 @@
           <!-- do tipo escalamento violem esta regra.        -->
           <!-- Nao e' necessario aplicar fatores de escala em  -->
           <!-- quadricas (esfera, cilindro...) -->
-          <texture id="ss" length_s="ff" length_t="ff" />
+          <texture id="bank" length_s="0.5" length_t="0.1" />
           <!-- bloco "children" obrigatorio num "component" -->
           <children>
             <!-- deve existir uma ou mais tags "componentref" e/ou -->
             <!-- "primitiveref", identificando outros -->
             <!-- componentes ou primitivas -->
-            <componentref id="ss" />
-            <primitiveref id="ss" />
+            <componentref id="component1" />
+            <primitiveref id="rectangle1" />
           </children>
         </component>
       </components>

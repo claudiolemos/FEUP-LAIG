@@ -182,192 +182,192 @@ class MySceneGraph {
       if ((error = this.parseTransformations(nodes[index])) != null)
       return error;
     }
-    /*
 
     // <primitives>
     if ((index = nodeNames.indexOf("primitives")) == -1)
     return "tag <primitives> missing";
     else {
-    if (index != PRIMITIVES_INDEX)
-    this.onXMLMinorError("tag <primitives> out of order");
+      if (index != PRIMITIVES_INDEX)
+      this.onXMLMinorError("tag <primitives> out of order");
 
-    //Parse primitives block
-    if ((error = this.parsePrimitives(nodes[index])) != null)
-    return error;
+      //Parse primitives block
+      if ((error = this.parsePrimitives(nodes[index])) != null)
+      return error;
+    }
+
+
+    // <components>
+    if ((index = nodeNames.indexOf("components")) == -1)
+    return "tag <components> missing";
+    else {
+      if (index != COMPONENTS_INDEX)
+      this.onXMLMinorError("tag <components> out of order");
+
+      //Parse components block
+      if ((error = this.parseComponents(nodes[index])) != null)
+      return error;
+    }
+
+
   }
 
-  // <components>
-  if ((index = nodeNames.indexOf("components")) == -1)
-  return "tag <components> missing";
-  else {
-  if (index != COMPONENTS_INDEX)
-  this.onXMLMinorError("tag <components> out of order");
+  /**
+  * Parses the <scene> block.
+  */
+  parseScene(sceneNode) {
 
-  //Parse components block
-  if ((error = this.parseComponents(nodes[index])) != null)
-  return error;
-}
+    // Reads root and axis_length
+    this.root = this.reader.getString(sceneNode, 'root');
+    this.axis_length = this.reader.getFloat(sceneNode, 'axis_length');
 
-*/
-}
+    // Validates root
+    if(this.root == null){
+      this.root = 'root';
+      this.onXMLMinorError("unable to parse root component of the scene block; assuming root = 'root'");
+    }
 
-/**
-* Parses the <scene> block.
-*/
-parseScene(sceneNode) {
+    // Validates axis_length
+    if(this.axis_length != null){
+      if(isNaN(this.axis_length))
+      return "axis_length is a non numeric value on the scene block";
+      else if(this.axis_length <= 0)
+      return "axis_length should be a value greater than 0";
+    }
+    else {
+      this.axis_length = 1;
+      this.onXMLMinorError("unable to parse axis_length component of the scene block; assuming axis_length = 1");
+    }
 
-  // Reads root and axis_length
-  this.root = this.reader.getString(sceneNode, 'root');
-  this.axis_length = this.reader.getFloat(sceneNode, 'axis_length');
+    this.log("Parsed scene");
 
-  // Validates root
-  if(this.root == null){
-    this.root = 'root';
-    this.onXMLMinorError("unable to parse root component of the scene block; assuming root = 'root'");
+    return null;
   }
 
-  // Validates axis_length
-  if(this.axis_length != null){
-    if(isNaN(this.axis_length))
-    return "axis_length is a non numeric value on the scene block";
-    else if(this.axis_length <= 0)
-    return "axis_length should be a value greater than 0";
+  /**
+  * Parses the <views> block.
+  */
+  parseViews(viewsNode) {
+
+    var children = viewsNode.children;
+
+    var nodeNames = [];
+
+    for (var i = 0; i < children.length; i++)
+    nodeNames.push(children[i].nodeName);
+
+    // Reads default view (perspective or ortho)
+    this.default = this.reader.getString(viewsNode, 'default');
+
+    /*TODO NAO CONSIGO POR A COMPARACAO A FUNCIONAR
+    if (this.default === 'perspective' || this.default === 'ortho') {
+    this.default = '';
+    this.onXMLMinorError("failed to parse default view; should be perspective or ortho");
   }
-  else {
-    this.axis_length = 1;
-    this.onXMLMinorError("unable to parse axis_length component of the scene block; assuming axis_length = 1");
-  }
+  */
 
-  this.log("Parsed scene");
+  // Checks if there's at least one of the views
+  if (nodeNames.indexOf("perspective") == -1 && vnodeNames.indexOf("ortho")  == -1)
+  return "at least one view must be defined (perspective or ortho)";
 
-  return null;
-}
-
-/**
-* Parses the <views> block.
-*/
-parseViews(viewsNode) {
-
-  var children = viewsNode.children;
-
-  var nodeNames = [];
-
-  for (var i = 0; i < children.length; i++)
-  nodeNames.push(children[i].nodeName);
-
-  // Reads default view (perspective or ortho)
-  this.default = this.reader.getString(viewsNode, 'default');
-
-  /*TODO NAO CONSIGO POR A COMPARACAO A FUNCIONAR
-  if (this.default === 'perspective' || this.default === 'ortho') {
-  this.default = '';
-  this.onXMLMinorError("failed to parse default view; should be perspective or ortho");
-}
-*/
-
-// Checks if there's at least one of the views
-if (nodeNames.indexOf("perspective") == -1 && vnodeNames.indexOf("ortho")  == -1)
-return "at least one view must be defined (perspective or ortho)";
-
-// Gets indice of each view
-var perspectiveIndex = nodeNames.indexOf("perspective");
-var orthoIndex = nodeNames.indexOf("ortho");
-
-// Creates variables
-this.perspective = [];
-this.ortho = []
-
-// Reads perspective node
-if(perspectiveIndex != -1){
-  var perspectiveChildren = children[perspectiveIndex].children;
-
-  var perspectiveNodeNames = [];
-
-  for (var i = 0; i < perspectiveChildren.length; i++)
-  perspectiveNodeNames.push(perspectiveChildren[i].nodeName);
-
-  // Reads id, near far and angle
-  this.perspectiveID = this.reader.getString(children[perspectiveIndex], 'id');
-  this.perspectiveNear = this.reader.getFloat(children[perspectiveIndex], 'near');
-  this.perspectiveFar = this.reader.getFloat(children[perspectiveIndex], 'far');
-  this.perspectiveAngle = this.reader.getFloat(children[perspectiveIndex], 'angle');
-
-  // Validates perspective variables
-  if(this.perspectiveID == null || this.perspectiveNear == null || this.perspectiveFar == null || this.perspectiveAngle == null){
-    this.perspectiveVars = ['',0,0,0];
-    this.onXMLMinorError("failed to parse perspective variables; assuming zero");
-  }
-  else
-  this.perspectiveVars = [this.perspectiveID, this.perspectiveNear, this.perspectiveFar, this.perspectiveAngle];
+  // Gets indice of each view
+  var perspectiveIndex = nodeNames.indexOf("perspective");
+  var orthoIndex = nodeNames.indexOf("ortho");
 
   // Creates variables
-  this.from = [];
-  this.to = []
+  this.perspective = [];
+  this.ortho = []
 
-  // Gets indices of each element (from & too)
-  var fromIndex = perspectiveNodeNames.indexOf('from');
-  var toIndex = perspectiveNodeNames.indexOf('to');
+  // Reads perspective node
+  if(perspectiveIndex != -1){
+    var perspectiveChildren = children[perspectiveIndex].children;
 
-  if (fromIndex == -1)
-  this.onXMLMinorError("from is undefined");
-  else {
-    var fx = this.reader.getFloat(perspectiveChildren[fromIndex], 'x');
-    var fy = this.reader.getFloat(perspectiveChildren[fromIndex], 'y');
-    var fz = this.reader.getFloat(perspectiveChildren[fromIndex], 'z');
+    var perspectiveNodeNames = [];
 
-    if(fx == null || fy == null || fz == null){
-      fx = 0;
-      fy = 0;
-      fz = 0;
-      this.onXMLMinorError("failed to parse from coordinates of perspective view; assuming zero");
+    for (var i = 0; i < perspectiveChildren.length; i++)
+    perspectiveNodeNames.push(perspectiveChildren[i].nodeName);
+
+    // Reads id, near far and angle
+    this.perspectiveID = this.reader.getString(children[perspectiveIndex], 'id');
+    this.perspectiveNear = this.reader.getFloat(children[perspectiveIndex], 'near');
+    this.perspectiveFar = this.reader.getFloat(children[perspectiveIndex], 'far');
+    this.perspectiveAngle = this.reader.getFloat(children[perspectiveIndex], 'angle');
+
+    // Validates perspective variables
+    if(this.perspectiveID == null || this.perspectiveNear == null || this.perspectiveFar == null || this.perspectiveAngle == null){
+      this.perspectiveVars = ['',0,0,0];
+      this.onXMLMinorError("failed to parse perspective variables; assuming zero");
+    }
+    else
+    this.perspectiveVars = [this.perspectiveID, this.perspectiveNear, this.perspectiveFar, this.perspectiveAngle];
+
+    // Creates variables
+    this.from = [];
+    this.to = []
+
+    // Gets indices of each element (from & too)
+    var fromIndex = perspectiveNodeNames.indexOf('from');
+    var toIndex = perspectiveNodeNames.indexOf('to');
+
+    if (fromIndex == -1)
+    this.onXMLMinorError("from is undefined");
+    else {
+      var fx = this.reader.getFloat(perspectiveChildren[fromIndex], 'x');
+      var fy = this.reader.getFloat(perspectiveChildren[fromIndex], 'y');
+      var fz = this.reader.getFloat(perspectiveChildren[fromIndex], 'z');
+
+      if(fx == null || fy == null || fz == null){
+        fx = 0;
+        fy = 0;
+        fz = 0;
+        this.onXMLMinorError("failed to parse from coordinates of perspective view; assuming zero");
+      }
+
+      this.from = [fx, fy, fz];
     }
 
-    this.from = [fx, fy, fz];
-  }
+    if (toIndex == -1)
+    this.onXMLMinorError("to is undefined");
+    else {
+      var tx = this.reader.getFloat(perspectiveChildren[toIndex], 'x');
+      var ty = this.reader.getFloat(perspectiveChildren[toIndex], 'y');
+      var tz = this.reader.getFloat(perspectiveChildren[toIndex], 'z');
 
-  if (toIndex == -1)
-  this.onXMLMinorError("to is undefined");
-  else {
-    var tx = this.reader.getFloat(perspectiveChildren[toIndex], 'x');
-    var ty = this.reader.getFloat(perspectiveChildren[toIndex], 'y');
-    var tz = this.reader.getFloat(perspectiveChildren[toIndex], 'z');
+      if(tx == null || ty == null || tz == null){
+        tx = 0;
+        ty = 0;
+        tz = 0;
+        this.onXMLMinorError("failed to parse from coordinates of perspective view; assuming zero");
+      }
 
-    if(tx == null || ty == null || tz == null){
-      tx = 0;
-      ty = 0;
-      tz = 0;
-      this.onXMLMinorError("failed to parse from coordinates of perspective view; assuming zero");
+      this.to = [tx, ty, tz];
     }
 
-    this.to = [tx, ty, tz];
+    this.perspective = [this.from, this.to];
   }
 
-  this.perspective = [this.from, this.to];
-}
+  //Reads ortho node
+  if(orthoIndex != -1){
 
-//Reads ortho node
-if(orthoIndex != -1){
+    //Reads id, near, far, left, right and top
+    this.orthoID = this.reader.getString(children[orthoIndex], 'id');
+    this.orthoNear = this.reader.getFloat(children[orthoIndex], 'near');
+    this.orthoFar = this.reader.getFloat(children[orthoIndex], 'far');
+    this.orthoLeft = this.reader.getFloat(children[orthoIndex], 'left');
+    this.orthoRight = this.reader.getFloat(children[orthoIndex], 'right');
+    this.orthoTop = this.reader.getFloat(children[orthoIndex], 'top');
+    this.orthoBottom = this.reader.getFloat(children[orthoIndex], 'bottom');
 
-  //Reads id, near, far, left, right and top
-  this.orthoID = this.reader.getString(children[orthoIndex], 'id');
-  this.orthoNear = this.reader.getFloat(children[orthoIndex], 'near');
-  this.orthoFar = this.reader.getFloat(children[orthoIndex], 'far');
-  this.orthoLeft = this.reader.getFloat(children[orthoIndex], 'left');
-  this.orthoRight = this.reader.getFloat(children[orthoIndex], 'right');
-  this.orthoTop = this.reader.getFloat(children[orthoIndex], 'top');
-  this.orthoBottom = this.reader.getFloat(children[orthoIndex], 'bottom');
-
-  if(this.orthoID == null || this.orthoNear == null || this.orthoFar == null || this.orthoLeft == null || this.orthoRight == null || this.orthoTop == null){
-    this.orthoVars = ['',0,0,0,0,0,0];
-    this.onXMLMinorError("failed to parse ortho variables; assuming zero");
+    if(this.orthoID == null || this.orthoNear == null || this.orthoFar == null || this.orthoLeft == null || this.orthoRight == null || this.orthoTop == null){
+      this.orthoVars = ['',0,0,0,0,0,0];
+      this.onXMLMinorError("failed to parse ortho variables; assuming zero");
+    }
+    else
+    this.orthoVars = [this.orthoID, this.orthoNear, this.orthoFar, this.orthoLeft, this.orthoRight, this.orthoTop];
   }
-  else
-  this.orthoVars = [this.orthoID, this.orthoNear, this.orthoFar, this.orthoLeft, this.orthoRight, this.orthoTop];
-}
 
-this.log("Parsed views");
+  this.log("Parsed views");
 
-return null;
+  return null;
 }
 
 /**
@@ -1065,7 +1065,7 @@ parseTransformations(transformationsNode) {
         var z = this.reader.getFloat(transformationChildren[j], 'z');
 
         if(isNaN(x) || isNaN(y) || isNaN(z))
-          return "scaling should be numeric values on the transformation node from the transformations block";
+        return "scaling should be numeric values on the transformation node from the transformations block";
 
 
         if(x == null || y == null || z == null){
@@ -1096,6 +1096,170 @@ parseTransformations(transformationsNode) {
 * Parses the <primitives> block.
 */
 parsePrimitives(primitivesNode) {
+  var children = primitivesNode.children;
+
+  var nodeNames = [];
+
+  for (var i = 0; i < children.length; i++)
+  nodeNames.push(children[i].nodeName);
+
+  // Checks if there are primitives defined
+  if(primitivesNode.getElementsByTagName('primitive').length == 0)
+  return "no primitives are defined on the primitives block";
+
+  // Creates variables
+  this.primitives = [];
+  var primitiveCounter = 0;
+
+  for (var i = 0; i < children.length; i++){
+    var primitiveChildren = children[i].children;
+
+    var primitiveNodeNames = [];
+
+    for (var j = 0; j < primitiveChildren.length; j++)
+    primitiveNodeNames.push(primitiveChildren[j].nodeName);
+
+    // Checks if there's at most one of rectangle, triangle, cylinder, sphere and torus
+    if(children[i].children.length > 1)
+    return "no more than one rectangle, triangle, cylinder, sphere or torus should be defined on the primitives block";
+    else if(children[i].children.length == 0)
+    return "no primitive (rectangle, triangle, sphere, cylinder, torus) is defined on one of the primitives";
+
+
+    this.primitives[primitiveCounter] = [];
+
+    var id = this.reader.getString(children[i], 'id');
+
+    // Verifies if the id is unique
+    for(var j = 0; j < this.primitives.length; j++){
+      if(id == this.primitives[j].id)
+      return "there can't be two primitives with the same id";
+    }
+
+    this.primitives[primitiveCounter].id = id;
+
+    if(children[i].children[0].nodeName == "rectangle"){
+      this.primitives[primitiveCounter].rectangle = [];
+      this.primitives[primitiveCounter].type = "rectangle";
+
+      var x1 = this.reader.getFloat(children[i].children[0], 'x1');
+      var x2 = this.reader.getFloat(children[i].children[0], 'x2');
+      var y1 = this.reader.getFloat(children[i].children[0], 'y1');
+      var y2 = this.reader.getFloat(children[i].children[0], 'y2');
+
+      if(isNaN(x1) || isNaN(x2) || isNaN(y1) || isNaN(y2))
+      return "x1, x2, y1, y2 should be numeric values on the rectangle primitive"
+      else if(x1 == null || x2 == null || y1 == null || y2 == null)
+      return "not able to parse x1, x2, y1, y2 values on the rectangle primitive"
+
+      this.primitives[primitiveCounter].x1 = x1;
+      this.primitives[primitiveCounter].x2 = x2;
+      this.primitives[primitiveCounter].y1 = y1;
+      this.primitives[primitiveCounter].y2 = y2;
+    }
+    else if(children[i].children[0].nodeName == "triangle"){
+      this.primitives[primitiveCounter].triangle = [];
+      this.primitives[primitiveCounter].type = "triangle";
+
+      var x1 = this.reader.getFloat(children[i].children[0], 'x1');
+      var x2 = this.reader.getFloat(children[i].children[0], 'x2');
+      var x3 = this.reader.getFloat(children[i].children[0], 'x3');
+      var y1 = this.reader.getFloat(children[i].children[0], 'y1');
+      var y2 = this.reader.getFloat(children[i].children[0], 'y2');
+      var y3 = this.reader.getFloat(children[i].children[0], 'y3');
+      var z1 = this.reader.getFloat(children[i].children[0], 'z1');
+      var z2 = this.reader.getFloat(children[i].children[0], 'z2');
+      var z3 = this.reader.getFloat(children[i].children[0], 'z3');
+
+      if(isNaN(x1) || isNaN(x2) || isNaN(x3) || isNaN(y1) || isNaN(y2) || isNaN(y3) || isNaN(z1) || isNaN(z2) || isNaN(z3))
+      return "x1, x2, x3, y1, y2, y3, z1, z2, z3 should be numeric values on the triangle primitive"
+      else if(x1 == null || x2 == null ||  x3 == null || y1 == null || y2 == null || y3 == null ||  z1 == null || z2 == null || z3 == null)
+      return "not able to parse x1, x2, x3, y1, y2, y3, z1, z2, z3 values on the triangle primitive"
+
+      this.primitives[primitiveCounter].x1 = x1;
+      this.primitives[primitiveCounter].x2 = x2;
+      this.primitives[primitiveCounter].x3 = x3;
+      this.primitives[primitiveCounter].y1 = y1;
+      this.primitives[primitiveCounter].y2 = y2;
+      this.primitives[primitiveCounter].y3 = y3;
+      this.primitives[primitiveCounter].z1 = z1;
+      this.primitives[primitiveCounter].z2 = z2;
+      this.primitives[primitiveCounter].z3 = z3;
+    }
+    else if(children[i].children[0].nodeName == "cylinder"){
+      this.primitives[primitiveCounter].cylinder = [];
+      this.primitives[primitiveCounter].type = "cylinder";
+
+      var base = this.reader.getFloat(children[i].children[0], 'base');
+      var top = this.reader.getFloat(children[i].children[0], 'top');
+      var height = this.reader.getFloat(children[i].children[0], 'height');
+      var slices = this.reader.getInteger(children[i].children[0], 'slices');
+      var stacks = this.reader.getInteger(children[i].children[0], 'stacks');
+
+
+      if(isNaN(base) || isNaN(top) || isNaN(height) || isNaN(slices) || isNaN(stacks))
+      return "base, top, height, slices, stacks should be numeric values on the cylinder primitive"
+      else if(base == null || top == null || height == null || slices == null || stacks == null)
+      return "not able to parse base, top, height, slices, stacks values on the cylinder primitive"
+      else if(slices < 1 || stacks < 1)
+      return "slices and stacks should be an integer value greater or equal to 1 on the cylinder primitive"
+
+      this.primitives[primitiveCounter].base = base;
+      this.primitives[primitiveCounter].height = height;
+      this.primitives[primitiveCounter].top = top;
+      this.primitives[primitiveCounter].stacks = stacks;
+      this.primitives[primitiveCounter].slices = slices;
+    }
+    else if(children[i].children[0].nodeName == "sphere"){
+      this.primitives[primitiveCounter].sphere = [];
+      this.primitives[primitiveCounter].type = "sphere";
+
+      var radius = this.reader.getFloat(children[i].children[0], 'radius');
+      var slices = this.reader.getInteger(children[i].children[0], 'slices');
+      var stacks = this.reader.getInteger(children[i].children[0], 'stacks');
+
+
+      if(isNaN(radius) || isNaN(slices) || isNaN(stacks))
+      return "radius, slices, stacks should be numeric values on the sphere primitive"
+      else if(radius == null || slices == null || stacks == null)
+      return "not able to parse radius, slices, stacks values on the sphere primitive"
+      else if(slices < 1 || stacks < 1)
+      return "slices and stacks should be an integer value greater or equal to 1 on the sphere primitive"
+      else if(radius <= 0)
+      return "radius should be an integer value greater to 0 on the sphere primitive"
+
+      this.primitives[primitiveCounter].radius = radius;
+      this.primitives[primitiveCounter].stacks = stacks;
+      this.primitives[primitiveCounter].slices = slices;
+    }
+    else if(children[i].children[0].nodeName == "torus"){
+      this.primitives[primitiveCounter].sphere = [];
+      this.primitives[primitiveCounter].type = "torus";
+
+      var inner = this.reader.getFloat(children[i].children[0], 'inner');
+      var outer = this.reader.getFloat(children[i].children[0], 'outer');
+      var slices = this.reader.getInteger(children[i].children[0], 'slices');
+      var loops = this.reader.getInteger(children[i].children[0], 'loops');
+
+
+      if(isNaN(inner) || isNaN(outer) || isNaN(slices) || isNaN(loops))
+      return "inner, outer, slices, loops should be numeric values on the torus primitive"
+      else if(inner == null || outer == null || slices == null || loops == null)
+      return "not able to parse inner, outer, slices, loops values on the torus primitive"
+      else if(slices < 1 || stacks < 1)
+      return "slices and loops should be an integer value greater or equal to 1 on the torus primitive"
+      else if(inner < 0 || outer <= 0 || inner == outer)
+      return "inner and outer should be an integer value greater to 0 and can't be the same value on the torus primitive"
+
+      this.primitives[primitiveCounter].inner = inner;
+      this.primitives[primitiveCounter].outer = outer;
+      this.primitives[primitiveCounter].slices = slices;
+      this.primitives[primitiveCounter].loops = loops;
+    }
+
+    primitiveCounter++;
+  }
+
   this.log("Parsed primitives");
   return null;
 }
@@ -1104,6 +1268,272 @@ parsePrimitives(primitivesNode) {
 * Parses the <components> block.
 */
 parseComponents(componentsNode) {
+  var children = componentsNode.children;
+
+  var nodeNames = [];
+
+  for (var i = 0; i < children.length; i++)
+  nodeNames.push(children[i].nodeName);
+
+  // Checks if there are components defined
+  if(componentsNode.getElementsByTagName('component').length == 0)
+  return "no components are defined on the components block";
+
+  // Creates variables
+  this.components = [];
+  var componentCounter = 0;
+
+  for (var i = 0; i < children.length; i++){
+    var componentChildren = children[i].children;
+
+    var componentNodeNames = [];
+
+    for (var j = 0; j < componentChildren.length; j++)
+    componentNodeNames.push(componentChildren[j].nodeName);
+
+    this.components[componentCounter] = [];
+
+    var id = this.reader.getString(children[i], 'id');
+
+    // Verifies if the id is unique
+    for(var j = 0; j < this.components.length; j++){
+      if(id == this.components[j].id)
+      return "there can't be two components with the same id";
+    }
+
+    this.components[componentCounter].id = id;
+
+    // Gets indice of transformation, materials, texture and children
+    var transformationIndex = componentNodeNames.indexOf("transformation");
+    var materialsIndex = componentNodeNames.indexOf("materials");
+    var textureIndex = componentNodeNames.indexOf("texture");
+    var childrenIndex = componentNodeNames.indexOf("children");
+
+    if(transformationIndex != -1){
+      this.components[componentCounter].transformation = [];
+
+      if(componentChildren[transformationIndex].children.length != 0)
+      if(componentChildren[transformationIndex].getElementsByTagName("transformationref").length == 1){ // transformation reference
+        var id = this.reader.getString(componentChildren[transformationIndex].children[0], 'id');
+
+        var idCheck = 0;
+
+        for(var j = 0; j < this.transformations.length; j++)
+        if(id == this.transformations[j].id)
+        idCheck = 1;
+
+        if(idCheck == 1)
+          this.components[componentCounter].transformation.id = id;
+        else if(idCheck == 0)
+          return "transformation ref not found"
+      }
+      else if (componentChildren[transformationIndex].getElementsByTagName("rotate").length > 0 || componentChildren[transformationIndex].getElementsByTagName("translate").length > 0 ||componentChildren[transformationIndex].getElementsByTagName("scale").length > 0){ // explicit transformation
+        var transformationChildren = componentChildren[transformationIndex].children;
+
+        var transformationNodeNames = [];
+
+        for (var j = 0; j < transformationChildren.length; j++)
+        transformationNodeNames.push(transformationChildren[j].nodeName);
+
+        this.components[componentCounter].transformation.instructions = [];
+
+        for(var j = 0; j < transformationChildren.length; j++){
+          this.components[componentCounter].transformation.instructions[j] = [];
+          if(transformationNodeNames[j] == "translate"){
+
+            var x = this.reader.getFloat(transformationChildren[j], 'x');
+            var y = this.reader.getFloat(transformationChildren[j], 'y');
+            var z = this.reader.getFloat(transformationChildren[j], 'z');
+
+
+            if(isNaN(x) || isNaN(y) || isNaN(z))
+            return "translation should be numeric values on the transformation node from the components block";
+
+            this.components[componentCounter].transformation.instructions[j].type = "translate";
+
+            if(x == null || y == null || z == null){
+              this.components[componentCounter].transformation.instructions[j].x = 0;
+              this.components[componentCounter].transformation.instructions[j].y = 0;
+              this.components[componentCounter].transformation.instructions[j].z = 0;
+              this.onXMLMinorError("unable to parse transformation translation; assuming (0,0,0)");
+            }
+            else{
+              this.components[componentCounter].transformation.instructions[j].x = x;
+              this.components[componentCounter].transformation.instructions[j].y = y;
+              this.components[componentCounter].transformation.instructions[j].z = z;
+            }
+          }
+          else if(transformationNodeNames[j] == "rotate"){
+            var axis = this.reader.getString(transformationChildren[j], 'axis');
+            var angle = this.reader.getFloat(transformationChildren[j], 'angle');
+
+            if(isNaN(angle))
+            return "rotation angle should be numeric values on the transformation node from the components block";
+            else if(angle < 0 || angle > 360)
+            return "rotation angle should be a numeric value between 0 and 360"
+            else if(axis != "x" && axis != "y" && axis != "z")
+            return "rotation axis should be x, y or z";
+
+            this.components[componentCounter].transformation.instructions[j].type = "rotate";
+
+            if(axis == null || angle == null){
+              this.components[componentCounter].transformation.instructions[j].axis = "x";
+              this.components[componentCounter].transformation.instructions[j].angle = 0;
+              this.onXMLMinorError("unable to parse transformation rotation; assuming axis=x and angle=0");
+            }
+            else{
+              this.components[componentCounter].transformation.instructions[j].axis = axis;
+              this.components[componentCounter].transformation.instructions[j].angle = angle;
+            }
+          }
+          else if(transformationNodeNames[j] == "scale"){
+            var x = this.reader.getFloat(transformationChildren[j], 'x');
+            var y = this.reader.getFloat(transformationChildren[j], 'y');
+            var z = this.reader.getFloat(transformationChildren[j], 'z');
+
+            if(isNaN(x) || isNaN(y) || isNaN(z))
+            return "scaling should be numeric values on the transformation node from the components block";
+
+            this.components[componentCounter].transformation.instructions[j].type = "scale";
+
+
+            if(x == null || y == null || z == null){
+              this.components[componentCounter].transformation.instructions[j].x = 0;
+              this.components[componentCounter].transformation.instructions[j].y = 0;
+              this.components[componentCounter].transformation.instructions[j].z = 0;
+              this.onXMLMinorError("unable to parse transformation scaling; assuming (0,0,0)");
+            }
+            else{
+              this.components[componentCounter].transformation.instructions[j].x = x;
+              this.components[componentCounter].transformation.instructions[j].y = y;
+              this.components[componentCounter].transformation.instructions[j].z = z;
+            }
+          }
+
+        }
+      }
+      else
+      return "there can't be explicit and reference transformations at the same time on the component block";
+    }
+    else
+    return "there needs to be a transformation block on the component block"
+
+    if(materialsIndex != -1){
+      this.components[componentCounter].materials = [];
+
+      if(componentChildren[materialsIndex].children.length != 0){
+        for(var k = 0; k < componentChildren[materialsIndex].children.length; k++){
+          var id = this.reader.getString(componentChildren[materialsIndex].children[k], 'id');
+
+          var idCheck = 0;
+
+          for(var j = 0; j < this.transformations.length; j++)
+          if(id == this.materials[j].id)
+          idCheck = 1;
+
+          if(idCheck == 1 || id == "inherit"){
+            this.components[componentCounter].materials[k] = [];
+            this.components[componentCounter].materials[k].id = id;
+          }
+          else if(idCheck == 0)
+            return "material ref not found";
+        }
+      }
+      else
+      return "at least on material must be defined on the materials node from the components block"
+    }
+    else
+    return "there needs to be a materials block on the component block"
+
+    if(textureIndex != -1){
+      this.components[componentCounter].texture = [];
+
+      var id = this.reader.getString(componentChildren[textureIndex], 'id');
+      var length_s = this.reader.getFloat(componentChildren[textureIndex], 'length_s');
+      var length_t = this.reader.getFloat(componentChildren[textureIndex], 'length_t');
+
+      if(length_s < 0 || length_t < 0)
+        return "length_s and length_t should be numeric values greater than 0 on the texture node from the components block";
+
+
+      var idCheck = 0;
+
+      for(var j = 0; j < this.textures.length; j++)
+        if(id == this.textures[j].id)
+          idCheck = 1;
+
+      if(idCheck == 1 || id == "inherit" || id == "none"){
+        this.components[componentCounter].texture.id = id
+        this.components[componentCounter].texture.length_s = length_s
+        this.components[componentCounter].texture.length_t = length_t
+      }
+      else if(idCheck == 0)
+        return "texture ref not found";
+    }
+    else
+      return "there needs to be a textures block on the component block"
+
+    if(childrenIndex != -1){
+      if(componentChildren[childrenIndex].getElementsByTagName("componentref").length > 0 || componentChildren[childrenIndex].getElementsByTagName("primitiveref").length > 0){
+        this.components[componentCounter].children = [];
+
+        var childrenChildren = componentChildren[childrenIndex].children;
+
+        var childrenNodeNames = [];
+
+        for (var j = 0; j < childrenChildren.length; j++)
+          childrenNodeNames.push(childrenChildren[j].nodeName);
+
+        for (var j = 0; j < childrenNodeNames.length; j++){
+
+          if(childrenNodeNames[j] == "componentref"){
+            var id = this.reader.getString(childrenChildren[j], 'id');
+
+            /* USAR FLAG PARA QUANDO O ID NAO EXISTE, CONFIRMAR SE EXISTE NO FIM
+            var idCheck = 0;
+
+            for(var j = 0; j < this.textures.length; j++)
+              if(id == this.textures[j].id)
+                idCheck = 1;
+                */
+
+
+            this.components[componentCounter].children[j] = [];
+            this.components[componentCounter].children[j].type = "componentref";
+            this.components[componentCounter].children[j].id = id;
+
+          }
+          else if(childrenNodeNames[j] == "primitiveref"){
+            var id = this.reader.getString(childrenChildren[j], 'id');
+
+            var idCheck = 0;
+
+            for(var k = 0; k < this.primitives.length; k++)
+              if(id == this.primitives[k].id)
+                idCheck = 1;
+
+            if(idCheck == 1){
+            this.components[componentCounter].children[j] = [];
+            this.components[componentCounter].children[j].type = "primitiveref";
+            this.components[componentCounter].children[j].id = id;
+          }
+          else
+            return "primitiveref not found on the components block"
+          }
+          else
+            this.onXMLMinorError("unkknow tag on the components block")
+        }
+      }
+      else
+        return "there should be one or more componentref and/or primitiveref"
+
+    }
+    else
+    return "there needs to be a textures block on the children block"
+
+    componentCounter++;
+  }
+
   this.log("Parsed components");
   return null;
 }
