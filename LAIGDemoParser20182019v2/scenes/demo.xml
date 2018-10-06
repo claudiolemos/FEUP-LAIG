@@ -74,10 +74,7 @@
       <transformation id="transformation1">
         <!-- instrucoes a usar sem limite nem ordem -->
         <!-- deve existir pelo menos uma transformacao -->
-        <translate x="1" y="0" z="2" />
-        <rotate axis="y" angle="90" />
-        <rotate axis="x" angle="90" />
-        <scale x="1" y="1" z="2" />
+        <translate x="1" y="2" z="1" />
       </transformation>
     </transformations>
 
@@ -94,7 +91,7 @@
         </primitive >
 
         <primitive id="triangle1">
-          <triangle   x1="0" y1="1" z1="2" x2="3" y2="4" z2="5" x3="6" y3="7" z3="8" />
+          <triangle x1="0" y1="1" z1="2" x2="3" y2="4" z2="5" x3="6" y3="7" z3="8" />
         </primitive>
         <primitive id="cylinder1">
           <cylinder base="0" top="10" height="5" slices="3" stacks="3" />
@@ -121,8 +118,6 @@
             <!--        limite nem ordem -->
             <!-- ex: bloco transformation pode ficar sem conteudo -->
             <translate x="1" y="2" z="3" />
-            <rotate axis="x" angle="90" />
-            <scale x="2" y="1" z="2" />
           </transformation>
           <!-- declaracao obrigatoria de pelo menos um material; -->
           <!-- o material id="inherit", mantem (herda) material do "pai" -->
