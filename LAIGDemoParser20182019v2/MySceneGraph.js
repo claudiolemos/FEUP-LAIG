@@ -1554,14 +1554,14 @@ class MySceneGraph {
                 //TODO
               }
               else
-              for(var k = 0; k < this.materials.length; k++){
-                if(id === this.materials[k].id){
-                this.components[componentCounter].materials[materialCounter] = this.materials[k];
-                break;
-              }
-                else if(k + 1 == this.transformations.length)
-                return "id '" + id + "' is not a valid material reference on tag <material> with index " + j + " on tag <materials> on the <component> node with index " + i + " from the <components> block";
-              }
+                for(var k = 0; k < this.materials.length; k++){
+                  if(id === this.materials[k].id){
+                  this.components[componentCounter].materials[materialCounter] = this.materials[k];
+                  break;
+                  }
+                  else if(k + 1 == this.materials.length)
+                    return "id '" + id + "' is not a valid material reference on tag <material> with index " + j + " on tag <materials> on the <component> node with index " + i + " from the <components> block";
+                }
             }
             else
             this.onXMLMinorError("tag <" + materialsNodeNames[j] + "> is not valid on tag <material> with index " + j + " on tag <materials> on the <component> node with index " + i + " from the <components> block");
