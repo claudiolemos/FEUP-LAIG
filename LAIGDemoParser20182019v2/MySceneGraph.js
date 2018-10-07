@@ -210,15 +210,15 @@ class MySceneGraph {
 
     // Validates root
     if(root == null)
-      return "unable to parse root component (null) on the <scene> block"
+    return "unable to parse root component (null) on the <scene> block"
 
     // Validates axis_length
     if(axis_length == null)
-      return "unable to parse axis_length component (null) on the <scene> block"
+    return "unable to parse axis_length component (null) on the <scene> block"
     else if(isNaN(axis_length))
-      return "unable to parse axis_length component (NaN) on the <scene> block"
+    return "unable to parse axis_length component (NaN) on the <scene> block"
     else if(axis_length <= 0)
-      return "unable to parse axis_length component (less than or equal to 0) on the <scene> block"
+    return "unable to parse axis_length component (less than or equal to 0) on the <scene> block"
 
     // Sets root and axis length values
     this.root = root;
@@ -248,7 +248,7 @@ class MySceneGraph {
 
     // Validates default
     if(defaultView != 'perspective' && defaultView != 'ortho')
-      return "unable to parse default component on the <views> block; must be 'perspective' or 'ortho'";
+    return "unable to parse default component on the <views> block; must be 'perspective' or 'ortho'";
 
     // Sets default value
     this.views.default = defaultView;
@@ -260,11 +260,11 @@ class MySceneGraph {
 
     // Checks if there's at least one of the views (perspective or ortho)
     if (children.length == 0 || (perspectiveIndex == -1 && orthoIndex == -1))
-      return "at least one view must be defined (either <perspective> or <ortho>) on the <views> block";
+    return "at least one view must be defined (either <perspective> or <ortho>) on the <views> block";
 
     // Checks if there's only one of each view defined
     if(children.length > 2 || (viewsNode.getElementsByTagName('perspective').length != 1 &&  viewsNode.getElementsByTagName('ortho').length != 1))
-      return "only one of each view should be defined (<perspective> and/or <ortho>)";
+    return "only one of each view should be defined (<perspective> and/or <ortho>)";
 
     // Creates variables
     this.perspective = [];
@@ -286,9 +286,9 @@ class MySceneGraph {
 
       // Validates id, near, far, angle
       if(id == null || near == null || far == null || angle == null)
-        return "unable to parse id, near, far, angle components (null) on the <perspective> node from the <views> block";
+      return "unable to parse id, near, far, angle components (null) on the <perspective> node from the <views> block";
       else if(isNaN(near) || isNaN(far) || isNaN(angle))
-        return "unable to parse near, far, angle components (NaN) on the <perspective> node from the <views> block";
+      return "unable to parse near, far, angle components (NaN) on the <perspective> node from the <views> block";
 
       // Sets id, near, far, angle
       this.perspective.id = id;
@@ -313,9 +313,9 @@ class MySceneGraph {
 
         // Validates x, y, z values
         if(x == null || y == null || z == null)
-          return "unable to parse x, y, z components (null) on tag <from> from the <perspective> node from the <views> block"
+        return "unable to parse x, y, z components (null) on tag <from> from the <perspective> node from the <views> block"
         else if(isNaN(x) || isNaN(y) || isNaN(z))
-          return "unable to parse x, y, z components (NaN) on tag <from> from the <perspective> node from the <views> block"
+        return "unable to parse x, y, z components (NaN) on tag <from> from the <perspective> node from the <views> block"
 
         // Sets x, y, z values
         this.perspective.from.x = x;
@@ -323,27 +323,27 @@ class MySceneGraph {
         this.perspective.from.z = z;
       }
       else
-        return "tag <from> is not defined on the <perspective> node from the <views> block"
+      return "tag <from> is not defined on the <perspective> node from the <views> block"
 
-        if(toIndex != -1){
-          // Reads x, y, z values
-          var x = this.reader.getFloat(perspectiveChildren[toIndex], 'x');
-          var y = this.reader.getFloat(perspectiveChildren[toIndex], 'y');
-          var z = this.reader.getFloat(perspectiveChildren[toIndex], 'z');
+      if(toIndex != -1){
+        // Reads x, y, z values
+        var x = this.reader.getFloat(perspectiveChildren[toIndex], 'x');
+        var y = this.reader.getFloat(perspectiveChildren[toIndex], 'y');
+        var z = this.reader.getFloat(perspectiveChildren[toIndex], 'z');
 
-          // Validates x, y, z values
-          if(x == null || y == null || z == null)
-            return "unable to parse x, y, z components (null) on tag <to> from the <perspective> node from the <views> block"
-          else if(isNaN(x) || isNaN(y) || isNaN(z))
-            return "unable to parse x, y, z components (NaN) on tag <to> from the <perspective> node from the <views> block"
+        // Validates x, y, z values
+        if(x == null || y == null || z == null)
+        return "unable to parse x, y, z components (null) on tag <to> from the <perspective> node from the <views> block"
+        else if(isNaN(x) || isNaN(y) || isNaN(z))
+        return "unable to parse x, y, z components (NaN) on tag <to> from the <perspective> node from the <views> block"
 
-          // Sets x, y, z values
-          this.perspective.to.x = x;
-          this.perspective.to.y = y;
-          this.perspective.to.z = z;
-        }
-        else
-          return "tag <to> is not defined on the <perspective> node from the <views> block"
+        // Sets x, y, z values
+        this.perspective.to.x = x;
+        this.perspective.to.y = y;
+        this.perspective.to.z = z;
+      }
+      else
+      return "tag <to> is not defined on the <perspective> node from the <views> block"
     }
 
     //Reads ortho node
@@ -352,7 +352,7 @@ class MySceneGraph {
       var orthoChildren = children[orthoIndex].children;
       var orthoNodeNames = [];
       for (var i = 0; i < orthoChildren.length; i++)
-        orthoNodeNames.push(orthoChildren[i].nodeName);
+      orthoNodeNames.push(orthoChildren[i].nodeName);
 
       // Reads id, near far, left, right, top, bottom
       var id = this.reader.getString(children[orthoIndex], 'id');
@@ -365,9 +365,9 @@ class MySceneGraph {
 
       // Validates id, near far, left, right, top, bottom
       if(id == null || near == null || far == null || left == null || right == null || top == null || bottom == null)
-        return "unable to parse id, near far, left, right, top, bottom components (null) on the <ortho> node from the <views> block";
+      return "unable to parse id, near far, left, right, top, bottom components (null) on the <ortho> node from the <views> block";
       else if(isNaN(near) || isNaN(far) || isNaN(left) || isNaN(right) || isNaN(top) || isNaN(bottom))
-        return "unable to parse near far, left, right, top, bottom components (NaN) on the <ortho> node from the <views> block";
+      return "unable to parse near far, left, right, top, bottom components (NaN) on the <ortho> node from the <views> block";
 
       // Sets id, near far, left, right, top, bottom
       this.ortho.id = id;
@@ -413,11 +413,11 @@ class MySceneGraph {
 
       // Validates r, g, b, a values
       if(r == null || g == null || b == null || a == null)
-        return "unable to parse r, g, b, a components (null) on the <ambient> node from the <ambient> block";
+      return "unable to parse r, g, b, a components (null) on the <ambient> node from the <ambient> block";
       else if(isNaN(r) || isNaN(g) || isNaN(b) || isNaN(a))
-        return "unable to parse r, g, b, a components (NaN) on the <ambient> node from the <ambient> block";
+      return "unable to parse r, g, b, a components (NaN) on the <ambient> node from the <ambient> block";
       else if(r > 1 || r < 0 || g > 1 || g < 0 || b > 1 || b < 0 || a > 1 || a < 0)
-        return "unable to parse r, g, b, a components (out of 0.0-1.0 range) on the <ambient> node from the <ambient> block";
+      return "unable to parse r, g, b, a components (out of 0.0-1.0 range) on the <ambient> node from the <ambient> block";
 
       // Sets r, g, b, a
       this.ambient.r = r;
@@ -426,7 +426,7 @@ class MySceneGraph {
       this.ambient.a = a;
     }
     else
-      return "<ambient> node is not defined on the <ambient> block";
+    return "<ambient> node is not defined on the <ambient> block";
 
     //Reads background node
     if(backgroundIndex != -1){
@@ -438,11 +438,11 @@ class MySceneGraph {
 
       // Validates r, g, b, a values
       if(r == null || g == null || b == null || a == null)
-        return "unable to parse r, g, b, a components (null) on the <background> node from the <ambient> block";
+      return "unable to parse r, g, b, a components (null) on the <background> node from the <ambient> block";
       else if(isNaN(r) || isNaN(g) || isNaN(b) || isNaN(a))
-        return "unable to parse r, g, b, a components (NaN) on the <background> node from the <ambient> block";
+      return "unable to parse r, g, b, a components (NaN) on the <background> node from the <ambient> block";
       else if(r > 1 || r < 0 || g > 1 || g < 0 || b > 1 || b < 0 || a > 1 || a < 0)
-        return "unable to parse r, g, b, a components (out of 0.0-1.0 range) on the <background> node from the <ambient> block";
+      return "unable to parse r, g, b, a components (out of 0.0-1.0 range) on the <background> node from the <ambient> block";
 
       // Sets r, g, b, a
       this.background.r = r;
@@ -451,7 +451,7 @@ class MySceneGraph {
       this.background.a = a;
     }
     else
-      return "<background> node is not defined on the <ambient> block";
+    return "<background> node is not defined on the <ambient> block";
 
     this.log("Parsed ambient");
 
@@ -468,11 +468,11 @@ class MySceneGraph {
     var children = lightsNode.children;
     var nodeNames = [];
     for (var i = 0; i < children.length; i++)
-      nodeNames.push(children[i].nodeName);
+    nodeNames.push(children[i].nodeName);
 
     // Checks if there are any lights defined
     if(lightsNode.getElementsByTagName('omni').length == 0 && lightsNode.getElementsByTagName('spot').length == 0)
-      return "at least one light must be defined (either <omni> or <spot>) on the <lights> block";
+    return "at least one light must be defined (either <omni> or <spot>) on the <lights> block";
 
     // Creates variables
     this.omni = [];
@@ -487,7 +487,7 @@ class MySceneGraph {
         var omniChildren = children[i].children;
         var omniNodeNames = [];
         for (var j = 0; j < omniChildren.length; j++)
-          omniNodeNames.push(omniChildren[j].nodeName);
+        omniNodeNames.push(omniChildren[j].nodeName);
 
         // Creates variable
         this.omni[omniCounter] = [];
@@ -498,16 +498,16 @@ class MySceneGraph {
 
         // Validates id and enabled
         if(id == null || enabled == null)
-          return "unable to parse id and enabled components (null) on the <omni> node with index " + i + " from the <lights> block";
+        return "unable to parse id and enabled components (null) on the <omni> node with index " + i + " from the <lights> block";
         else if(isNaN(enabled))
-          return "unable to parse enabled component (NaN) on the <omni> node with index " + i + " from the <lights> block";
+        return "unable to parse enabled component (NaN) on the <omni> node with index " + i + " from the <lights> block";
         else if(enabled != 0 && enabled != 1)
-          return "unable to parse enabled component (not valid - should be 0 or 1) on the <omni> node with index " + i + " from the <lights> block";
+        return "unable to parse enabled component (not valid - should be 0 or 1) on the <omni> node with index " + i + " from the <lights> block";
 
         // Checks if id is unique
         for(var j = 0; j < this.omni.length; j++)
-          if(id == this.omni[j].id)
-            return "id '" + id + "' on the <omni> node with index " + i + " from the <lights> block is not unique";
+        if(id == this.omni[j].id)
+        return "id '" + id + "' on the <omni> node with index " + i + " from the <lights> block is not unique";
 
         // Sets id and enabled
         this.omni[omniCounter].id = id;
@@ -532,9 +532,9 @@ class MySceneGraph {
 
           // Validates x, y, z,, w
           if(isNaN(x) || isNaN(y) || isNaN(z) || isNaN(w))
-            return "unable to parse x, y, z, w component (NaN) on tag <location> from the <omni> node with index " + i + " from the <lights> block";
+          return "unable to parse x, y, z, w component (NaN) on tag <location> from the <omni> node with index " + i + " from the <lights> block";
           else if(x == null || y == null || z == null || w == null)
-            return "unable to parse x, y, z, w component (null) on tag <location> from the <omni> node with index " + i + " from the <lights> block";
+          return "unable to parse x, y, z, w component (null) on tag <location> from the <omni> node with index " + i + " from the <lights> block";
 
           // Sets x, y, z, w
           this.omni[omniCounter].location.x = x;
@@ -543,7 +543,7 @@ class MySceneGraph {
           this.omni[omniCounter].location.w = w;
         }
         else
-          return "tag <location> is not defined on the <omni> node with index " + i + " from the <lights> block";
+        return "tag <location> is not defined on the <omni> node with index " + i + " from the <lights> block";
 
         // Reads ambient tag
         if(ambientIndex != -1){
@@ -558,11 +558,11 @@ class MySceneGraph {
 
           // Validates r, g, b, a
           if(isNaN(r) || isNaN(g) || isNaN(b) || isNaN(a))
-            return "unable to parse r, g, b, a component (NaN) on tag <ambient> from the <omni> node with index " + i + " from the <lights> block";
+          return "unable to parse r, g, b, a component (NaN) on tag <ambient> from the <omni> node with index " + i + " from the <lights> block";
           else if(r == null || g == null || b == null || a == null)
-            return "unable to parse r, g, b, a component (null) on tag <ambient> from the <omni> node with index " + i + " from the <lights> block";
+          return "unable to parse r, g, b, a component (null) on tag <ambient> from the <omni> node with index " + i + " from the <lights> block";
           else if(r > 1 || r < 0 || g > 1 || g < 0 || b > 1 || b < 0 || a > 1 || a < 0)
-            return "unable to parse r, g, b, a component (out of 0.0-1.0 range) on tag <ambient> from the <omni> node with index " + i + " from the <lights> block";
+          return "unable to parse r, g, b, a component (out of 0.0-1.0 range) on tag <ambient> from the <omni> node with index " + i + " from the <lights> block";
 
           // Sets r, g, b, a
           this.omni[omniCounter].ambient.r = r;
@@ -571,7 +571,7 @@ class MySceneGraph {
           this.omni[omniCounter].ambient.a = a;
         }
         else
-          return "tag <ambient> is not defined on the <omni> node with index " + i + " from the <lights> block";
+        return "tag <ambient> is not defined on the <omni> node with index " + i + " from the <lights> block";
 
         // Reads diffuse tag
         if(diffuseIndex != -1){
@@ -586,11 +586,11 @@ class MySceneGraph {
 
           // Validates r, g, b, a
           if(isNaN(r) || isNaN(g) || isNaN(b) || isNaN(a))
-            return "unable to parse r, g, b, a component (NaN) on tag <diffuse> from the <omni> node with index " + i + " from the <lights> block";
+          return "unable to parse r, g, b, a component (NaN) on tag <diffuse> from the <omni> node with index " + i + " from the <lights> block";
           else if(r == null || g == null || b == null || a == null)
-            return "unable to parse r, g, b, a component (null) on tag <diffuse> from the <omni> node with index " + i + " from the <lights> block";
+          return "unable to parse r, g, b, a component (null) on tag <diffuse> from the <omni> node with index " + i + " from the <lights> block";
           else if(r > 1 || r < 0 || g > 1 || g < 0 || b > 1 || b < 0 || a > 1 || a < 0)
-            return "unable to parse r, g, b, a component (out of 0.0-1.0 range) on tag <diffuse> from the <omni> node with index " + i + " from the <lights> block";
+          return "unable to parse r, g, b, a component (out of 0.0-1.0 range) on tag <diffuse> from the <omni> node with index " + i + " from the <lights> block";
 
           // Sets r, g, b, a
           this.omni[omniCounter].diffuse.r = r;
@@ -599,7 +599,7 @@ class MySceneGraph {
           this.omni[omniCounter].diffuse.a = a;
         }
         else
-          return "tag <diffuse> is not defined on the <omni> node with index " + i + " from the <lights> block";
+        return "tag <diffuse> is not defined on the <omni> node with index " + i + " from the <lights> block";
 
 
         // Reads specular tag
@@ -615,11 +615,11 @@ class MySceneGraph {
 
           // Validates r, g, b, a
           if(isNaN(r) || isNaN(g) || isNaN(b) || isNaN(a))
-            return "unable to parse r, g, b, a component (NaN) on tag <specular> from the <omni> node with index " + i + " from the <lights> block";
+          return "unable to parse r, g, b, a component (NaN) on tag <specular> from the <omni> node with index " + i + " from the <lights> block";
           else if(r == null || g == null || b == null || a == null)
-            return "unable to parse r, g, b, a component (null) on tag <specular> from the <omni> node with index " + i + " from the <lights> block";
+          return "unable to parse r, g, b, a component (null) on tag <specular> from the <omni> node with index " + i + " from the <lights> block";
           else if(r > 1 || r < 0 || g > 1 || g < 0 || b > 1 || b < 0 || a > 1 || a < 0)
-            return "unable to parse r, g, b, a component (out of 0.0-1.0 range) on tag <specular> from the <omni> node with index " + i + " from the <lights> block";
+          return "unable to parse r, g, b, a component (out of 0.0-1.0 range) on tag <specular> from the <omni> node with index " + i + " from the <lights> block";
 
           // Sets r, g, b, a
           this.omni[omniCounter].specular.r = r;
@@ -628,7 +628,7 @@ class MySceneGraph {
           this.omni[omniCounter].specular.a = a;
         }
         else
-          return "tag <specular> is not defined on the <omni> node with index " + i + " from the <lights> block";
+        return "tag <specular> is not defined on the <omni> node with index " + i + " from the <lights> block";
 
         // Increments omni lights counter
         omniCounter++;
@@ -638,7 +638,7 @@ class MySceneGraph {
         var spotChildren = children[i].children;
         var spotNodeNames = [];
         for (var j = 0; j < spotChildren.length; j++)
-          spotNodeNames.push(spotChildren[j].nodeName);
+        spotNodeNames.push(spotChildren[j].nodeName);
 
         // Creates variable
         this.spot[spotCounter] = [];
@@ -651,16 +651,16 @@ class MySceneGraph {
 
         // Validates id, enabled, angle, exponent
         if(id == null || enabled == null || angle == null || exponent == null)
-          return "unable to parse id, enabled, angle, exponent components (null) on the <spot> node with index " + i + " from the <lights> block";
+        return "unable to parse id, enabled, angle, exponent components (null) on the <spot> node with index " + i + " from the <lights> block";
         else if(isNaN(enabled) || isNaN(angle) || isNaN(exponent))
-          return "unable to parse enabled, angle, exponent components (NaN) on the <spot> node with index " + i + " from the <lights> block";
+        return "unable to parse enabled, angle, exponent components (NaN) on the <spot> node with index " + i + " from the <lights> block";
         else if(enabled != 0 && enabled != 1)
-          return "unable to parse enabled component (not valid - should be 0 or 1) on the <spot> node with index " + i + " from the <lights> block";
+        return "unable to parse enabled component (not valid - should be 0 or 1) on the <spot> node with index " + i + " from the <lights> block";
 
         // Checks if id is unique
         for(var j = 0; j < this.spot.length; j++)
-          if(id == this.spot[j].id)
-            return "id '" + id + "' on the <spot> node with index " + i + " from the <lights> block is not unique";
+        if(id == this.spot[j].id)
+        return "id '" + id + "' on the <spot> node with index " + i + " from the <lights> block is not unique";
 
         // Sets id, enabled, angle, exponent
         this.spot[spotCounter].id = id;
@@ -688,9 +688,9 @@ class MySceneGraph {
 
           // Validates x, y, z, w
           if(isNaN(x) || isNaN(y) || isNaN(z) || isNaN(w))
-            return "unable to parse x, y, z, w component (NaN) on tag <location> from the <spot> node with index " + i + " from the <lights> block";
+          return "unable to parse x, y, z, w component (NaN) on tag <location> from the <spot> node with index " + i + " from the <lights> block";
           else if(x == null || y == null || z == null || w == null)
-            return "unable to parse x, y, z, w component (null) on tag <location> from the <spot> node with index " + i + " from the <lights> block";
+          return "unable to parse x, y, z, w component (null) on tag <location> from the <spot> node with index " + i + " from the <lights> block";
 
           // Sets x, y, z, w
           this.spot[spotCounter].location.x = x;
@@ -699,7 +699,7 @@ class MySceneGraph {
           this.spot[spotCounter].location.w = w;
         }
         else
-          return "tag <location> is not defined on the <spot> node with index " + i + " from the <lights> block";
+        return "tag <location> is not defined on the <spot> node with index " + i + " from the <lights> block";
 
         // Reads target tag
         if(targetIndex != -1){
@@ -713,9 +713,9 @@ class MySceneGraph {
 
           // Validates x, y, z
           if(isNaN(x) || isNaN(y) || isNaN(z))
-            return "unable to parse x, y, z component (NaN) on tag <target> from the <spot> node with index " + i + " from the <lights> block";
+          return "unable to parse x, y, z component (NaN) on tag <target> from the <spot> node with index " + i + " from the <lights> block";
           else if(x == null || y == null || z == null)
-            return "unable to parse x, y, z component (null) on tag <target> from the <spot> node with index " + i + " from the <lights> block";
+          return "unable to parse x, y, z component (null) on tag <target> from the <spot> node with index " + i + " from the <lights> block";
 
           // Sets x, y, z, w
           this.spot[spotCounter].target.x = x;
@@ -723,7 +723,7 @@ class MySceneGraph {
           this.spot[spotCounter].target.z = z;
         }
         else
-          return "tag <target> is not defined on the <spot> node with index " + i + " from the <lights> block";
+        return "tag <target> is not defined on the <spot> node with index " + i + " from the <lights> block";
 
         // Reads ambient tag
         if(ambientIndex != -1){
@@ -738,11 +738,11 @@ class MySceneGraph {
 
           // Validates r, g, b, a
           if(isNaN(r) || isNaN(g) || isNaN(b) || isNaN(a))
-            return "unable to parse r, g, b, a component (NaN) on tag <ambient> from the <spot> node with index " + i + " from the <lights> block";
+          return "unable to parse r, g, b, a component (NaN) on tag <ambient> from the <spot> node with index " + i + " from the <lights> block";
           else if(r == null || g == null || b == null || a == null)
-            return "unable to parse r, g, b, a component (null) on tag <ambient> from the <spot> node with index " + i + " from the <lights> block";
+          return "unable to parse r, g, b, a component (null) on tag <ambient> from the <spot> node with index " + i + " from the <lights> block";
           else if(r > 1 || r < 0 || g > 1 || g < 0 || b > 1 || b < 0 || a > 1 || a < 0)
-            return "unable to parse r, g, b, a component (out of 0.0-1.0 range) on tag <ambient> from the <spot> node with index " + i + " from the <lights> block";
+          return "unable to parse r, g, b, a component (out of 0.0-1.0 range) on tag <ambient> from the <spot> node with index " + i + " from the <lights> block";
 
           // Sets r, g, b, a
           this.spot[spotCounter].ambient.r = r;
@@ -751,7 +751,7 @@ class MySceneGraph {
           this.spot[spotCounter].ambient.a = a;
         }
         else
-          return "tag <ambient> is not defined on the <spot> node with index " + i + " from the <lights> block";
+        return "tag <ambient> is not defined on the <spot> node with index " + i + " from the <lights> block";
 
         // Reads diffuse tag
         if(diffuseIndex != -1){
@@ -766,11 +766,11 @@ class MySceneGraph {
 
           // Validates r, g, b, a
           if(isNaN(r) || isNaN(g) || isNaN(b) || isNaN(a))
-            return "unable to parse r, g, b, a component (NaN) on tag <diffuse> from the <spot> node with index " + i + " from the <lights> block";
+          return "unable to parse r, g, b, a component (NaN) on tag <diffuse> from the <spot> node with index " + i + " from the <lights> block";
           else if(r == null || g == null || b == null || a == null)
-            return "unable to parse r, g, b, a component (null) on tag <diffuse> from the <spot> node with index " + i + " from the <lights> block";
+          return "unable to parse r, g, b, a component (null) on tag <diffuse> from the <spot> node with index " + i + " from the <lights> block";
           else if(r > 1 || r < 0 || g > 1 || g < 0 || b > 1 || b < 0 || a > 1 || a < 0)
-            return "unable to parse r, g, b, a component (out of 0.0-1.0 range) on tag <diffuse> from the <spot> node with index " + i + " from the <lights> block";
+          return "unable to parse r, g, b, a component (out of 0.0-1.0 range) on tag <diffuse> from the <spot> node with index " + i + " from the <lights> block";
 
           // Sets r, g, b, a
           this.spot[spotCounter].diffuse.r = r;
@@ -779,7 +779,7 @@ class MySceneGraph {
           this.spot[spotCounter].diffuse.a = a;
         }
         else
-          return "tag <diffuse> is not defined on the <spot> node with index " + i + " from the <lights> block";
+        return "tag <diffuse> is not defined on the <spot> node with index " + i + " from the <lights> block";
 
         // Reads specular tag
         if(specularIndex != -1){
@@ -794,11 +794,11 @@ class MySceneGraph {
 
           // Validates r, g, b, a
           if(isNaN(r) || isNaN(g) || isNaN(b) || isNaN(a))
-            return "unable to parse r, g, b, a component (NaN) on tag <specular> from the <spot> node with index " + i + " from the <lights> block";
+          return "unable to parse r, g, b, a component (NaN) on tag <specular> from the <spot> node with index " + i + " from the <lights> block";
           else if(r == null || g == null || b == null || a == null)
-            return "unable to parse r, g, b, a component (null) on tag <specular> from the <spot> node with index " + i + " from the <lights> block";
+          return "unable to parse r, g, b, a component (null) on tag <specular> from the <spot> node with index " + i + " from the <lights> block";
           else if(r > 1 || r < 0 || g > 1 || g < 0 || b > 1 || b < 0 || a > 1 || a < 0)
-            return "unable to parse r, g, b, a component (out of 0.0-1.0 range) on tag <specular> from the <spot> node with index " + i + " from the <lights> block";
+          return "unable to parse r, g, b, a component (out of 0.0-1.0 range) on tag <specular> from the <spot> node with index " + i + " from the <lights> block";
 
           // Sets r, g, b, a
           this.spot[spotCounter].specular.r = r;
@@ -807,13 +807,13 @@ class MySceneGraph {
           this.spot[spotCounter].specular.a = a;
         }
         else
-          return "tag <specular> is not defined on the <spot> node with index " + i + " from the <lights> block";
+        return "tag <specular> is not defined on the <spot> node with index " + i + " from the <lights> block";
 
         // Increments spot lights counter
         spotCounter++;
       }
       else
-        this.onXMLMinorError("<" + children[i].nodeName + "> node with index " + i + " is not valid on the <lights> block");
+      this.onXMLMinorError("<" + children[i].nodeName + "> node with index " + i + " is not valid on the <lights> block");
     }
 
     this.log("Parsed lights");
@@ -829,7 +829,7 @@ class MySceneGraph {
     var children = texturesNode.children;
     var nodeNames = [];
     for (var i = 0; i < children.length; i++)
-      nodeNames.push(children[i].nodeName);
+    nodeNames.push(children[i].nodeName);
 
     // Checks if there are textures defined
     if(texturesNode.getElementsByTagName('texture').length == 0)
@@ -842,30 +842,30 @@ class MySceneGraph {
     // Reads textures
     for (var i = 0; i < children.length; i++){
       if(children[i].nodeName == "texture"){
-      // Creates variable
-      this.textures[textureCounter] = [];
+        // Creates variable
+        this.textures[textureCounter] = [];
 
-      // Reads id and file
-      var id = this.reader.getString(children[i], 'id');
-      var file = this.reader.getString(children[i], 'file');
+        // Reads id and file
+        var id = this.reader.getString(children[i], 'id');
+        var file = this.reader.getString(children[i], 'file');
 
-      // Validates id and file
-      if(id == null || file == null)
+        // Validates id and file
+        if(id == null || file == null)
         return "unable to parse id and file components (null) on the <texture> node with index " + i + " from the <textures> block";
 
-      // Checks if id is unique
-      for(var j = 0; j < this.textures.length; j++)
+        // Checks if id is unique
+        for(var j = 0; j < this.textures.length; j++)
         if(id == this.textures[j].id)
-          return "id '" + id + "' on the <texture> node with index " + i + " from the <textures> block is not unique";
+        return "id '" + id + "' on the <texture> node with index " + i + " from the <textures> block is not unique";
 
-      // Sets id and file
-      this.textures[textureCounter].id = id;
-      this.textures[textureCounter].file = file;
+        // Sets id and file
+        this.textures[textureCounter].id = id;
+        this.textures[textureCounter].file = file;
 
-      // Increments texture counter
-      textureCounter++;
-    }
-    else
+        // Increments texture counter
+        textureCounter++;
+      }
+      else
       this.onXMLMinorError("<" + children[i].nodeName + "> node with index " + i + " is not valid on the <textures> block");
     }
 
@@ -882,11 +882,11 @@ class MySceneGraph {
     var children = materialsNode.children;
     var nodeNames = [];
     for (var i = 0; i < children.length; i++)
-      nodeNames.push(children[i].nodeName);
+    nodeNames.push(children[i].nodeName);
 
     // Checks if there are any materials defined
     if(materialsNode.getElementsByTagName('material').length == 0)
-      return "at least one <material> must be defined on the <materials> block";
+    return "at least one <material> must be defined on the <materials> block";
 
     // Creates variables
     this.materials = [];
@@ -900,7 +900,7 @@ class MySceneGraph {
         var materialChildren = children[i].children;
         var materialNodeNames = [];
         for (var j = 0; j < materialChildren.length; j++)
-          materialNodeNames.push(materialChildren[j].nodeName);
+        materialNodeNames.push(materialChildren[j].nodeName);
 
         // Creates variable
         this.materials[materialCounter] = [];
@@ -911,14 +911,14 @@ class MySceneGraph {
 
         // Validates id and shininess
         if(id == null || shininess == null)
-          return "unable to parse id and shininess components (null) on the <material> node with index " + i + " from the <materials> block";
+        return "unable to parse id and shininess components (null) on the <material> node with index " + i + " from the <materials> block";
         else if(isNaN(shininess))
-          return "unable to parse shininess component (NaN) on the <material> node with index " + i + " from the <materials> block";
+        return "unable to parse shininess component (NaN) on the <material> node with index " + i + " from the <materials> block";
 
         // Verifies if the id is unique
         for(var j = 0; j < this.materials.length; j++)
-          if(id == this.materials[j].id)
-            return "id '" + id + "' on the <material> node with index " + i + " from the <materials> block is not unique";
+        if(id == this.materials[j].id)
+        return "id '" + id + "' on the <material> node with index " + i + " from the <materials> block is not unique";
 
         // Sets id and shininess
         this.materials[materialCounter].id = id;
@@ -943,11 +943,11 @@ class MySceneGraph {
 
           // Validates r, g, b, a
           if(isNaN(r) || isNaN(g) || isNaN(b) || isNaN(a))
-            return "unable to parse r, g, b, a component (NaN) on tag <emission> from the <material> node with index " + i + " from the <materials> block";
+          return "unable to parse r, g, b, a component (NaN) on tag <emission> from the <material> node with index " + i + " from the <materials> block";
           else if(r == null || g == null || b == null || a == null)
-            return "unable to parse r, g, b, a component (null) on tag <emission> from the <material> node with index " + i + " from the <materials> block";
+          return "unable to parse r, g, b, a component (null) on tag <emission> from the <material> node with index " + i + " from the <materials> block";
           else if(r > 1 || r < 0 || g > 1 || g < 0 || b > 1 || b < 0 || a > 1 || a < 0)
-            return "unable to parse r, g, b, a component (out of 0.0-1.0 range) on tag <emission> from the <material> node with index " + i + " from the <materials> block";
+          return "unable to parse r, g, b, a component (out of 0.0-1.0 range) on tag <emission> from the <material> node with index " + i + " from the <materials> block";
 
           // Sets r, g, b, a
           this.materials[materialCounter].emission.r = r;
@@ -956,7 +956,7 @@ class MySceneGraph {
           this.materials[materialCounter].emission.a = a;
         }
         else
-          return "tag <emission> is not defined on the <material> node with index " + i + " from the <materials> block";
+        return "tag <emission> is not defined on the <material> node with index " + i + " from the <materials> block";
 
 
         // Reads ambient tag
@@ -972,11 +972,11 @@ class MySceneGraph {
 
           // Validates r, g, b, a
           if(isNaN(r) || isNaN(g) || isNaN(b) || isNaN(a))
-            return "unable to parse r, g, b, a component (NaN) on tag <ambient> from the <material> node with index " + i + " from the <materials> block";
+          return "unable to parse r, g, b, a component (NaN) on tag <ambient> from the <material> node with index " + i + " from the <materials> block";
           else if(r == null || g == null || b == null || a == null)
-            return "unable to parse r, g, b, a component (null) on tag <ambient> from the <material> node with index " + i + " from the <materials> block";
+          return "unable to parse r, g, b, a component (null) on tag <ambient> from the <material> node with index " + i + " from the <materials> block";
           else if(r > 1 || r < 0 || g > 1 || g < 0 || b > 1 || b < 0 || a > 1 || a < 0)
-            return "unable to parse r, g, b, a component (out of 0.0-1.0 range) on tag <ambient> from the <material> node with index " + i + " from the <materials> block";
+          return "unable to parse r, g, b, a component (out of 0.0-1.0 range) on tag <ambient> from the <material> node with index " + i + " from the <materials> block";
 
           // Sets r, g, b, a
           this.materials[materialCounter].ambient.r = r;
@@ -985,7 +985,7 @@ class MySceneGraph {
           this.materials[materialCounter].ambient.a = a;
         }
         else
-          return "tag <ambient> is not defined on the <material> node with index " + i + " from the <materials> block";
+        return "tag <ambient> is not defined on the <material> node with index " + i + " from the <materials> block";
 
 
         // Reads diffuse tag
@@ -1001,11 +1001,11 @@ class MySceneGraph {
 
           // Validates r, g, b, a
           if(isNaN(r) || isNaN(g) || isNaN(b) || isNaN(a))
-            return "unable to parse r, g, b, a component (NaN) on tag <diffuse> from the <material> node with index " + i + " from the <materials> block";
+          return "unable to parse r, g, b, a component (NaN) on tag <diffuse> from the <material> node with index " + i + " from the <materials> block";
           else if(r == null || g == null || b == null || a == null)
-            return "unable to parse r, g, b, a component (null) on tag <diffuse> from the <material> node with index " + i + " from the <materials> block";
+          return "unable to parse r, g, b, a component (null) on tag <diffuse> from the <material> node with index " + i + " from the <materials> block";
           else if(r > 1 || r < 0 || g > 1 || g < 0 || b > 1 || b < 0 || a > 1 || a < 0)
-            return "unable to parse r, g, b, a component (out of 0.0-1.0 range) on tag <diffuse> from the <material> node with index " + i + " from the <materials> block";
+          return "unable to parse r, g, b, a component (out of 0.0-1.0 range) on tag <diffuse> from the <material> node with index " + i + " from the <materials> block";
 
           // Sets r, g, b, a
           this.materials[materialCounter].diffuse.r = r;
@@ -1014,7 +1014,7 @@ class MySceneGraph {
           this.materials[materialCounter].diffuse.a = a;
         }
         else
-          return "tag <diffuse> is not defined on the <material> node with index " + i + " from the <materials> block";
+        return "tag <diffuse> is not defined on the <material> node with index " + i + " from the <materials> block";
 
 
         // Reads specular tag
@@ -1030,11 +1030,11 @@ class MySceneGraph {
 
           // Validates r, g, b, a
           if(isNaN(r) || isNaN(g) || isNaN(b) || isNaN(a))
-            return "unable to parse r, g, b, a component (NaN) on tag <specular> from the <material> node with index " + i + " from the <materials> block";
+          return "unable to parse r, g, b, a component (NaN) on tag <specular> from the <material> node with index " + i + " from the <materials> block";
           else if(r == null || g == null || b == null || a == null)
-            return "unable to parse r, g, b, a component (null) on tag <specular> from the <material> node with index " + i + " from the <materials> block";
+          return "unable to parse r, g, b, a component (null) on tag <specular> from the <material> node with index " + i + " from the <materials> block";
           else if(r > 1 || r < 0 || g > 1 || g < 0 || b > 1 || b < 0 || a > 1 || a < 0)
-            return "unable to parse r, g, b, a component (out of 0.0-1.0 range) on tag <specular> from the <material> node with index " + i + " from the <materials> block";
+          return "unable to parse r, g, b, a component (out of 0.0-1.0 range) on tag <specular> from the <material> node with index " + i + " from the <materials> block";
 
           // Sets r, g, b, a
           this.materials[materialCounter].specular.r = r;
@@ -1043,14 +1043,14 @@ class MySceneGraph {
           this.materials[materialCounter].specular.a = a;
         }
         else
-          return "tag <specular> is not defined on the <material> node with index " + i + " from the <materials> block";
+        return "tag <specular> is not defined on the <material> node with index " + i + " from the <materials> block";
 
         // Increments material counter
         materialCounter++;
       }
       else
-        this.onXMLMinorError("<" + children[i].nodeName + "> node with index " + i + " is not valid on the <materials> block");
-      }
+      this.onXMLMinorError("<" + children[i].nodeName + "> node with index " + i + " is not valid on the <materials> block");
+    }
 
     this.log("Parsed materials");
     return null;
@@ -1065,11 +1065,11 @@ class MySceneGraph {
     var children = transformationsNode.children;
     var nodeNames = [];
     for (var i = 0; i < children.length; i++)
-      nodeNames.push(children[i].nodeName);
+    nodeNames.push(children[i].nodeName);
 
     // Checks if there are any materials defined
     if(transformationsNode.getElementsByTagName('transformation').length == 0)
-      return "at least one <transformation> must be defined on the <transformations> block";
+    return "at least one <transformation> must be defined on the <transformations> block";
 
     // Creates variables
     this.transformations = [];
@@ -1082,11 +1082,11 @@ class MySceneGraph {
         var transformationChildren = children[i].children;
         var transformationNodeNames = [];
         for (var j = 0; j < transformationChildren.length; j++)
-          transformationNodeNames.push(transformationChildren[j].nodeName);
+        transformationNodeNames.push(transformationChildren[j].nodeName);
 
         // Checks if there are any instructions
         if(transformationChildren.length == 0)
-          return "at least one instruction tag must be defined (either <translate>, <rotate> or scale) on the <transformation> node with index " + i + " from the <transformations> block";
+        return "at least one instruction tag must be defined (either <translate>, <rotate> or scale) on the <transformation> node with index " + i + " from the <transformations> block";
 
         // Creates variables
         this.transformations[transformationCounter] = [];
@@ -1096,12 +1096,12 @@ class MySceneGraph {
 
         // Validates id
         if(id == null)
-          return "unable to parse id component (null) on the <transformation> node with index " + i + " from the <transformations> block";
+        return "unable to parse id component (null) on the <transformation> node with index " + i + " from the <transformations> block";
 
         // Checks if id is unique
         for(var j = 0; j < this.transformations.length; j++)
-          if(id == this.transformations[j].id)
-            return "id '" + id + "' on the <transformation> node with index " + i + " from the <transformations> block is not unique";
+        if(id == this.transformations[j].id)
+        return "id '" + id + "' on the <transformation> node with index " + i + " from the <transformations> block is not unique";
 
         // Sets id
         this.transformations[transformationCounter].id = id;
@@ -1111,70 +1111,70 @@ class MySceneGraph {
         mat4.identity(transformationMatrix);
 
         for (var j = 0; j < transformationChildren.length; j++){
-            if(transformationChildren[j].nodeName == "translate"){
-              // Reads x, y, z
-              var x = this.reader.getFloat(transformationChildren[j], 'x');
-              var y = this.reader.getFloat(transformationChildren[j], 'y');
-              var z = this.reader.getFloat(transformationChildren[j], 'z');
+          if(transformationChildren[j].nodeName == "translate"){
+            // Reads x, y, z
+            var x = this.reader.getFloat(transformationChildren[j], 'x');
+            var y = this.reader.getFloat(transformationChildren[j], 'y');
+            var z = this.reader.getFloat(transformationChildren[j], 'z');
 
-              // Validates x, y, z
-              if(isNaN(x) || isNaN(y) || isNaN(z))
-                return "unable to parse x, y, z components (NaN) on tag <translate> with index " + j + " from the <transformation> node with index " + i + " from the <transformations> block";
-              else if(x == null || y == null || z == null)
-                return "unable to parse x, y, z components (null) on tag <translate> with index " + j + " from the <transformation> node with index " + i + " from the <transformations> block";
+            // Validates x, y, z
+            if(isNaN(x) || isNaN(y) || isNaN(z))
+            return "unable to parse x, y, z components (NaN) on tag <translate> with index " + j + " from the <transformation> node with index " + i + " from the <transformations> block";
+            else if(x == null || y == null || z == null)
+            return "unable to parse x, y, z components (null) on tag <translate> with index " + j + " from the <transformation> node with index " + i + " from the <transformations> block";
 
-              // Adds translation
-              mat4.translate(transformationMatrix, transformationMatrix, [x,y,z]);
-            }
-            else if(transformationChildren[j].nodeName == "rotate"){
-              // Reads axis, angle
-              var axis = this.reader.getString(transformationChildren[j], 'axis');
-              var angle = this.reader.getFloat(transformationChildren[j], 'angle');
-
-              // Validates axis and angle
-              if(isNaN(angle))
-                return "unable to parse angle component (NaN) on tag <rotate> with index " + j + " from the <transformation> node with index " + i + " from the <transformations> block";
-              else if(angle == null || axis == null)
-                return "unable to parse axis and angle components (null) on tag <rotate> with index " + j + " from the <transformation> node with index " + i + " from the <transformations> block";
-              else if(axis != "x" && axis != "y" && axis != "z")
-                return "unable to parse axis component (not valid - should be x, y or z) on tag <rotate> with index " + j + " from the <transformation> node with index " + i + " from the <transformations> block";
-
-              // Adds rotation
-              if(axis == 'x')
-                mat4.rotateX(transformationMatrix, transformationMatrix, angle*DEGREE_TO_RAD);
-              else if(axis == 'y')
-                mat4.rotateY(transformationMatrix, transformationMatrix, angle*DEGREE_TO_RAD);
-              else if(axis == 'z')
-                mat4.rotateZ(transformationMatrix, transformationMatrix, angle*DEGREE_TO_RAD);
-            }
-            else if(transformationChildren[j].nodeName == "scale"){
-              // Reads x, y, z
-              var x = this.reader.getFloat(transformationChildren[j], 'x');
-              var y = this.reader.getFloat(transformationChildren[j], 'y');
-              var z = this.reader.getFloat(transformationChildren[j], 'z');
-
-              // Validates x, y, z
-              if(isNaN(x) || isNaN(y) || isNaN(z))
-                return "unable to parse x, y, z components (NaN) on tag <scale> with index " + j + " from the <transformation> node with index " + i + " from the <transformations> block";
-              else if(x == null || y == null || z == null)
-                return "unable to parse x, y, z components (null) on tag <scale> with index " + j + " from the <transformation> node with index " + i + " from the <transformations> block";
-
-              // Adds scaling
-              mat4.scale(transformationMatrix, transformationMatrix, [x,y,z]);
-            }
-            else
-              this.onXMLMinorError("tag <" + transformationChildren[j].nodeName + "> with index " + j + " from the <transformation> node with index " + i + " is not valid on the <transformations> block");
+            // Adds translation
+            mat4.translate(transformationMatrix, transformationMatrix, [x,y,z]);
           }
+          else if(transformationChildren[j].nodeName == "rotate"){
+            // Reads axis, angle
+            var axis = this.reader.getString(transformationChildren[j], 'axis');
+            var angle = this.reader.getFloat(transformationChildren[j], 'angle');
 
-          // Sets transformation
-          this.transformations[transformationCounter].transformation = transformationMatrix;
+            // Validates axis and angle
+            if(isNaN(angle))
+            return "unable to parse angle component (NaN) on tag <rotate> with index " + j + " from the <transformation> node with index " + i + " from the <transformations> block";
+            else if(angle == null || axis == null)
+            return "unable to parse axis and angle components (null) on tag <rotate> with index " + j + " from the <transformation> node with index " + i + " from the <transformations> block";
+            else if(axis != "x" && axis != "y" && axis != "z")
+            return "unable to parse axis component (not valid - should be x, y or z) on tag <rotate> with index " + j + " from the <transformation> node with index " + i + " from the <transformations> block";
 
-          // Incremenets transformations counter
-          transformationCounter++;
+            // Adds rotation
+            if(axis == 'x')
+            mat4.rotateX(transformationMatrix, transformationMatrix, angle*DEGREE_TO_RAD);
+            else if(axis == 'y')
+            mat4.rotateY(transformationMatrix, transformationMatrix, angle*DEGREE_TO_RAD);
+            else if(axis == 'z')
+            mat4.rotateZ(transformationMatrix, transformationMatrix, angle*DEGREE_TO_RAD);
+          }
+          else if(transformationChildren[j].nodeName == "scale"){
+            // Reads x, y, z
+            var x = this.reader.getFloat(transformationChildren[j], 'x');
+            var y = this.reader.getFloat(transformationChildren[j], 'y');
+            var z = this.reader.getFloat(transformationChildren[j], 'z');
+
+            // Validates x, y, z
+            if(isNaN(x) || isNaN(y) || isNaN(z))
+            return "unable to parse x, y, z components (NaN) on tag <scale> with index " + j + " from the <transformation> node with index " + i + " from the <transformations> block";
+            else if(x == null || y == null || z == null)
+            return "unable to parse x, y, z components (null) on tag <scale> with index " + j + " from the <transformation> node with index " + i + " from the <transformations> block";
+
+            // Adds scaling
+            mat4.scale(transformationMatrix, transformationMatrix, [x,y,z]);
+          }
+          else
+          this.onXMLMinorError("tag <" + transformationChildren[j].nodeName + "> with index " + j + " from the <transformation> node with index " + i + " is not valid on the <transformations> block");
+        }
+
+        // Sets transformation
+        this.transformations[transformationCounter].transformation = transformationMatrix;
+
+        // Incremenets transformations counter
+        transformationCounter++;
       }
       else
-        this.onXMLMinorError("<" + children[i].nodeName + "> node with index " + i + " is not valid on the <transformations> block");
-      }
+      this.onXMLMinorError("<" + children[i].nodeName + "> node with index " + i + " is not valid on the <transformations> block");
+    }
 
     this.log("Parsed transformations");
     return null;
@@ -1189,7 +1189,7 @@ class MySceneGraph {
     var children = primitivesNode.children;
     var nodeNames = [];
     for (var i = 0; i < children.length; i++)
-      nodeNames.push(children[i].nodeName);
+    nodeNames.push(children[i].nodeName);
 
     // Checks if there are any primitives defined
     if(primitivesNode.getElementsByTagName('primitive').length == 0)
@@ -1207,13 +1207,13 @@ class MySceneGraph {
         var primitiveChildren = children[i].children;
         var primitiveNodeNames = [];
         for (var j = 0; j < primitiveChildren.length; j++)
-          primitiveNodeNames.push(primitiveChildren[j].nodeName);
+        primitiveNodeNames.push(primitiveChildren[j].nodeName);
 
         // Checks if there's at most one of rectangle, triangle, cylinder, sphere or torus
         if(children[i].children.length > 1)
-          return "only one tag <rectangle>, <triangle>, <cylinder>, <sphere> or <torus> should be defined on the <primitive> node with index " + i + " from the <primitives> block";
+        return "only one tag <rectangle>, <triangle>, <cylinder>, <sphere> or <torus> should be defined on the <primitive> node with index " + i + " from the <primitives> block";
         else if(children[i].children.length == 0)
-          return "one tag <rectangle>, <triangle>, <cylinder>, <sphere> or <torus> must be defined on the <primitive> node with index " + i + " from the <primitives> block";
+        return "one tag <rectangle>, <triangle>, <cylinder>, <sphere> or <torus> must be defined on the <primitive> node with index " + i + " from the <primitives> block";
 
         // Creates variables
         this.primitives[primitiveCounter] = [];
@@ -1224,12 +1224,12 @@ class MySceneGraph {
 
         // Validates id
         if(id == null)
-          return "unable to parse id component (null) on the <primitive> node with index " + i + " from the <primitives> block";
+        return "unable to parse id component (null) on the <primitive> node with index " + i + " from the <primitives> block";
 
         // Verifies if the id is unique
         for(var j = 0; j < this.primitives.length; j++)
-          if(id == this.primitives[j].id)
-            return "id '" + id + "' on the <primitive> node with index " + i + " from the <primitives> block is not unique";
+        if(id == this.primitives[j].id)
+        return "id '" + id + "' on the <primitive> node with index " + i + " from the <primitives> block is not unique";
 
         // Sets id
         this.primitives[primitiveCounter].id = id;
@@ -1245,9 +1245,9 @@ class MySceneGraph {
 
           // Validates x1, x2, y1, y2
           if(isNaN(x1) || isNaN(x2) || isNaN(y1) || isNaN(y2))
-            return "unable to parse x1, x2, y1, y2 components (NaN) on tag <rectangle> from the <primitive> node with index " + i + " from the <primitives> block";
+          return "unable to parse x1, x2, y1, y2 components (NaN) on tag <rectangle> from the <primitive> node with index " + i + " from the <primitives> block";
           else if(x1 == null || x2 == null || y1 == null || y2 == null)
-            return "unable to parse x1, x2, y1, y2 components (null) on tag <rectangle> from the <primitive> node with index " + i + " from the <primitives> block";
+          return "unable to parse x1, x2, y1, y2 components (null) on tag <rectangle> from the <primitive> node with index " + i + " from the <primitives> block";
 
           // Sets type, x1, x2, y1, y2
           this.primitives[primitiveCounter].type = "rectangle";
@@ -1271,9 +1271,9 @@ class MySceneGraph {
 
           // Validates x1, x2, x3, y1, y2, y3, z1, z2, z3
           if(isNaN(x1) || isNaN(x2) || isNaN(x3) || isNaN(y1) || isNaN(y2) || isNaN(y3) || isNaN(z1) || isNaN(z2) || isNaN(z3))
-            return "unable to parse x1, x2, x3, y1, y2, y3, z1, z2, z3 components (NaN) on tag <triangle> from the <primitive> node with index " + i + " from the <primitives> block";
+          return "unable to parse x1, x2, x3, y1, y2, y3, z1, z2, z3 components (NaN) on tag <triangle> from the <primitive> node with index " + i + " from the <primitives> block";
           else if(x1 == null || x2 == null ||  x3 == null || y1 == null || y2 == null || y3 == null ||  z1 == null || z2 == null || z3 == null)
-            return "unable to parse x1, x2, x3, y1, y2, y3, z1, z2, z3 components (null) on tag <triangle> from the <primitive> node with index " + i + " from the <primitives> block";
+          return "unable to parse x1, x2, x3, y1, y2, y3, z1, z2, z3 components (null) on tag <triangle> from the <primitive> node with index " + i + " from the <primitives> block";
 
           // Sets type, x1, x2, x3, y1, y2, y3, z1, z2, z3
           this.primitives[primitiveCounter].type = "triangle";
@@ -1298,13 +1298,13 @@ class MySceneGraph {
 
           // Validates base, top, height, slices, stacks
           if(isNaN(base) || isNaN(top) || isNaN(height) || isNaN(slices) || isNaN(stacks))
-            return "unable to parse base, top, height, slices, stacks components (NaN) on tag <cylinder> from the <primitive> node with index " + i + " from the <primitives> block";
+          return "unable to parse base, top, height, slices, stacks components (NaN) on tag <cylinder> from the <primitive> node with index " + i + " from the <primitives> block";
           else if(base == null || top == null || height == null || slices == null || stacks == null)
-            return "unable to parse base, top, height, slices, stacks components (null) on tag <cylinder> from the <primitive> node with index " + i + " from the <primitives> block";
+          return "unable to parse base, top, height, slices, stacks components (null) on tag <cylinder> from the <primitive> node with index " + i + " from the <primitives> block";
           else if(slices < 1 || stacks < 1)
-            return "unable to parse slices and stacks components (out of 1-inf range) on tag <cylinder> from the <primitive> node with index " + i + " from the <primitives> block";
+          return "unable to parse slices and stacks components (out of 1-inf range) on tag <cylinder> from the <primitive> node with index " + i + " from the <primitives> block";
           else if(height <= 0)
-            return "unable to parse height component (out of 0-inf range) on tag <cylinder> from the <primitive> node with index " + i + " from the <primitives> block";
+          return "unable to parse height component (out of 0-inf range) on tag <cylinder> from the <primitive> node with index " + i + " from the <primitives> block";
 
           // Sets type, base, top, height, slices, stacks
           this.primitives[primitiveCounter].type = "cylinder";
@@ -1323,13 +1323,13 @@ class MySceneGraph {
 
           // Validates radius, slices, stacks
           if(isNaN(radius) || isNaN(slices) || isNaN(stacks))
-            return "unable to parse radius, slices, stacks components (NaN) on tag <sphere> from the <primitive> node with index " + i + " from the <primitives> block";
+          return "unable to parse radius, slices, stacks components (NaN) on tag <sphere> from the <primitive> node with index " + i + " from the <primitives> block";
           else if(radius == null || slices == null || stacks == null)
-            return "unable to parse radius, slices, stacks components (null) on tag <sphere> from the <primitive> node with index " + i + " from the <primitives> block";
+          return "unable to parse radius, slices, stacks components (null) on tag <sphere> from the <primitive> node with index " + i + " from the <primitives> block";
           else if(slices < 1 || stacks < 1)
-            return "unable to parse slices and stacks components (out of 1-inf range) on tag <sphere> from the <primitive> node with index " + i + " from the <primitives> block";
+          return "unable to parse slices and stacks components (out of 1-inf range) on tag <sphere> from the <primitive> node with index " + i + " from the <primitives> block";
           else if(radius <= 0)
-            return "unable to parse radius component (out of 0-inf range) on tag <sphere> from the <primitive> node with index " + i + " from the <primitives> block";
+          return "unable to parse radius component (out of 0-inf range) on tag <sphere> from the <primitive> node with index " + i + " from the <primitives> block";
 
           // Sets type, radius, slices, stacks
           this.primitives[primitiveCounter].type = "sphere";
@@ -1347,13 +1347,13 @@ class MySceneGraph {
 
           // Validates inner, outer, slices, loops
           if(isNaN(inner) || isNaN(outer) || isNaN(slices) || isNaN(loops))
-            return "unable to parse inner, outer, slices, loops components (NaN) on tag <torus> from the <primitive> node with index " + i + " from the <primitives> block";
+          return "unable to parse inner, outer, slices, loops components (NaN) on tag <torus> from the <primitive> node with index " + i + " from the <primitives> block";
           else if(inner == null || outer == null || slices == null || loops == null)
-            return "unable to parse inner, outer, slices, loops components (null) on tag <torus> from the <primitive> node with index " + i + " from the <primitives> block";
+          return "unable to parse inner, outer, slices, loops components (null) on tag <torus> from the <primitive> node with index " + i + " from the <primitives> block";
           else if(slices < 1 || stacks < 1)
-            return "unable to parse slices and stacks components (out of 1-inf range) on tag <torus> from the <primitive> node with index " + i + " from the <primitives> block";
+          return "unable to parse slices and stacks components (out of 1-inf range) on tag <torus> from the <primitive> node with index " + i + " from the <primitives> block";
           else if(inner < 0 || outer <= 0)
-            return "unable to parse inner and outer components (out of 0-inf range) on tag <torus> from the <primitive> node with index " + i + " from the <primitives> block";
+          return "unable to parse inner and outer components (out of 0-inf range) on tag <torus> from the <primitive> node with index " + i + " from the <primitives> block";
 
           // Sets type, inner, outer, slices, loops
           this.primitives[primitiveCounter].type = "torus";
@@ -1363,13 +1363,13 @@ class MySceneGraph {
           this.primitives[primitiveCounter].loops = loops;
         }
         else
-          this.onXMLMinorError("tag <" + children[i].children[tagIndex].nodeName + "> is not valid on the <primitive> node with index " + i + " from the <primitives> block");
+        this.onXMLMinorError("tag <" + children[i].children[tagIndex].nodeName + "> is not valid on the <primitive> node with index " + i + " from the <primitives> block");
 
         // Increments the primitive counter
         primitiveCounter++;
       }
       else
-        this.onXMLMinorError("<" + children[i].nodeName + "> node with index " + i + " is not valid on the <primitives> block");
+      this.onXMLMinorError("<" + children[i].nodeName + "> node with index " + i + " is not valid on the <primitives> block");
     }
 
     this.log("Parsed primitives");
@@ -1385,11 +1385,11 @@ class MySceneGraph {
     var children = componentsNode.children;
     var nodeNames = [];
     for (var i = 0; i < children.length; i++)
-      nodeNames.push(children[i].nodeName);
+    nodeNames.push(children[i].nodeName);
 
     // Checks if there are any components defined
     if(componentsNode.getElementsByTagName('component').length == 0)
-      return "at least one <component> must be defined on the <components> block";
+    return "at least one <component> must be defined on the <components> block";
 
     // Creates variables
     this.components = [];
@@ -1402,7 +1402,7 @@ class MySceneGraph {
         var componentChildren = children[i].children;
         var componentNodeNames = [];
         for (var j = 0; j < componentChildren.length; j++)
-          componentNodeNames.push(componentChildren[j].nodeName);
+        componentNodeNames.push(componentChildren[j].nodeName);
 
         // Creates variables
         this.components[componentCounter] = [];
@@ -1412,12 +1412,12 @@ class MySceneGraph {
 
         // Validates id
         if(id == null)
-          return "unable to parse id component (null) on the <component> node with index " + i + " from the <components> block";
+        return "unable to parse id component (null) on the <component> node with index " + i + " from the <components> block";
 
         // Verifies if the id is unique
         for(var j = 0; j < this.components.length; j++)
-          if(id == this.components[j].id)
-            return "id '" + id + "' on the <component> node with index " + i + " from the <components> block is not unique";
+        if(id == this.components[j].id)
+        return "id '" + id + "' on the <component> node with index " + i + " from the <components> block is not unique";
 
         // Sets id
         this.components[componentCounter].id = id;
@@ -1433,7 +1433,7 @@ class MySceneGraph {
 
           // Checks if there aren't explicit and referenced transformations defined at the same time
           if(componentChildren[transformationIndex].getElementsByTagName("transformationref").length > 0 && (componentChildren[transformationIndex].getElementsByTagName("rotate").length > 0 || componentChildren[transformationIndex].getElementsByTagName("translate").length > 0 ||componentChildren[transformationIndex].getElementsByTagName("scale").length > 0))
-            return "there can't be explicit and referenced transformations defined at the same time on tag <transformation> on the <component> node with index " + i + " from the <components> block";
+          return "there can't be explicit and referenced transformations defined at the same time on tag <transformation> on the <component> node with index " + i + " from the <components> block";
 
           if(componentChildren[transformationIndex].children.length != 0){
             // Reads transformation children and node names
@@ -1454,11 +1454,13 @@ class MySceneGraph {
 
                 // Checks if id exists
                 for(var k = 0; k < this.transformations.length; k++){
-                  if(id === this.transformations[k].id)
-                    this.components[componentCounter].transformation = this.transformations[k].transformation;
+                  if(id === this.transformations[k].id){
+                  this.components[componentCounter].transformation = this.transformations[k].transformation;
+                  break;
+                }
                   else if(k + 1 == this.transformations.length)
-                    return "id '" + id + "' is not a valid transformation reference on tag <transformation> on the <component> node with index " + i + " from the <components> block";
-                  }
+                  return "id '" + id + "' is not a valid transformation reference on tag <transformation> on the <component> node with index " + i + " from the <components> block";
+                }
               }
               else if(transformationNodeNames[j] == "translate"){
                 // Reads x, y, z
@@ -1468,9 +1470,9 @@ class MySceneGraph {
 
                 // Validates x, y, z
                 if(isNaN(x) || isNaN(y) || isNaN(z))
-                  return "unable to parse x, y, z components (NaN) on tag <translate> with index " + j + " on tag <transformation> with index " + transformationIndex + " from the <component> node with index " + i + " from the <components> block";
+                return "unable to parse x, y, z components (NaN) on tag <translate> with index " + j + " on tag <transformation> with index " + transformationIndex + " from the <component> node with index " + i + " from the <components> block";
                 else if(x == null || y == null || z == null)
-                  return "unable to parse x, y, z components (null) on tag <translate> with index " + j + " on tag <transformation> with index " + transformationIndex + " from the <component> node with index " + i + " from the <components> block";
+                return "unable to parse x, y, z components (null) on tag <translate> with index " + j + " on tag <transformation> with index " + transformationIndex + " from the <component> node with index " + i + " from the <components> block";
 
                 // Adds translation
                 mat4.translate(transformationMatrix, transformationMatrix, [x,y,z]);
@@ -1482,19 +1484,19 @@ class MySceneGraph {
 
                 // Validates axis and angle
                 if(isNaN(angle))
-                  return "unable to parse angle component (NaN) on tag <rotate> with index " + j + " on tag <transformation> with index " + transformationIndex + " from the <component> node with index " + i + " from the <components> block";
+                return "unable to parse angle component (NaN) on tag <rotate> with index " + j + " on tag <transformation> with index " + transformationIndex + " from the <component> node with index " + i + " from the <components> block";
                 else if(angle == null || axis == null)
-                  return "unable to parse axis and angle components (null) on tag <rotate> with index " + j + " on tag <transformation> with index " + transformationIndex + " from the <component> node with index " + i + " from the <components> block";
+                return "unable to parse axis and angle components (null) on tag <rotate> with index " + j + " on tag <transformation> with index " + transformationIndex + " from the <component> node with index " + i + " from the <components> block";
                 else if(axis != "x" && axis != "y" && axis != "z")
-                  return "unable to parse axis component (not valid - should be x, y or z) on tag <rotate> with index " + j + " on tag <transformation> with index " + transformationIndex + " from the <component> node with index " + i + " from the <components> block";
+                return "unable to parse axis component (not valid - should be x, y or z) on tag <rotate> with index " + j + " on tag <transformation> with index " + transformationIndex + " from the <component> node with index " + i + " from the <components> block";
 
                 // Adds rotation
                 if(axis == 'x')
-                  mat4.rotateX(transformationMatrix, transformationMatrix, angle*DEGREE_TO_RAD);
+                mat4.rotateX(transformationMatrix, transformationMatrix, angle*DEGREE_TO_RAD);
                 else if(axis == 'y')
-                  mat4.rotateY(transformationMatrix, transformationMatrix, angle*DEGREE_TO_RAD);
+                mat4.rotateY(transformationMatrix, transformationMatrix, angle*DEGREE_TO_RAD);
                 else if(axis == 'z')
-                  mat4.rotateZ(transformationMatrix, transformationMatrix, angle*DEGREE_TO_RAD);
+                mat4.rotateZ(transformationMatrix, transformationMatrix, angle*DEGREE_TO_RAD);
               }
               else if(transformationNodeNames[j] == "scale"){
                 // Reads x, y, z
@@ -1504,15 +1506,15 @@ class MySceneGraph {
 
                 // Validates x, y, z
                 if(isNaN(x) || isNaN(y) || isNaN(z))
-                  return "unable to parse x, y, z components (NaN) on tag <scale> with index " + j + " on tag <transformation> with index " + transformationIndex + " from the <component> node with index " + i + " from the <components> block";
+                return "unable to parse x, y, z components (NaN) on tag <scale> with index " + j + " on tag <transformation> with index " + transformationIndex + " from the <component> node with index " + i + " from the <components> block";
                 else if(x == null || y == null || z == null)
-                  return "unable to parse x, y, z components (null) on tag <scale> with index " + j + " on tag <transformation> with index " + transformationIndex + " from the <component> node with index " + i + " from the <components> block";
+                return "unable to parse x, y, z components (null) on tag <scale> with index " + j + " on tag <transformation> with index " + transformationIndex + " from the <component> node with index " + i + " from the <components> block";
 
                 // Adds scaling
                 mat4.scale(transformationMatrix, transformationMatrix, [x,y,z]);
               }
               else
-                this.onXMLMinorError("tag <" + transformationChildren[j].nodeName + "> with index " + j + " on tag <transformation> on the <component> node with index " + i + " is not valid on the <components> block");
+              this.onXMLMinorError("tag <" + transformationChildren[j].nodeName + "> with index " + j + " on tag <transformation> on the <component> node with index " + i + " is not valid on the <components> block");
             }
 
             // Sets transformation
@@ -1520,7 +1522,7 @@ class MySceneGraph {
           }
         }
         else
-          return "tag <transformation> is not defined on the <component> node with index " + i + " from the <components> block";
+        return "tag <transformation> is not defined on the <component> node with index " + i + " from the <components> block";
 
         // Reads materials tag
         if(materialsIndex != -1){
@@ -1530,7 +1532,7 @@ class MySceneGraph {
 
           // Checks if there are any materials defined
           if(componentChildren[materialsIndex].children.length == 0)
-            return "at least one <material> must be defined on tag <materials> on the <component> node with index " + i + " from the <components> block";
+          return "at least one <material> must be defined on tag <materials> on the <component> node with index " + i + " from the <components> block";
 
           // Reads materials children and node names
           var materialsChildren = componentChildren[materialsIndex].children;
@@ -1545,29 +1547,31 @@ class MySceneGraph {
 
               // Validates id
               if(id == null)
-                return "unable to parse id component (null) on tag <material> with index " + j + " on tag <materials> on the <component> node with index " + i + " from the <components> block";
+              return "unable to parse id component (null) on tag <material> with index " + j + " on tag <materials> on the <component> node with index " + i + " from the <components> block";
 
               // Checks if id exists
               if(id == "inherit"){
                 //TODO
               }
               else
-                for(var k = 0; k < this.materials.length; k++){
-                  if(id === this.materials[k].id)
-                    this.components[componentCounter].materials[materialCounter] = this.materials[k];
-                  else if(k + 1 == this.transformations.length)
-                    return "id '" + id + "' is not a valid material reference on tag <material> with index " + j + " on tag <materials> on the <component> node with index " + i + " from the <components> block";
-                  }
+              for(var k = 0; k < this.materials.length; k++){
+                if(id === this.materials[k].id){
+                this.components[componentCounter].materials[materialCounter] = this.materials[k];
+                break;
               }
-              else
-                this.onXMLMinorError("tag <" + materialsNodeNames[j] + "> is not valid on tag <material> with index " + j + " on tag <materials> on the <component> node with index " + i + " from the <components> block");
+                else if(k + 1 == this.transformations.length)
+                return "id '" + id + "' is not a valid material reference on tag <material> with index " + j + " on tag <materials> on the <component> node with index " + i + " from the <components> block";
+              }
+            }
+            else
+            this.onXMLMinorError("tag <" + materialsNodeNames[j] + "> is not valid on tag <material> with index " + j + " on tag <materials> on the <component> node with index " + i + " from the <components> block");
 
-              // Increments material counter
-              materialCounter++;
+            // Increments material counter
+            materialCounter++;
           }
         }
         else
-          return "tag <materials> is not defined on the <component> node with index " + i + " from the <components> block";
+        return "tag <materials> is not defined on the <component> node with index " + i + " from the <components> block";
 
         // Reads texture tag
         if(textureIndex != -1){
@@ -1581,95 +1585,101 @@ class MySceneGraph {
 
           // Validates id, length_s, length_t
           if(id == null || length_s == null || length_t == null)
-            return "unable to parse id, length_s, length_t components (null) on tag <texture> on the <component> node with index " + i + " from the <components> block";
+          return "unable to parse id, length_s, length_t components (null) on tag <texture> on the <component> node with index " + i + " from the <components> block";
           else if(isNaN(length_s) || isNaN(length_t))
-            return "unable to length_s, length_t components (NaN) on tag <texture> on the <component> node with index " + i + " from the <components> block";
+          return "unable to length_s, length_t components (NaN) on tag <texture> on the <component> node with index " + i + " from the <components> block";
           else if(length_s < 0 || length_t < 0)
-            return "unable to length_s, length_t components (out of 0-inf. range) on tag <texture> on the <component> node with index " + i + " from the <components> block";
+          return "unable to length_s, length_t components (out of 0-inf. range) on tag <texture> on the <component> node with index " + i + " from the <components> block";
 
           // Checks if id exists
           if(id == "inherit" || id == "none"){
             //TODO
           }
           else
-            for(var k = 0; k < this.textures.length; k++){
-              if(id === this.textures[k].id)
-                this.components[componentCounter].texture.texture = this.textures[k];
-              else if(k + 1 == this.transformations.length)
-                return "id '" + id + "' is not a valid texture reference on tag <textures> on the <component> node with index " + i + " from the <components> block";
-              }
+          for(var k = 0; k < this.textures.length; k++){
+            if(id === this.textures[k].id){
+            this.components[componentCounter].texture.texture = this.textures[k];
+            break;
+          }
+            else if(k + 1 == this.transformations.length)
+            return "id '" + id + "' is not a valid texture reference on tag <textures> on the <component> node with index " + i + " from the <components> block";
+          }
 
           // Sets length_s, length_t
           this.components[componentCounter].texture.length_s = length_s;
           this.components[componentCounter].texture.length_t = length_t;
         }
         else
-          return "tag <texture> is not defined on the <component> node with index " + i + " from the <components> block";
+        return "tag <texture> is not defined on the <component> node with index " + i + " from the <components> block";
 
         // Reads children tag
         if(childrenIndex != -1){
-          if(componentChildren[childrenIndex].getElementsByTagName("componentref").length > 0 || componentChildren[childrenIndex].getElementsByTagName("primitiveref").length > 0){
-            this.components[componentCounter].children = [];
 
-            var childrenChildren = componentChildren[childrenIndex].children;
+          // Checks if there are any children defined
+          if(componentChildren[childrenIndex].getElementsByTagName("componentref").length == 0 && componentChildren[childrenIndex].getElementsByTagName("primitiveref").length == 0)
+          return "at least one children (either <componentref> or  <primitiveref>) should be defined on tag <children> on the <component> node with index " + i + " from the <components> block";
 
-            var childrenNodeNames = [];
+          // Creates variables
+          this.components[componentCounter].children = [];
 
-            for (var j = 0; j < childrenChildren.length; j++)
-            childrenNodeNames.push(childrenChildren[j].nodeName);
+          // Reads children children and node names
+          var childrenChildren = componentChildren[childrenIndex].children;
+          var childrenNodeNames = [];
+          for (var j = 0; j < childrenChildren.length; j++)
+          childrenNodeNames.push(childrenChildren[j].nodeName);
 
-            for (var j = 0; j < childrenNodeNames.length; j++){
+          for(var j = 0; j < childrenChildren.length; j++){
+            if(childrenChildren[j].nodeName == "componentref"){
+              // Reads id
+              var id = this.reader.getString(childrenChildren[j], 'id');
 
-              if(childrenNodeNames[j] == "componentref"){
-                var id = this.reader.getString(childrenChildren[j], 'id');
+              // Validates id
+              if(id == null)
+              return "unable to parse id component (null) on tag <componentref> with index " + j +" on tag <children> on the <component> node with index " + i + " from the <components> block";
 
-                /* USAR FLAG PARA QUANDO O ID NAO EXISTE, CONFIRMAR SE EXISTE NO FIM
-                var idCheck = 0;
+              //TODO: flag para quando o componentref ainda nao foi adicionado
 
-                for(var j = 0; j < this.textures.length; j++)
-                if(id == this.textures[j].id)
-                idCheck = 1;
-                */
-
-
-                this.components[componentCounter].children[j] = [];
-                this.components[componentCounter].children[j].type = "componentref";
-                this.components[componentCounter].children[j].id = id;
-
+              // Checks if id exists
+              for(var k = 0; k < this.components.length; k++){
+                if(id === this.components[k].id){
+                this.components[componentCounter].children[j] = this.components[k];
+                break;
               }
-              else if(childrenNodeNames[j] == "primitiveref"){
-                var id = this.reader.getString(childrenChildren[j], 'id');
-
-                var idCheck = 0;
-
-                for(var k = 0; k < this.primitives.length; k++)
-                if(id == this.primitives[k].id)
-                idCheck = 1;
-
-                if(idCheck == 1){
-                  this.components[componentCounter].children[j] = [];
-                  this.components[componentCounter].children[j].type = "primitiveref";
-                  this.components[componentCounter].children[j].id = id;
-                }
-                else
-                return "primitiveref not found on the components block"
+                else if(k + 1 == this.components.length)
+                return "id '" + id + "' is not a valid component reference on tag <componentref> with index " + j +" on tag <children> on the <component> node with index " + i + " from the <components> block";
               }
-              else
-              this.onXMLMinorError("unkknow tag on the components block")
             }
-          }
-          else
-          return "there should be one or more componentref and/or primitiveref"
+            else if(childrenChildren[j].nodeName == "primitiveref"){
+              // Reads id
+              var id = this.reader.getString(childrenChildren[j], 'id');
 
+              // Validates id
+              if(id == null)
+              return "unable to parse id component (null) on tag <primitiveref> with index " + j +" on tag <children> on the <component> node with index " + i + " from the <components> block";
+
+
+              // Checks if id exists
+              for(var k = 0; k < this.primitives.length; k++){
+                if(id === this.primitives[k].id){
+                this.components[componentCounter].children[j] = this.primitives[k];
+                break;
+              }
+                else if(k + 1 == this.primitives.length)
+                return "id '" + id + "' is not a valid primitive reference on tag <componentref> with index " + j +" on tag <children> on the <component> node with index " + i + " from the <components> block";
+              }
+            }
+            else
+            this.onXMLMinorError("tag <" + childrenChildren[j].nodeName + "> with index " + j + " is not valid on tag <children> on the <component> node with index " + i + " from the <components> block");
+          }
         }
         else
-          return "tag <children> is not defined on the <component> node with index " + i + " from the <components> block";
+        return "tag <children> is not defined on the <component> node with index " + i + " from the <components> block";
 
         // Increments component counter
         componentCounter++;
       }
       else
-        this.onXMLMinorError("<" + children[i].nodeName + "> node with index " + i + " is not valid on the <components> block");
+      this.onXMLMinorError("<" + children[i].nodeName + "> node with index " + i + " is not valid on the <components> block");
     }
 
     this.log("Parsed components");
