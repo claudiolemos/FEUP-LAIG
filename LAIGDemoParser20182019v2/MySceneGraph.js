@@ -233,7 +233,6 @@ class MySceneGraph {
   * Parses the <views> block.
   */
   parseViews(viewsNode) {
-
     // Reads views children and node names
     var children = viewsNode.children;
     var nodeNames = [];
@@ -243,141 +242,141 @@ class MySceneGraph {
     // Initializes views
     this.views = [];
 
-    // Reads default view (perspective or ortho)
-    var defaultView = this.reader.getString(viewsNode, "default");
-
-    // Validates default
-    if(defaultView != 'perspective' && defaultView != 'ortho')
-    return "unable to parse default component on the <views> block; must be 'perspective' or 'ortho'";
-
-    // Sets default value
-    this.views.default = defaultView;
-
-    // Gets index of each view
-    var perspectiveIndex = nodeNames.indexOf('perspective');
-    var orthoIndex = nodeNames.indexOf('ortho');
-
-
     // Checks if there's at least one of the views (perspective or ortho)
-    if (children.length == 0 || (perspectiveIndex == -1 && orthoIndex == -1))
+    if(viewsNode.getElementsByTagName('perspective').length == 0 && viewsNode.getElementsByTagName('ortho').length == 0)
     return "at least one view must be defined (either <perspective> or <ortho>) on the <views> block";
 
-    // Checks if there's only one of each view defined
-    if(children.length > 2 || (viewsNode.getElementsByTagName('perspective').length != 1 &&  viewsNode.getElementsByTagName('ortho').length != 1))
-    return "only one of each view should be defined (<perspective> and/or <ortho>)";
-
     // Creates variables
-    this.perspective = [];
-    this.ortho = []
+    this.views = [];
 
-    // Reads perspective node
-    if(perspectiveIndex != -1){
-      // Reads perspective node children and node names
-      var perspectiveChildren = children[perspectiveIndex].children;
-      var perspectiveNodeNames = [];
-      for (var i = 0; i < perspectiveChildren.length; i++)
-      perspectiveNodeNames.push(perspectiveChildren[i].nodeName);
+    for (var i = 0; i < children.length; i++){
+      if(children[i].nodeName == "perspective"){
+        // Reads perspective node children and node names
+        var perspectiveChildren = children[i].children;
+        var perspectiveNodeNames = [];
+        for (var j = 0; j < perspectiveChildren.length; j++)
+        perspectiveNodeNames.push(perspectiveChildren[j].nodeName);
 
-      // Reads id, near far, angle
-      var id = this.reader.getString(children[perspectiveIndex], 'id');
-      var near = this.reader.getFloat(children[perspectiveIndex], 'near');
-      var far = this.reader.getFloat(children[perspectiveIndex], 'far');
-      var angle = this.reader.getFloat(children[perspectiveIndex], 'angle');
+        // Reads id, near far, angle
+        var id = this.reader.getString(children[i], 'id');
+        var near = this.reader.getFloat(children[i], 'near');
+        var far = this.reader.getFloat(children[i], 'far');
+        var angle = this.reader.getFloat(children[i], 'angle');
 
-      // Validates id, near, far, angle
-      if(id == null || near == null || far == null || angle == null)
-      return "unable to parse id, near, far, angle components (null) on the <perspective> node from the <views> block";
-      else if(isNaN(near) || isNaN(far) || isNaN(angle))
-      return "unable to parse near, far, angle components (NaN) on the <perspective> node from the <views> block";
+        // Validates id, near, far, angle
+        if(id == null || near == null || far == null || angle == null)
+        return "unable to parse id, near, far, angle components (null) on the <perspective> node with index " + i + " from the <views> block";
+        else if(isNaN(near) || isNaN(far) || isNaN(angle))
+        return "unable to parse near, far, angle components (NaN) on the <perspective> node with index " + i + " from the <views> block";
 
-      // Sets id, near, far, angle
-      this.perspective.id = id;
-      this.perspective.near = near;
-      this.perspective.far = far;
-      this.perspective.angle = angle;
+        // Checks if id is unique
+        if(this.views[id] != null)
+          return "id '" + id + "' on the <perspective> node with index " + i + " from the <views> block is not unique";
 
-      // Creates from and to variables
-      this.perspective.from = [];
-      this.perspective.to = []
+        // Sets id, near, far, angle
+        this.views[id] = [];
+        this.views[id].type = "perspective"
+        this.views[id].near = near;
+        this.views[id].far = far;
+        this.views[id].angle = angle;
 
-      // Gets indexes of each element (from & too)
-      var fromIndex = perspectiveNodeNames.indexOf('from');
-      var toIndex = perspectiveNodeNames.indexOf('to');
+        // Creates from and to variables
+        this.views[id].from = [];
+        this.views[id].to = []
 
-      // Reads from and to nodes
-      if(fromIndex != -1){
-        // Reads x, y, z values
-        var x = this.reader.getFloat(perspectiveChildren[fromIndex], 'x');
-        var y = this.reader.getFloat(perspectiveChildren[fromIndex], 'y');
-        var z = this.reader.getFloat(perspectiveChildren[fromIndex], 'z');
+        // Gets indexes of each element (from & too)
+        var fromIndex = perspectiveNodeNames.indexOf('from');
+        var toIndex = perspectiveNodeNames.indexOf('to');
 
-        // Validates x, y, z values
-        if(x == null || y == null || z == null)
-        return "unable to parse x, y, z components (null) on tag <from> from the <perspective> node from the <views> block"
-        else if(isNaN(x) || isNaN(y) || isNaN(z))
-        return "unable to parse x, y, z components (NaN) on tag <from> from the <perspective> node from the <views> block"
+        // Reads from and to nodes
+        if(fromIndex != -1){
+          // Reads x, y, z values
+          var x = this.reader.getFloat(perspectiveChildren[fromIndex], 'x');
+          var y = this.reader.getFloat(perspectiveChildren[fromIndex], 'y');
+          var z = this.reader.getFloat(perspectiveChildren[fromIndex], 'z');
 
-        // Sets x, y, z values
-        this.perspective.from.x = x;
-        this.perspective.from.y = y;
-        this.perspective.from.z = z;
+          // Validates x, y, z values
+          if(x == null || y == null || z == null)
+          return "unable to parse x, y, z components (null) on tag <from> from the <perspective> node with index " + i + " from the <views> block";
+          else if(isNaN(x) || isNaN(y) || isNaN(z))
+          return "unable to parse x, y, z components (NaN) on tag <from> from the <perspective> node with index " + i + " from the <views> block";
+
+          // Sets x, y, z values
+          this.views[id].from.x = x;
+          this.views[id].from.y = y;
+          this.views[id].from.z = z;
+        }
+        else
+        return "tag <from> is not defined on the <perspective> node with index " + i + " from the <views> block";
+
+        if(toIndex != -1){
+          // Reads x, y, z values
+          var x = this.reader.getFloat(perspectiveChildren[toIndex], 'x');
+          var y = this.reader.getFloat(perspectiveChildren[toIndex], 'y');
+          var z = this.reader.getFloat(perspectiveChildren[toIndex], 'z');
+
+          // Validates x, y, z values
+          if(x == null || y == null || z == null)
+          return "unable to parse x, y, z components (null) on tag <to> from the <perspective> node with index " + i + " from the <views> block";
+          else if(isNaN(x) || isNaN(y) || isNaN(z))
+          return "unable to parse x, y, z components (NaN) on tag <to> from the <perspective> node with index " + i + " from the <views> block";
+
+          // Sets x, y, z values
+          this.views[id].to.x = x;
+          this.views[id].to.y = y;
+          this.views[id].to.z = z;
+        }
+        else
+        return "tag <to> is not defined on the <perspective> node with index " + i + " from the <views> block";
+      }
+      else if(children[i].nodeName == "ortho"){
+        // Reads ortho node children and node names
+        var orthoChildren = children[i].children;
+        var orthoNodeNames = [];
+        for (var j = 0; j < orthoChildren.length; j++)
+        orthoNodeNames.push(orthoChildren[j].nodeName);
+
+        // Reads id, near far, left, right, top, bottom
+        var id = this.reader.getString(children[i], 'id');
+        var near = this.reader.getFloat(children[i], 'near');
+        var far = this.reader.getFloat(children[i], 'far');
+        var left = this.reader.getFloat(children[i], 'left');
+        var right = this.reader.getFloat(children[i], 'right');
+        var top = this.reader.getFloat(children[i], 'top');
+        var bottom = this.reader.getFloat(children[i], 'bottom');
+
+        // Validates id, near far, left, right, top, bottom
+        if(id == null || near == null || far == null || left == null || right == null || top == null || bottom == null)
+        return "unable to parse id, near far, left, right, top, bottom components (null) on the <ortho> node with index " + i + " from the <views> block";
+        else if(isNaN(near) || isNaN(far) || isNaN(left) || isNaN(right) || isNaN(top) || isNaN(bottom))
+        return "unable to parse near far, left, right, top, bottom components (NaN) on the <ortho> node with index " + i + " from the <views> block";
+
+        // Checks if id is unique
+        if(this.views[id] != null)
+          return "id '" + id + "' on the <ortho> node with index " + i + " from the <views> block is not unique";
+
+        // Sets id, near far, left, right, top, bottom
+        this.views[id] = [];
+        this.views[id].type = "ortho";
+        this.views[id].near = near;
+        this.views[id].far = far;
+        this.views[id].left = left;
+        this.views[id].right = right;
+        this.views[id].top = top;
+        this.views[id].bottom = bottom;
       }
       else
-      return "tag <from> is not defined on the <perspective> node from the <views> block"
-
-      if(toIndex != -1){
-        // Reads x, y, z values
-        var x = this.reader.getFloat(perspectiveChildren[toIndex], 'x');
-        var y = this.reader.getFloat(perspectiveChildren[toIndex], 'y');
-        var z = this.reader.getFloat(perspectiveChildren[toIndex], 'z');
-
-        // Validates x, y, z values
-        if(x == null || y == null || z == null)
-        return "unable to parse x, y, z components (null) on tag <to> from the <perspective> node from the <views> block"
-        else if(isNaN(x) || isNaN(y) || isNaN(z))
-        return "unable to parse x, y, z components (NaN) on tag <to> from the <perspective> node from the <views> block"
-
-        // Sets x, y, z values
-        this.perspective.to.x = x;
-        this.perspective.to.y = y;
-        this.perspective.to.z = z;
-      }
-      else
-      return "tag <to> is not defined on the <perspective> node from the <views> block"
+        return "<" + children[j].nodeName + "> node with index " + i + " is not valid on the <views> block";
     }
 
-    //Reads ortho node
-    if(orthoIndex != -1){
-      // Reads ortho node children and node names
-      var orthoChildren = children[orthoIndex].children;
-      var orthoNodeNames = [];
-      for (var i = 0; i < orthoChildren.length; i++)
-      orthoNodeNames.push(orthoChildren[i].nodeName);
+    // Reads default view
+    var defaultView = this.reader.getString(viewsNode, "default");
 
-      // Reads id, near far, left, right, top, bottom
-      var id = this.reader.getString(children[orthoIndex], 'id');
-      var near = this.reader.getFloat(children[orthoIndex], 'near');
-      var far = this.reader.getFloat(children[orthoIndex], 'far');
-      var left = this.reader.getFloat(children[orthoIndex], 'left');
-      var right = this.reader.getFloat(children[orthoIndex], 'right');
-      var top = this.reader.getFloat(children[orthoIndex], 'top');
-      var bottom = this.reader.getFloat(children[orthoIndex], 'bottom');
-
-      // Validates id, near far, left, right, top, bottom
-      if(id == null || near == null || far == null || left == null || right == null || top == null || bottom == null)
-      return "unable to parse id, near far, left, right, top, bottom components (null) on the <ortho> node from the <views> block";
-      else if(isNaN(near) || isNaN(far) || isNaN(left) || isNaN(right) || isNaN(top) || isNaN(bottom))
-      return "unable to parse near far, left, right, top, bottom components (NaN) on the <ortho> node from the <views> block";
-
-      // Sets id, near far, left, right, top, bottom
-      this.ortho.id = id;
-      this.ortho.near = near;
-      this.ortho.far = far;
-      this.ortho.left = left;
-      this.ortho.right = right;
-      this.ortho.top = top;
-      this.ortho.bottom = bottom;
-    }
+    // Finds and sets default view
+    if(this.views[defaultView] != null)
+      this.default = this.views[defaultView];
+    else
+      return "default id is not valid on the <views> block";
 
     this.log("Parsed views");
 
@@ -474,11 +473,12 @@ class MySceneGraph {
     if(lightsNode.getElementsByTagName('omni').length == 0 && lightsNode.getElementsByTagName('spot').length == 0)
     return "at least one light must be defined (either <omni> or <spot>) on the <lights> block";
 
+    // Checks if there are more than 8 lights defined
+    if(children.length > 8)
+    return "no more than 8 lights can be defined on the <lights> block due to WebGL limits";
+
     // Creates variables
-    this.omni = [];
-    this.spot = [];
-    var omniCounter = 0;
-    var spotCounter = 0;
+    this.lights = [];
 
     // Reads omni amd spot lights
     for (var i = 0; i < children.length; i++){
@@ -488,9 +488,6 @@ class MySceneGraph {
         var omniNodeNames = [];
         for (var j = 0; j < omniChildren.length; j++)
         omniNodeNames.push(omniChildren[j].nodeName);
-
-        // Creates variable
-        this.omni[omniCounter] = [];
 
         // Reads id and enabled
         var id = this.reader.getString(children[i], 'id');
@@ -505,13 +502,13 @@ class MySceneGraph {
         return "unable to parse enabled component (not valid - should be 0 or 1) on the <omni> node with index " + i + " from the <lights> block";
 
         // Checks if id is unique
-        for(var j = 0; j < this.omni.length; j++)
-        if(id == this.omni[j].id)
+        if(this.lights[id] != null)
         return "id '" + id + "' on the <omni> node with index " + i + " from the <lights> block is not unique";
 
         // Sets id and enabled
-        this.omni[omniCounter].id = id;
-        this.omni[omniCounter].enabled = enabled;
+        this.lights[id] = [];
+        this.lights[id].type = "omni";
+        this.lights[id].enabled = enabled;
 
         // Gets indexes of location, ambient, diffuse and specular
         var locationIndex = omniNodeNames.indexOf("location");
@@ -522,7 +519,7 @@ class MySceneGraph {
         // Reads location tag
         if(locationIndex != -1){
           // Creates variable
-          this.omni[omniCounter].location = [];
+          this.lights[id].location = [];
 
           // Reads x, y, z,, w
           var x = this.reader.getFloat(omniChildren[locationIndex], 'x');
@@ -537,10 +534,10 @@ class MySceneGraph {
           return "unable to parse x, y, z, w component (null) on tag <location> from the <omni> node with index " + i + " from the <lights> block";
 
           // Sets x, y, z, w
-          this.omni[omniCounter].location.x = x;
-          this.omni[omniCounter].location.y = y;
-          this.omni[omniCounter].location.z = z;
-          this.omni[omniCounter].location.w = w;
+          this.lights[id].location.x = x;
+          this.lights[id].location.y = y;
+          this.lights[id].location.z = z;
+          this.lights[id].location.w = w;
         }
         else
         return "tag <location> is not defined on the <omni> node with index " + i + " from the <lights> block";
@@ -548,7 +545,7 @@ class MySceneGraph {
         // Reads ambient tag
         if(ambientIndex != -1){
           // Creates variable
-          this.omni[omniCounter].ambient = [];
+          this.lights[id].ambient = [];
 
           // Reads r, g, b, a
           var r = this.reader.getFloat(omniChildren[ambientIndex], 'r');
@@ -565,10 +562,10 @@ class MySceneGraph {
           return "unable to parse r, g, b, a component (out of 0.0-1.0 range) on tag <ambient> from the <omni> node with index " + i + " from the <lights> block";
 
           // Sets r, g, b, a
-          this.omni[omniCounter].ambient.r = r;
-          this.omni[omniCounter].ambient.g = g;
-          this.omni[omniCounter].ambient.b = b;
-          this.omni[omniCounter].ambient.a = a;
+          this.lights[id].ambient.r = r;
+          this.lights[id].ambient.g = g;
+          this.lights[id].ambient.b = b;
+          this.lights[id].ambient.a = a;
         }
         else
         return "tag <ambient> is not defined on the <omni> node with index " + i + " from the <lights> block";
@@ -576,7 +573,7 @@ class MySceneGraph {
         // Reads diffuse tag
         if(diffuseIndex != -1){
           // Creates variable
-          this.omni[omniCounter].diffuse = [];
+          this.lights[id].diffuse = [];
 
           // Reads r, g, b, a
           var r = this.reader.getFloat(omniChildren[diffuseIndex], 'r');
@@ -593,10 +590,10 @@ class MySceneGraph {
           return "unable to parse r, g, b, a component (out of 0.0-1.0 range) on tag <diffuse> from the <omni> node with index " + i + " from the <lights> block";
 
           // Sets r, g, b, a
-          this.omni[omniCounter].diffuse.r = r;
-          this.omni[omniCounter].diffuse.g = g;
-          this.omni[omniCounter].diffuse.b = b;
-          this.omni[omniCounter].diffuse.a = a;
+          this.lights[id].diffuse.r = r;
+          this.lights[id].diffuse.g = g;
+          this.lights[id].diffuse.b = b;
+          this.lights[id].diffuse.a = a;
         }
         else
         return "tag <diffuse> is not defined on the <omni> node with index " + i + " from the <lights> block";
@@ -605,7 +602,7 @@ class MySceneGraph {
         // Reads specular tag
         if(specularIndex != -1){
           // Creates variable
-          this.omni[omniCounter].specular = [];
+          this.lights[id].specular = [];
 
           // Reads r, g, b, a
           var r = this.reader.getFloat(omniChildren[specularIndex], 'r');
@@ -622,16 +619,13 @@ class MySceneGraph {
           return "unable to parse r, g, b, a component (out of 0.0-1.0 range) on tag <specular> from the <omni> node with index " + i + " from the <lights> block";
 
           // Sets r, g, b, a
-          this.omni[omniCounter].specular.r = r;
-          this.omni[omniCounter].specular.g = g;
-          this.omni[omniCounter].specular.b = b;
-          this.omni[omniCounter].specular.a = a;
+          this.lights[id].specular.r = r;
+          this.lights[id].specular.g = g;
+          this.lights[id].specular.b = b;
+          this.lights[id].specular.a = a;
         }
         else
         return "tag <specular> is not defined on the <omni> node with index " + i + " from the <lights> block";
-
-        // Increments omni lights counter
-        omniCounter++;
       }
       else if(children[i].nodeName == "spot"){
         // Reads spot children and node names
@@ -639,9 +633,6 @@ class MySceneGraph {
         var spotNodeNames = [];
         for (var j = 0; j < spotChildren.length; j++)
         spotNodeNames.push(spotChildren[j].nodeName);
-
-        // Creates variable
-        this.spot[spotCounter] = [];
 
         // Reads id, enabled, angle, exponent
         var id = this.reader.getString(children[i], 'id');
@@ -658,15 +649,15 @@ class MySceneGraph {
         return "unable to parse enabled component (not valid - should be 0 or 1) on the <spot> node with index " + i + " from the <lights> block";
 
         // Checks if id is unique
-        for(var j = 0; j < this.spot.length; j++)
-        if(id == this.spot[j].id)
+        if(this.lights[id] != null)
         return "id '" + id + "' on the <spot> node with index " + i + " from the <lights> block is not unique";
 
         // Sets id, enabled, angle, exponent
-        this.spot[spotCounter].id = id;
-        this.spot[spotCounter].enabled = enabled;
-        this.spot[spotCounter].angle = angle;
-        this.spot[spotCounter].exponent = exponent;
+        this.lights[id] = [];
+        this.lights[id].type = "spot";
+        this.lights[id].enabled = enabled;
+        this.lights[id].angle = angle;
+        this.lights[id].exponent = exponent;
 
         // Gets indexes of location, target ambient, diffuse, specular
         var locationIndex = spotNodeNames.indexOf("location");
@@ -678,7 +669,7 @@ class MySceneGraph {
         // Reads location tag
         if(locationIndex != -1){
           // Creates variable
-          this.spot[spotCounter].location = [];
+          this.lights[id].location = [];
 
           // Reads x, y, z, w
           var x = this.reader.getFloat(spotChildren[locationIndex], 'x');
@@ -693,10 +684,10 @@ class MySceneGraph {
           return "unable to parse x, y, z, w component (null) on tag <location> from the <spot> node with index " + i + " from the <lights> block";
 
           // Sets x, y, z, w
-          this.spot[spotCounter].location.x = x;
-          this.spot[spotCounter].location.y = y;
-          this.spot[spotCounter].location.z = z;
-          this.spot[spotCounter].location.w = w;
+          this.lights[id].location.x = x;
+          this.lights[id].location.y = y;
+          this.lights[id].location.z = z;
+          this.lights[id].location.w = w;
         }
         else
         return "tag <location> is not defined on the <spot> node with index " + i + " from the <lights> block";
@@ -704,7 +695,7 @@ class MySceneGraph {
         // Reads target tag
         if(targetIndex != -1){
           // Creates variable
-          this.spot[spotCounter].target = [];
+          this.lights[id].target = [];
 
           // Reads x, y, z, w
           var x = this.reader.getFloat(spotChildren[targetIndex], 'x');
@@ -718,9 +709,9 @@ class MySceneGraph {
           return "unable to parse x, y, z component (null) on tag <target> from the <spot> node with index " + i + " from the <lights> block";
 
           // Sets x, y, z, w
-          this.spot[spotCounter].target.x = x;
-          this.spot[spotCounter].target.y = y;
-          this.spot[spotCounter].target.z = z;
+          this.lights[id].target.x = x;
+          this.lights[id].target.y = y;
+          this.lights[id].target.z = z;
         }
         else
         return "tag <target> is not defined on the <spot> node with index " + i + " from the <lights> block";
@@ -728,7 +719,7 @@ class MySceneGraph {
         // Reads ambient tag
         if(ambientIndex != -1){
           // Creates variable
-          this.spot[spotCounter].ambient = [];
+          this.lights[id].ambient = [];
 
           // Reads r, g, b, a
           var r = this.reader.getFloat(spotChildren[ambientIndex], 'r');
@@ -745,10 +736,10 @@ class MySceneGraph {
           return "unable to parse r, g, b, a component (out of 0.0-1.0 range) on tag <ambient> from the <spot> node with index " + i + " from the <lights> block";
 
           // Sets r, g, b, a
-          this.spot[spotCounter].ambient.r = r;
-          this.spot[spotCounter].ambient.g = g;
-          this.spot[spotCounter].ambient.b = b;
-          this.spot[spotCounter].ambient.a = a;
+          this.lights[id].ambient.r = r;
+          this.lights[id].ambient.g = g;
+          this.lights[id].ambient.b = b;
+          this.lights[id].ambient.a = a;
         }
         else
         return "tag <ambient> is not defined on the <spot> node with index " + i + " from the <lights> block";
@@ -756,7 +747,7 @@ class MySceneGraph {
         // Reads diffuse tag
         if(diffuseIndex != -1){
           // Creates variable
-          this.spot[spotCounter].diffuse = [];
+          this.lights[id].diffuse = [];
 
           // Reads r, g, b, a
           var r = this.reader.getFloat(spotChildren[diffuseIndex], 'r');
@@ -773,10 +764,10 @@ class MySceneGraph {
           return "unable to parse r, g, b, a component (out of 0.0-1.0 range) on tag <diffuse> from the <spot> node with index " + i + " from the <lights> block";
 
           // Sets r, g, b, a
-          this.spot[spotCounter].diffuse.r = r;
-          this.spot[spotCounter].diffuse.g = g;
-          this.spot[spotCounter].diffuse.b = b;
-          this.spot[spotCounter].diffuse.a = a;
+          this.lights[id].diffuse.r = r;
+          this.lights[id].diffuse.g = g;
+          this.lights[id].diffuse.b = b;
+          this.lights[id].diffuse.a = a;
         }
         else
         return "tag <diffuse> is not defined on the <spot> node with index " + i + " from the <lights> block";
@@ -784,7 +775,7 @@ class MySceneGraph {
         // Reads specular tag
         if(specularIndex != -1){
           // Creates variable
-          this.spot[spotCounter].specular = [];
+          this.lights[id].specular = [];
 
           // Reads r, g, b, a
           var r = this.reader.getFloat(spotChildren[specularIndex], 'r');
@@ -801,16 +792,13 @@ class MySceneGraph {
           return "unable to parse r, g, b, a component (out of 0.0-1.0 range) on tag <specular> from the <spot> node with index " + i + " from the <lights> block";
 
           // Sets r, g, b, a
-          this.spot[spotCounter].specular.r = r;
-          this.spot[spotCounter].specular.g = g;
-          this.spot[spotCounter].specular.b = b;
-          this.spot[spotCounter].specular.a = a;
+          this.lights[id].specular.r = r;
+          this.lights[id].specular.g = g;
+          this.lights[id].specular.b = b;
+          this.lights[id].specular.a = a;
         }
         else
         return "tag <specular> is not defined on the <spot> node with index " + i + " from the <lights> block";
-
-        // Increments spot lights counter
-        spotCounter++;
       }
       else
       this.onXMLMinorError("<" + children[i].nodeName + "> node with index " + i + " is not valid on the <lights> block");
@@ -837,13 +825,10 @@ class MySceneGraph {
 
     // Creates variables
     this.textures = [];
-    var textureCounter = 0;
 
     // Reads textures
     for (var i = 0; i < children.length; i++){
       if(children[i].nodeName == "texture"){
-        // Creates variable
-        this.textures[textureCounter] = [];
 
         // Reads id and file
         var id = this.reader.getString(children[i], 'id');
@@ -854,16 +839,11 @@ class MySceneGraph {
         return "unable to parse id and file components (null) on the <texture> node with index " + i + " from the <textures> block";
 
         // Checks if id is unique
-        for(var j = 0; j < this.textures.length; j++)
-        if(id == this.textures[j].id)
+        if(this.textures[id] != null)
         return "id '" + id + "' on the <texture> node with index " + i + " from the <textures> block is not unique";
 
-        // Sets id and file
-        this.textures[textureCounter].id = id;
-        this.textures[textureCounter].file = file;
-
-        // Increments texture counter
-        textureCounter++;
+        // Sets texture
+        this.textures[id] = new CGFtexture(this.scene, file);
       }
       else
       this.onXMLMinorError("<" + children[i].nodeName + "> node with index " + i + " is not valid on the <textures> block");
@@ -890,20 +870,22 @@ class MySceneGraph {
 
     // Creates variables
     this.materials = [];
-    var materialCounter = 0;
 
     // Reads materials
     for (var i = 0; i < children.length; i++){
       if(children[i].nodeName == "material"){
+
+        //Create variables
+        var emission = [];
+        var ambient = [];
+        var specular = [];
+        var diffuse = [];
 
         // Reads material children and node names
         var materialChildren = children[i].children;
         var materialNodeNames = [];
         for (var j = 0; j < materialChildren.length; j++)
         materialNodeNames.push(materialChildren[j].nodeName);
-
-        // Creates variable
-        this.materials[materialCounter] = [];
 
         // Reads id and shininess
         var id = this.reader.getString(children[i], 'id');
@@ -916,13 +898,8 @@ class MySceneGraph {
         return "unable to parse shininess component (NaN) on the <material> node with index " + i + " from the <materials> block";
 
         // Verifies if the id is unique
-        for(var j = 0; j < this.materials.length; j++)
-        if(id == this.materials[j].id)
+        if(this.materials[id] != null)
         return "id '" + id + "' on the <material> node with index " + i + " from the <materials> block is not unique";
-
-        // Sets id and shininess
-        this.materials[materialCounter].id = id;
-        this.materials[materialCounter].shininess = shininess;
 
         // Gets indexes of emission, ambient, diffuse, specular
         var emissionIndex = materialNodeNames.indexOf("emission");
@@ -932,9 +909,6 @@ class MySceneGraph {
 
         // Reads emission tag
         if(emissionIndex != -1){
-          // Creates variable
-          this.materials[materialCounter].emission = [];
-
           // Reads r, g, b, a
           var r = this.reader.getFloat(materialChildren[emissionIndex], 'r');
           var g = this.reader.getFloat(materialChildren[emissionIndex], 'g');
@@ -950,10 +924,10 @@ class MySceneGraph {
           return "unable to parse r, g, b, a component (out of 0.0-1.0 range) on tag <emission> from the <material> node with index " + i + " from the <materials> block";
 
           // Sets r, g, b, a
-          this.materials[materialCounter].emission.r = r;
-          this.materials[materialCounter].emission.g = g;
-          this.materials[materialCounter].emission.b = b;
-          this.materials[materialCounter].emission.a = a;
+          emission.r = r;
+          emission.g = g;
+          emission.b = b;
+          emission.a = a;
         }
         else
         return "tag <emission> is not defined on the <material> node with index " + i + " from the <materials> block";
@@ -961,8 +935,6 @@ class MySceneGraph {
 
         // Reads ambient tag
         if(ambientIndex != -1){
-          // Creates variable
-          this.materials[materialCounter].ambient = [];
 
           // Reads r, g, b, a
           var r = this.reader.getFloat(materialChildren[ambientIndex], 'r');
@@ -979,10 +951,10 @@ class MySceneGraph {
           return "unable to parse r, g, b, a component (out of 0.0-1.0 range) on tag <ambient> from the <material> node with index " + i + " from the <materials> block";
 
           // Sets r, g, b, a
-          this.materials[materialCounter].ambient.r = r;
-          this.materials[materialCounter].ambient.g = g;
-          this.materials[materialCounter].ambient.b = b;
-          this.materials[materialCounter].ambient.a = a;
+          ambient.r = r;
+          ambient.g = g;
+          ambient.b = b;
+          ambient.a = a;
         }
         else
         return "tag <ambient> is not defined on the <material> node with index " + i + " from the <materials> block";
@@ -990,8 +962,6 @@ class MySceneGraph {
 
         // Reads diffuse tag
         if(diffuseIndex != -1){
-          // Creates variable
-          this.materials[materialCounter].diffuse = [];
 
           // Reads r, g, b, a
           var r = this.reader.getFloat(materialChildren[diffuseIndex], 'r');
@@ -1008,10 +978,10 @@ class MySceneGraph {
           return "unable to parse r, g, b, a component (out of 0.0-1.0 range) on tag <diffuse> from the <material> node with index " + i + " from the <materials> block";
 
           // Sets r, g, b, a
-          this.materials[materialCounter].diffuse.r = r;
-          this.materials[materialCounter].diffuse.g = g;
-          this.materials[materialCounter].diffuse.b = b;
-          this.materials[materialCounter].diffuse.a = a;
+          diffuse.r = r;
+          diffuse.g = g;
+          diffuse.b = b;
+          diffuse.a = a;
         }
         else
         return "tag <diffuse> is not defined on the <material> node with index " + i + " from the <materials> block";
@@ -1019,8 +989,6 @@ class MySceneGraph {
 
         // Reads specular tag
         if(specularIndex != -1){
-          // Creates variable
-          this.materials[materialCounter].specular = [];
 
           // Reads r, g, b, a
           var r = this.reader.getFloat(materialChildren[specularIndex], 'r');
@@ -1037,16 +1005,23 @@ class MySceneGraph {
           return "unable to parse r, g, b, a component (out of 0.0-1.0 range) on tag <specular> from the <material> node with index " + i + " from the <materials> block";
 
           // Sets r, g, b, a
-          this.materials[materialCounter].specular.r = r;
-          this.materials[materialCounter].specular.g = g;
-          this.materials[materialCounter].specular.b = b;
-          this.materials[materialCounter].specular.a = a;
+          specular.r = r;
+          specular.g = g;
+          specular.b = b;
+          specular.a = a;
         }
         else
         return "tag <specular> is not defined on the <material> node with index " + i + " from the <materials> block";
 
-        // Increments material counter
-        materialCounter++;
+
+        // Creates variables
+        var material = new CGFappearance(this.scene);
+        material.setShininess(shininess);
+        material.setAmbient(ambient.r, ambient.g, ambient.b, ambient.a);
+        material.setDiffuse(diffuse.r, diffuse.g, diffuse.b, diffuse.a);
+        material.setSpecular(specular.r, specular.g, specular.b, specular.a);
+        material.setEmission(emission.r, emission.g, emission.b, emission.a);
+        this.materials[id] = material;
       }
       else
       this.onXMLMinorError("<" + children[i].nodeName + "> node with index " + i + " is not valid on the <materials> block");
@@ -1073,7 +1048,6 @@ class MySceneGraph {
 
     // Creates variables
     this.transformations = [];
-    var transformationCounter = 0;
 
     // Reads transformations
     for (var i = 0; i < children.length; i++){
@@ -1088,9 +1062,6 @@ class MySceneGraph {
         if(transformationChildren.length == 0)
         return "at least one instruction tag must be defined (either <translate>, <rotate> or scale) on the <transformation> node with index " + i + " from the <transformations> block";
 
-        // Creates variables
-        this.transformations[transformationCounter] = [];
-
         // Reads id
         var id = this.reader.getString(children[i], 'id');
 
@@ -1099,12 +1070,8 @@ class MySceneGraph {
         return "unable to parse id component (null) on the <transformation> node with index " + i + " from the <transformations> block";
 
         // Checks if id is unique
-        for(var j = 0; j < this.transformations.length; j++)
-        if(id == this.transformations[j].id)
+        if(this.transformations[id] != null)
         return "id '" + id + "' on the <transformation> node with index " + i + " from the <transformations> block is not unique";
-
-        // Sets id
-        this.transformations[transformationCounter].id = id;
 
         // Create variables
         var transformationMatrix = mat4.create();
@@ -1167,10 +1134,7 @@ class MySceneGraph {
         }
 
         // Sets transformation
-        this.transformations[transformationCounter].transformation = transformationMatrix;
-
-        // Incremenets transformations counter
-        transformationCounter++;
+        this.transformations[id] = transformationMatrix;
       }
       else
       this.onXMLMinorError("<" + children[i].nodeName + "> node with index " + i + " is not valid on the <transformations> block");
@@ -1197,7 +1161,6 @@ class MySceneGraph {
 
     // Creates variables
     this.primitives = [];
-    var primitiveCounter = 0;
 
     // Reads primitives
     for (var i = 0; i < children.length; i++){
@@ -1216,7 +1179,6 @@ class MySceneGraph {
         return "one tag <rectangle>, <triangle>, <cylinder>, <sphere> or <torus> must be defined on the <primitive> node with index " + i + " from the <primitives> block";
 
         // Creates variables
-        this.primitives[primitiveCounter] = [];
         var tagIndex = 0;
 
         // Reads id
@@ -1227,12 +1189,8 @@ class MySceneGraph {
         return "unable to parse id component (null) on the <primitive> node with index " + i + " from the <primitives> block";
 
         // Verifies if the id is unique
-        for(var j = 0; j < this.primitives.length; j++)
-        if(id == this.primitives[j].id)
+        if(this.primitives[id] != null)
         return "id '" + id + "' on the <primitive> node with index " + i + " from the <primitives> block is not unique";
-
-        // Sets id
-        this.primitives[primitiveCounter].id = id;
 
         // Reads primitive tag
         if(children[i].children[tagIndex].nodeName == "rectangle"){
@@ -1249,12 +1207,8 @@ class MySceneGraph {
           else if(x1 == null || x2 == null || y1 == null || y2 == null)
           return "unable to parse x1, x2, y1, y2 components (null) on tag <rectangle> from the <primitive> node with index " + i + " from the <primitives> block";
 
-          // Sets type, x1, x2, y1, y2
-          this.primitives[primitiveCounter].type = "rectangle";
-          this.primitives[primitiveCounter].x1 = x1;
-          this.primitives[primitiveCounter].x2 = x2;
-          this.primitives[primitiveCounter].y1 = y1;
-          this.primitives[primitiveCounter].y2 = y2;
+          // Sets rectangle
+          this.primitives[id] = new MyRectangle(this.scene);
         }
         else if(children[i].children[tagIndex].nodeName == "triangle"){
 
@@ -1275,17 +1229,8 @@ class MySceneGraph {
           else if(x1 == null || x2 == null ||  x3 == null || y1 == null || y2 == null || y3 == null ||  z1 == null || z2 == null || z3 == null)
           return "unable to parse x1, x2, x3, y1, y2, y3, z1, z2, z3 components (null) on tag <triangle> from the <primitive> node with index " + i + " from the <primitives> block";
 
-          // Sets type, x1, x2, x3, y1, y2, y3, z1, z2, z3
-          this.primitives[primitiveCounter].type = "triangle";
-          this.primitives[primitiveCounter].x1 = x1;
-          this.primitives[primitiveCounter].x2 = x2;
-          this.primitives[primitiveCounter].x3 = x3;
-          this.primitives[primitiveCounter].y1 = y1;
-          this.primitives[primitiveCounter].y2 = y2;
-          this.primitives[primitiveCounter].y3 = y3;
-          this.primitives[primitiveCounter].z1 = z1;
-          this.primitives[primitiveCounter].z2 = z2;
-          this.primitives[primitiveCounter].z3 = z3;
+          // Sets triangle
+          this.primitives[id] = new MyRectangle(this.scene);
         }
         else if(children[i].children[tagIndex].nodeName == "cylinder"){
 
@@ -1306,13 +1251,8 @@ class MySceneGraph {
           else if(height <= 0)
           return "unable to parse height component (out of 0-inf range) on tag <cylinder> from the <primitive> node with index " + i + " from the <primitives> block";
 
-          // Sets type, base, top, height, slices, stacks
-          this.primitives[primitiveCounter].type = "cylinder";
-          this.primitives[primitiveCounter].base = base;
-          this.primitives[primitiveCounter].height = height;
-          this.primitives[primitiveCounter].top = top;
-          this.primitives[primitiveCounter].stacks = stacks;
-          this.primitives[primitiveCounter].slices = slices;
+          // Sets cylinder
+          this.primitives[id] = new MyRectangle(this.scene);
         }
         else if(children[i].children[tagIndex].nodeName == "sphere"){
 
@@ -1331,11 +1271,8 @@ class MySceneGraph {
           else if(radius <= 0)
           return "unable to parse radius component (out of 0-inf range) on tag <sphere> from the <primitive> node with index " + i + " from the <primitives> block";
 
-          // Sets type, radius, slices, stacks
-          this.primitives[primitiveCounter].type = "sphere";
-          this.primitives[primitiveCounter].radius = radius;
-          this.primitives[primitiveCounter].stacks = stacks;
-          this.primitives[primitiveCounter].slices = slices;
+          // Sets sphere
+          this.primitives[id] = new MyRectangle(this.scene);
         }
         else if(children[i].children[tagIndex].nodeName == "torus"){
 
@@ -1355,18 +1292,11 @@ class MySceneGraph {
           else if(inner < 0 || outer <= 0)
           return "unable to parse inner and outer components (out of 0-inf range) on tag <torus> from the <primitive> node with index " + i + " from the <primitives> block";
 
-          // Sets type, inner, outer, slices, loops
-          this.primitives[primitiveCounter].type = "torus";
-          this.primitives[primitiveCounter].inner = inner;
-          this.primitives[primitiveCounter].outer = outer;
-          this.primitives[primitiveCounter].slices = slices;
-          this.primitives[primitiveCounter].loops = loops;
+          // Sets torus
+          this.primitives[id] = new MyRectangle(this.scene);
         }
         else
         this.onXMLMinorError("tag <" + children[i].children[tagIndex].nodeName + "> is not valid on the <primitive> node with index " + i + " from the <primitives> block");
-
-        // Increments the primitive counter
-        primitiveCounter++;
       }
       else
       this.onXMLMinorError("<" + children[i].nodeName + "> node with index " + i + " is not valid on the <primitives> block");
@@ -1393,7 +1323,6 @@ class MySceneGraph {
 
     // Creates variables
     this.components = [];
-    var componentCounter = 0;
 
     // Reads components
     for (var i = 0; i < children.length; i++){
@@ -1404,9 +1333,6 @@ class MySceneGraph {
         for (var j = 0; j < componentChildren.length; j++)
         componentNodeNames.push(componentChildren[j].nodeName);
 
-        // Creates variables
-        this.components[componentCounter] = [];
-
         // Reads id
         var id = this.reader.getString(children[i], 'id');
 
@@ -1415,12 +1341,11 @@ class MySceneGraph {
         return "unable to parse id component (null) on the <component> node with index " + i + " from the <components> block";
 
         // Verifies if the id is unique
-        for(var j = 0; j < this.components.length; j++)
-        if(id == this.components[j].id)
-        return "id '" + id + "' on the <component> node with index " + i + " from the <components> block is not unique";
+        if(this.components[id] != null)
+          return "id '" + id + "' on the <component> node with index " + i + " from the <components> block is not unique";
 
-        // Sets id
-        this.components[componentCounter].id = id;
+        // Creates variables
+        this.components[id] = new MyGraphNode(this, id);
 
         // Gets indexes of transformation, materials, texture and children
         var transformationIndex = componentNodeNames.indexOf("transformation");
@@ -1450,17 +1375,17 @@ class MySceneGraph {
             for(var j = 0; j < transformationChildren.length; j++){
               if(transformationNodeNames[j] == "transformationref"){
                 // Reads id
-                var id = this.reader.getString(componentChildren[transformationIndex].children[j], 'id');
+                var transformationID = this.reader.getString(componentChildren[transformationIndex].children[j], 'id');
+
+                // Validates id
+                if(transformationID == null)
+                return "unable to parse id component (null) on tag <transformationref> on tag <transformations> on the <component> node with index " + i + " from the <components> block";
 
                 // Checks if id exists
-                for(var k = 0; k < this.transformations.length; k++){
-                  if(id === this.transformations[k].id){
-                  this.components[componentCounter].transformation = this.transformations[k].transformation;
-                  break;
-                }
-                  else if(k + 1 == this.transformations.length)
-                  return "id '" + id + "' is not a valid transformation reference on tag <transformation> on the <component> node with index " + i + " from the <components> block";
-                }
+                  if(this.transformations[transformationID] != null)
+                    this.components[id].transformation = this.transformations[transformationID];
+                  else
+                    return "id '" + transformationID + "' is not a valid transformation reference on tag <transformation> on the <component> node with index " + i + " from the <components> block";
               }
               else if(transformationNodeNames[j] == "translate"){
                 // Reads x, y, z
@@ -1518,7 +1443,7 @@ class MySceneGraph {
             }
 
             // Sets transformation
-            this.components[componentCounter].transformation = transformationMatrix;
+            this.components[id].transformation = transformationMatrix;
           }
         }
         else
@@ -1526,9 +1451,6 @@ class MySceneGraph {
 
         // Reads materials tag
         if(materialsIndex != -1){
-          // Creates variable
-          this.components[componentCounter].materials = [];
-          var materialCounter = 0;
 
           // Checks if there are any materials defined
           if(componentChildren[materialsIndex].children.length == 0)
@@ -1543,31 +1465,25 @@ class MySceneGraph {
           for(var j = 0; j < materialsChildren.length; j++){
             if(materialsNodeNames[j] == "material"){
               // Reads id
-              var id = this.reader.getString(componentChildren[materialsIndex].children[j], 'id');
+              var materialID = this.reader.getString(componentChildren[materialsIndex].children[j], 'id');
 
               // Validates id
-              if(id == null)
+              if(materialID == null)
               return "unable to parse id component (null) on tag <material> with index " + j + " on tag <materials> on the <component> node with index " + i + " from the <components> block";
 
               // Checks if id exists
-              if(id == "inherit"){
+              if(materialID == "inherit"){
                 //TODO
               }
+              else{
+              if(this.materials[materialID] != null)
+                this.components[id].materials[materialID] = this.materials[materialID];
               else
-                for(var k = 0; k < this.materials.length; k++){
-                  if(id === this.materials[k].id){
-                  this.components[componentCounter].materials[materialCounter] = this.materials[k];
-                  break;
-                  }
-                  else if(k + 1 == this.materials.length)
-                    return "id '" + id + "' is not a valid material reference on tag <material> with index " + j + " on tag <materials> on the <component> node with index " + i + " from the <components> block";
-                }
+                return "id '" + materialID + "' is not a valid transformation reference on tag <material> with index " + j + " on tag <materials> on the <component> node with index " + i + " from the <components> block";
+              }
             }
             else
             this.onXMLMinorError("tag <" + materialsNodeNames[j] + "> is not valid on tag <material> with index " + j + " on tag <materials> on the <component> node with index " + i + " from the <components> block");
-
-            // Increments material counter
-            materialCounter++;
           }
         }
         else
@@ -1575,16 +1491,14 @@ class MySceneGraph {
 
         // Reads texture tag
         if(textureIndex != -1){
-          // Creates variables
-          this.components[componentCounter].texture = [];
 
           // Reads id, length_s, length_t
-          var id = this.reader.getString(componentChildren[textureIndex], 'id');
+          var textureID = this.reader.getString(componentChildren[textureIndex], 'id');
           var length_s = this.reader.getFloat(componentChildren[textureIndex], 'length_s');
           var length_t = this.reader.getFloat(componentChildren[textureIndex], 'length_t');
 
           // Validates id, length_s, length_t
-          if(id == null || length_s == null || length_t == null)
+          if(textureID == null || length_s == null || length_t == null)
           return "unable to parse id, length_s, length_t components (null) on tag <texture> on the <component> node with index " + i + " from the <components> block";
           else if(isNaN(length_s) || isNaN(length_t))
           return "unable to length_s, length_t components (NaN) on tag <texture> on the <component> node with index " + i + " from the <components> block";
@@ -1592,22 +1506,19 @@ class MySceneGraph {
           return "unable to length_s, length_t components (out of 0-inf. range) on tag <texture> on the <component> node with index " + i + " from the <components> block";
 
           // Checks if id exists
-          if(id == "inherit" || id == "none"){
+          if(textureID == "inherit" || textureID == "none" || textureID == "default"){
             //TODO
           }
-          else
-          for(var k = 0; k < this.textures.length; k++){
-            if(id === this.textures[k].id){
-            this.components[componentCounter].texture.texture = this.textures[k];
-            break;
-          }
-            else if(k + 1 == this.transformations.length)
-            return "id '" + id + "' is not a valid texture reference on tag <textures> on the <component> node with index " + i + " from the <components> block";
+          else{
+            if(this.textures[textureID] != null)
+              this.components[id].textures[textureID] = this.textures[textureID];
+            else
+              return "id '" + textureID + "' is not a valid transformation reference on tag <texture> on the <component> node with index " + i + " from the <components> block";
           }
 
           // Sets length_s, length_t
-          this.components[componentCounter].texture.length_s = length_s;
-          this.components[componentCounter].texture.length_t = length_t;
+          this.components[id].length_s = length_s;
+          this.components[id].length_t = length_t;
         }
         else
         return "tag <texture> is not defined on the <component> node with index " + i + " from the <components> block";
@@ -1619,9 +1530,6 @@ class MySceneGraph {
           if(componentChildren[childrenIndex].getElementsByTagName("componentref").length == 0 && componentChildren[childrenIndex].getElementsByTagName("primitiveref").length == 0)
           return "at least one children (either <componentref> or  <primitiveref>) should be defined on tag <children> on the <component> node with index " + i + " from the <components> block";
 
-          // Creates variables
-          this.components[componentCounter].children = [];
-
           // Reads children children and node names
           var childrenChildren = componentChildren[childrenIndex].children;
           var childrenNodeNames = [];
@@ -1631,42 +1539,29 @@ class MySceneGraph {
           for(var j = 0; j < childrenChildren.length; j++){
             if(childrenChildren[j].nodeName == "componentref"){
               // Reads id
-              var id = this.reader.getString(childrenChildren[j], 'id');
+              var componentID = this.reader.getString(childrenChildren[j], 'id');
 
               // Validates id
-              if(id == null)
+              if(componentID == null)
               return "unable to parse id component (null) on tag <componentref> with index " + j +" on tag <children> on the <component> node with index " + i + " from the <components> block";
 
               //TODO: flag para quando o componentref ainda nao foi adicionado
-
-              // Checks if id exists
-              for(var k = 0; k < this.components.length; k++){
-                if(id === this.components[k].id){
-                this.components[componentCounter].children[j] = this.components[k];
-                break;
-              }
-                else if(k + 1 == this.components.length)
-                return "id '" + id + "' is not a valid component reference on tag <componentref> with index " + j +" on tag <children> on the <component> node with index " + i + " from the <components> block";
-              }
+              this.components[id].addChild(componentID);
             }
             else if(childrenChildren[j].nodeName == "primitiveref"){
               // Reads id
-              var id = this.reader.getString(childrenChildren[j], 'id');
+              var primitiveID = this.reader.getString(childrenChildren[j], 'id');
 
               // Validates id
-              if(id == null)
+              if(primitiveID == null)
               return "unable to parse id component (null) on tag <primitiveref> with index " + j +" on tag <children> on the <component> node with index " + i + " from the <components> block";
 
 
               // Checks if id exists
-              for(var k = 0; k < this.primitives.length; k++){
-                if(id === this.primitives[k].id){
-                this.components[componentCounter].children[j] = this.primitives[k];
-                break;
-              }
-                else if(k + 1 == this.primitives.length)
-                return "id '" + id + "' is not a valid primitive reference on tag <componentref> with index " + j +" on tag <children> on the <component> node with index " + i + " from the <components> block";
-              }
+              if(this.primitives[primitiveID] != null)
+                this.components[id].addPrimitive(this.primitives[primitiveID]);
+              else
+                return "id '" + primitiveID + "' is not a valid primitive reference on tag <primitiveref> with index " + j +" on tag <children> on the <component> node with index " + i + " from the <components> block";
             }
             else
             this.onXMLMinorError("tag <" + childrenChildren[j].nodeName + "> with index " + j + " is not valid on tag <children> on the <component> node with index " + i + " from the <components> block");
@@ -1674,9 +1569,6 @@ class MySceneGraph {
         }
         else
         return "tag <children> is not defined on the <component> node with index " + i + " from the <components> block";
-
-        // Increments component counter
-        componentCounter++;
       }
       else
       this.onXMLMinorError("<" + children[i].nodeName + "> node with index " + i + " is not valid on the <components> block");
@@ -1716,7 +1608,14 @@ class MySceneGraph {
   * Displays the scene, processing each node, starting in the root node.
   */
   displayScene() {
+    this.components["right_wall"].primitives[0].display();
     // entry point for graph rendering
     //TODO: Render loop starting at root of graph
+    //for(var key1 in this.components[this.root]){
+    //  console.log(key1);
+    //  for(var key2 in this.components[key1].children)
+    //    console.log(key2);
+      //    this.components["right_wall"].primitives[0].display();
+//    }
   }
 }
