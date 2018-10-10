@@ -805,7 +805,6 @@ class MySceneGraph {
     }
 
     this.log("Parsed lights");
-    return null;
   }
 
   /**
@@ -1208,7 +1207,7 @@ class MySceneGraph {
           return "unable to parse x1, x2, y1, y2 components (null) on tag <rectangle> from the <primitive> node with index " + i + " from the <primitives> block";
 
           // Sets rectangle
-          this.primitives[id] = new MyRectangle(this.scene);
+          this.primitives[id] = new MyRectangle(this.scene, x1, x2, y1, y2);
         }
         else if(children[i].children[tagIndex].nodeName == "triangle"){
 
@@ -1230,7 +1229,7 @@ class MySceneGraph {
           return "unable to parse x1, x2, x3, y1, y2, y3, z1, z2, z3 components (null) on tag <triangle> from the <primitive> node with index " + i + " from the <primitives> block";
 
           // Sets triangle
-          this.primitives[id] = new MyRectangle(this.scene);
+          this.primitives[id] = new MyTriangle(this.scene, x1, x2, x3, y1, y2, y3, z1, z2, z3);
         }
         else if(children[i].children[tagIndex].nodeName == "cylinder"){
 
@@ -1252,7 +1251,7 @@ class MySceneGraph {
           return "unable to parse height component (out of 0-inf range) on tag <cylinder> from the <primitive> node with index " + i + " from the <primitives> block";
 
           // Sets cylinder
-          this.primitives[id] = new MyRectangle(this.scene);
+          this.primitives[id] = new MyCylinder(this.scene, base, top, height, slices, stacks);
         }
         else if(children[i].children[tagIndex].nodeName == "sphere"){
 
@@ -1272,7 +1271,7 @@ class MySceneGraph {
           return "unable to parse radius component (out of 0-inf range) on tag <sphere> from the <primitive> node with index " + i + " from the <primitives> block";
 
           // Sets sphere
-          this.primitives[id] = new MyRectangle(this.scene);
+          this.primitives[id] = new MySphere(this.scene, radius, slices, stacks);
         }
         else if(children[i].children[tagIndex].nodeName == "torus"){
 
@@ -1319,7 +1318,7 @@ class MySceneGraph {
 
     // Checks if there are any components defined
     if(componentsNode.getElementsByTagName('component').length == 0)
-    return "at least one <component> must be defined on the <components> block";
+      return "at least one <component> must be defined on the <components> block";
 
     // Creates variables
     this.components = [];
@@ -1574,6 +1573,9 @@ class MySceneGraph {
       this.onXMLMinorError("<" + children[i].nodeName + "> node with index " + i + " is not valid on the <components> block");
     }
 
+    if(this.components[this.root] == null)
+      return "root <component> with id '" + this.root + "' must be defined on the <components> block";
+
     this.log("Parsed components");
     return null;
   }
@@ -1608,14 +1610,22 @@ class MySceneGraph {
   * Displays the scene, processing each node, starting in the root node.
   */
   displayScene() {
-    this.components["right_wall"].primitives[0].display();
-    // entry point for graph rendering
-    //TODO: Render loop starting at root of graph
-    //for(var key1 in this.components[this.root]){
-    //  console.log(key1);
-    //  for(var key2 in this.components[key1].children)
-    //    console.log(key2);
-      //    this.components["right_wall"].primitives[0].display();
-//    }
+    this.displayNode(this.components[this.root]);
+  }
+
+  /**
+  * Displays the scene, processing just one node at a time
+  */
+  displayNode(node){
+    this.scene.pushMatrix();
+    this.scene.multMatrix(node.transformation);
+
+    for(var key in node.primitives)
+      node.primitives[key].display();
+
+    for(var i = 0; i < node.children.length; i++)
+      this.displayNode(this.components[node.children[i]]);
+
+    this.scene.popMatrix();
   }
 }

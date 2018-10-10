@@ -64,16 +64,15 @@ class XMLscene extends CGFscene {
               if(light.type == "spot"){
                 this.lights[i].setSpotCutOff(light.angle);
                 this.lights[i].setSpotExponent(light.exponent);
-                this.lights[i].setSpotDirection(light.target.x, light.target.y, light.target.z);
+                this.lights[i].setSpotDirection(light.target.x - light.location.x, light.target.y - light.location.y, light.target.z - light.location.z);
               }
+
+              this.lights[i].setVisible(true);
 
               if (light.enabled)
                   this.lights[i].enable();
               else
                   this.lights[i].disable();
-
-
-              this.lights[i].setVisible(true);
 
               this.lights[i].update();
 
@@ -97,7 +96,7 @@ class XMLscene extends CGFscene {
         this.initLights();
 
         // Adds lights group.
-        //this.interface.addLightsGroup(this.lights);
+        this.interface.addLightsGroup(this.lights);
 
         this.sceneInited = true;
     }

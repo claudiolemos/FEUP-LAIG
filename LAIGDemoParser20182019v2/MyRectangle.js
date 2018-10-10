@@ -6,14 +6,21 @@
 
 class MyRectangle extends CGFobject
 {
-	constructor(scene, minS, maxS, minT, maxT)
+	constructor(scene, x1, x2, y1, y2)
 	{
 		super(scene);
 
-		this.minS = minS || 0.0;
-		this.maxS = maxS || 1.0;
-		this.minT = minT || 0.0;
-		this.maxT = maxT || 1.0;
+		// Position coordinates
+		this.x1 = x1;
+		this.x2 = x2;
+		this.y1 = y1;
+		this.y2 = y2;
+
+		// Texture coordinates
+		this.minS = 0.0;
+		this.maxS = 1.0;
+		this.minT = 0.0;
+		this.maxT = 1.0;
 
 		this.initBuffers();
 	};
@@ -21,10 +28,10 @@ class MyRectangle extends CGFobject
 	initBuffers()
 	{
 		this.vertices = [
-			0.5, 0.5, 0,
-			-0.5, 0.5, 0,
-			-0.5, -0.5, 0,
-			0.5, -0.5, 0
+			this.x2, this.y2, 0,
+			this.x1, this.y2, 0,
+			this.x1, this.y1, 0,
+			this.x2, this.y1, 0
 		];
 
 		this.indices = [
