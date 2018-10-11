@@ -508,7 +508,7 @@ class MySceneGraph {
         // Sets id and enabled
         this.lights[id] = [];
         this.lights[id].type = "omni";
-        this.lights[id].enabled = enabled;
+        this.lights[id].enabled = enabled? true : false;
 
         // Gets indexes of location, ambient, diffuse and specular
         var locationIndex = omniNodeNames.indexOf("location");
@@ -655,7 +655,7 @@ class MySceneGraph {
         // Sets id, enabled, angle, exponent
         this.lights[id] = [];
         this.lights[id].type = "spot";
-        this.lights[id].enabled = enabled;
+        this.lights[id].enabled = enabled? true : false;
         this.lights[id].angle = angle;
         this.lights[id].exponent = exponent;
 
@@ -1292,7 +1292,7 @@ class MySceneGraph {
           return "unable to parse inner and outer components (out of 0-inf range) on tag <torus> from the <primitive> node with index " + i + " from the <primitives> block";
 
           // Sets torus
-          this.primitives[id] = new MyRectangle(this.scene);
+          this.primitives[id] = new MyTorus(this.scene, inner, outer, slices, loops);
         }
         else
         this.onXMLMinorError("tag <" + children[i].children[tagIndex].nodeName + "> is not valid on the <primitive> node with index " + i + " from the <primitives> block");
