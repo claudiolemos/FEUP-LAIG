@@ -39,14 +39,15 @@ class MyRectangle extends CGFobject
 			1, 2, 3
 		];
 
-		this.primitiveType=this.scene.gl.TRIANGLES;
-
 		this.normals = [
 			0, 0, 1,
 			0, 0, 1,
 			0, 0, 1,
 			0, 0, 1
 		];
+
+
+		this.primitiveType=this.scene.gl.TRIANGLES;
 
 		this.texCoords = [
 			this.maxS, this.minT,

@@ -1247,7 +1247,7 @@ class MySceneGraph {
           return "unable to parse base, top, height, slices, stacks components (null) on tag <cylinder> from the <primitive> node with index " + i + " from the <primitives> block";
           else if(slices < 1 || stacks < 1)
           return "unable to parse slices and stacks components (out of 1-inf range) on tag <cylinder> from the <primitive> node with index " + i + " from the <primitives> block";
-          else if(height <= 0)
+          else if(height < 0)
           return "unable to parse height component (out of 0-inf range) on tag <cylinder> from the <primitive> node with index " + i + " from the <primitives> block";
 
           // Sets cylinder
