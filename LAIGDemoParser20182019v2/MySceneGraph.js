@@ -364,6 +364,55 @@ class MySceneGraph {
         this.views[id].right = right;
         this.views[id].top = top;
         this.views[id].bottom = bottom;
+
+        // Creates from and to variables
+        this.views[id].from = [];
+        this.views[id].to = []
+
+        // Gets indexes of each element (from & too)
+        var fromIndex = orthoNodeNames.indexOf('from');
+        var toIndex = orthoNodeNames.indexOf('to');
+
+        // Reads from and to nodes
+        if(fromIndex != -1){
+          // Reads x, y, z values
+          var x = this.reader.getFloat(orthoChildren[fromIndex], 'x');
+          var y = this.reader.getFloat(orthoChildren[fromIndex], 'y');
+          var z = this.reader.getFloat(orthoChildren[fromIndex], 'z');
+
+          // Validates x, y, z values
+          if(x == null || y == null || z == null)
+          return "unable to parse x, y, z components (null) on tag <from> from the <ortho> node with index " + i + " from the <views> block";
+          else if(isNaN(x) || isNaN(y) || isNaN(z))
+          return "unable to parse x, y, z components (NaN) on tag <from> from the <ortho> node with index " + i + " from the <views> block";
+
+          // Sets x, y, z values
+          this.views[id].from.x = x;
+          this.views[id].from.y = y;
+          this.views[id].from.z = z;
+        }
+        else
+        return "tag <from> is not defined on the <ortho> node with index " + i + " from the <views> block";
+
+        if(toIndex != -1){
+          // Reads x, y, z values
+          var x = this.reader.getFloat(orthoChildren[toIndex], 'x');
+          var y = this.reader.getFloat(orthoChildren[toIndex], 'y');
+          var z = this.reader.getFloat(orthoChildren[toIndex], 'z');
+
+          // Validates x, y, z values
+          if(x == null || y == null || z == null)
+          return "unable to parse x, y, z components (null) on tag <to> from the <ortho> node with index " + i + " from the <views> block";
+          else if(isNaN(x) || isNaN(y) || isNaN(z))
+          return "unable to parse x, y, z components (NaN) on tag <to> from the <ortho> node with index " + i + " from the <views> block";
+
+          // Sets x, y, z values
+          this.views[id].to.x = x;
+          this.views[id].to.y = y;
+          this.views[id].to.z = z;
+        }
+        else
+        return "tag <to> is not defined on the <ortho> node with index " + i + " from the <views> block";
       }
       else
         return "<" + children[j].nodeName + "> node with index " + i + " is not valid on the <views> block";
@@ -377,7 +426,7 @@ class MySceneGraph {
       this.default = this.views[defaultView];
     else
       return "default id is not valid on the <views> block";
-
+      
     this.log("Parsed views");
 
     return null;
@@ -1474,12 +1523,11 @@ class MySceneGraph {
               if(materialID == "inherit"){
                 //TODO
               }
-              else{
-              if(this.materials[materialID] != null)
-                this.components[id].materials[materialID] = this.materials[materialID];
               else
-                return "id '" + materialID + "' is not a valid transformation reference on tag <material> with index " + j + " on tag <materials> on the <component> node with index " + i + " from the <components> block";
-              }
+                if(this.materials[materialID] != null)
+                  this.components[id].materials[materialID] = this.materials[materialID];
+                else
+                  return "id '" + materialID + "' is not a valid transformation reference on tag <material> with index " + j + " on tag <materials> on the <component> node with index " + i + " from the <components> block";
             }
             else
             this.onXMLMinorError("tag <" + materialsNodeNames[j] + "> is not valid on tag <material> with index " + j + " on tag <materials> on the <component> node with index " + i + " from the <components> block");
@@ -1505,15 +1553,13 @@ class MySceneGraph {
           return "unable to length_s, length_t components (out of 0-inf. range) on tag <texture> on the <component> node with index " + i + " from the <components> block";
 
           // Checks if id exists
-          if(textureID == "inherit" || textureID == "none" || textureID == "default"){
-            //TODO
-          }
-          else{
+          if(textureID == "inherit" || textureID == "none")
+            this.components[id].texture = textureID;
+          else
             if(this.textures[textureID] != null)
-              this.components[id].textures[textureID] = this.textures[textureID];
+              this.components[id].texture = this.textures[textureID];
             else
               return "id '" + textureID + "' is not a valid transformation reference on tag <texture> on the <component> node with index " + i + " from the <components> block";
-          }
 
           // Sets length_s, length_t
           this.components[id].length_s = length_s;
@@ -1521,6 +1567,7 @@ class MySceneGraph {
         }
         else
         return "tag <texture> is not defined on the <component> node with index " + i + " from the <components> block";
+
 
         // Reads children tag
         if(childrenIndex != -1){
@@ -1619,6 +1666,16 @@ class MySceneGraph {
   displayNode(node){
     this.scene.pushMatrix();
     this.scene.multMatrix(node.transformation);
+
+    for(var key in node.materials){
+      node.materials[key].apply();
+
+      if(node.texture == "none")
+        node.materials[key].setTexture(null);
+      else if(node.texture != "inherit")
+        node.materials[key].setTexture(node.texture);
+    }
+
 
     for(var key in node.primitives)
       node.primitives[key].display();

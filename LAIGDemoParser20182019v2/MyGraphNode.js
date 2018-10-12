@@ -12,7 +12,7 @@
     this.transformation = mat4.create();
     mat4.identity(this.transformation);
     this.materials = [];
-    this.textures = [];
+    this.texture;
     this.length_s = 1;
     this.length_t = 1;
     this.children = [];

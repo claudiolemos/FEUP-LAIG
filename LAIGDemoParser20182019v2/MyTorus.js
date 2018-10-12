@@ -42,6 +42,9 @@ class MyTorus extends CGFobject
 							this.indices.push(j*(this.slices + 1) + i, j*(this.slices + 1) + i + this.slices + 1, j*(this.slices + 1) + i + this.slices + 2);
 							this.indices.push(j*(this.slices + 1) + i, j*(this.slices + 1) + i + this.slices + 2,	j*(this.slices + 1) + i + 1);
 						}
+
+						this.texCoords.push(1-i*(1/this.loops), 1-j*(1/this.slices));
+
         }
     }
 

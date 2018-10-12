@@ -40,7 +40,7 @@ class XMLscene extends CGFscene {
      * Initializes the scene cameras.
      */
     initCameras() {
-        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(10, 10, 10), vec3.fromValues(0, 0, 0));
     }
     /**
      * Initializes the scene lights with the values read from the XML file.
@@ -86,8 +86,15 @@ class XMLscene extends CGFscene {
      * As loading is asynchronous, this may be called already after the application has started the run loop
      */
     onGraphLoaded() {
-        this.camera.near = this.graph.default.near;
-        this.camera.far = this.graph.default.far;
+        // if(this.graph.default.type = "perspective"){
+        //   this.camera.near = this.graph.default.near;
+        //   this.camera.far = this.graph.default.far;
+        //   this.camera.fov = this.graph.default.angle;
+        //   this.camera.position = vec3.fromValues(this.graph.default.from.x, this.graph.default.from.y, this.graph.default.from.z);
+        //   this.camera.target = vec3.fromValues(this.graph.default.to.x, this.graph.default.to.y, this.graph.default.to.z);
+        // }
+        // else if(this.graph.default.type = "ortho")
+        //   this.camera = new CGFcameraOrtho(this.graph.default.left, this.graph.default.right, this.graph.default.bottom, this.graph.default.top, this.graph.default.near, this.graph.default.far, vec3.fromValues(this.graph.default.from.x, this.graph.default.from.y, this.graph.default.from.z), vec3.fromValues(this.graph.default.to.x, this.graph.default.to.y, this.graph.default.to.z), vec3.fromValues(1,1,1));
 
         this.axis = new CGFaxis(this, this.graph.axis_length);
 
