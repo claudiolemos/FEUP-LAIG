@@ -423,10 +423,10 @@ class MySceneGraph {
 
     // Finds and sets default view
     if(this.views[defaultView] != null)
-      this.default = this.views[defaultView];
+      this.default = defaultView;
     else
       return "default id is not valid on the <views> block";
-      
+
     this.log("Parsed views");
 
     return null;
@@ -1591,7 +1591,7 @@ class MySceneGraph {
               if(componentID == null)
               return "unable to parse id component (null) on tag <componentref> with index " + j +" on tag <children> on the <component> node with index " + i + " from the <components> block";
 
-              //TODO: flag para quando o componentref ainda nao foi adicionado
+              //TODO: erro para quando o componentref ainda nao foi adicionado
               this.components[id].addChild(componentID);
             }
             else if(childrenChildren[j].nodeName == "primitiveref"){
@@ -1676,9 +1676,10 @@ class MySceneGraph {
         node.materials[key].setTexture(node.texture);
     }
 
-
-    for(var key in node.primitives)
+    for(var key in node.primitives){
+      node.primitives[key].updateTexCoords(node.length_s, node.length_t);
       node.primitives[key].display();
+    }
 
     for(var i = 0; i < node.children.length; i++)
       this.displayNode(this.components[node.children[i]]);

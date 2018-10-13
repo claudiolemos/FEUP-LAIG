@@ -29,4 +29,7 @@ class MySphere
 		this.scene.popMatrix();
 	};
 
+	updateTexCoords(s,t){
+	};
+
 };

@@ -58,4 +58,15 @@ class MyRectangle extends CGFobject
 
 		this.initGLBuffers();
 	};
+
+	updateTexCoords(s,t){
+		this.texCoords = [
+			s, 0,
+			0, 0,
+			0, t,
+			s, t
+		];
+
+		this.updateTexCoordsGLBuffers();
+	};
 };

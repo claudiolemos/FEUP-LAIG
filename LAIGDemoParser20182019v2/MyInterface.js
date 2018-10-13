@@ -19,6 +19,7 @@ class MyInterface extends CGFinterface {
         //  http://workshop.chromeexperiments.com/examples/gui
 
         this.gui = new dat.GUI();
+        this.cameraController;
 
         // add a group of controls (and open/expand by defult)
 
@@ -44,4 +45,25 @@ class MyInterface extends CGFinterface {
             }
         }
     }
+
+    /**
+     * Adds a list containing the IDs of the views passed as parameter.
+     * @param {array} views
+     */
+    addViews(views){
+      var scene = this.scene;
+
+      var viewsID = [];
+      for (var key in views)
+        viewsID.push(key);
+
+      //this.scene.selectedCamera = this.scene.default;
+
+      var controller = this.gui.add(this.scene, 'selectedCamera', viewsID).name("Camera");
+
+      controller.onChange(function(value){
+        scene.updateCamera(value);
+      });
+    }
+
 }

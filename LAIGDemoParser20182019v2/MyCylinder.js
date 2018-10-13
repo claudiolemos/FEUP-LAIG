@@ -36,5 +36,8 @@ class MyCylinder
 		this.scene.popMatrix();
 	}
 
+	updateTexCoords(s,t){
+	};
+
 
 };
