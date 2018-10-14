@@ -84,4 +84,22 @@ class MyUncoveredCylinder extends CGFobject
 		this.initGLBuffers();
 	};
 
+	updateTexCoords(s,t){
+		var incS = s/this.slices;
+		var incT = t/this.stacks;
+
+		this.texCoords = [];
+
+		for (var j = 0; j < this.stacks; j++) {
+			for (var i = 0; i < this.slices; i++) {
+				this.texCoords.push(i*incS, j*incT);
+				this.texCoords.push(i*incS, (j+1)*incT);
+			}
+			this.texCoords.push(1,j*incT);
+			this.texCoords.push(1,(j+1)*incT);
+		}
+
+		this.updateTexCoordsGLBuffers();
+	};
+
 };

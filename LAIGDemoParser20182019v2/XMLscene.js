@@ -14,6 +14,7 @@ class XMLscene extends CGFscene {
     this.interface = myinterface;
     this.lightValues = {};
     this.selectedCamera;
+    this.showAxis = true;
     this.perspectiveCamera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 10, 15), vec3.fromValues(0, 0, 0));
     this.orthoCamera = new CGFcameraOrtho(0, 3, 0, 3, 0.1, 50, vec3.fromValues(5, 10, 5), vec3.fromValues(5, 0, 5), vec3.fromValues(10, 10, 10));
   }
@@ -98,8 +99,12 @@ class XMLscene extends CGFscene {
 
     this.initLights();
 
+
     // Adds lights group.
     this.interface.addLightsGroup(this.graph.lights);
+
+    // Adds show axis
+    this.interface.gui.add(this, 'showAxis').name("Show axis");
 
     // Adds views group.
     this.interface.addViews(this.graph.views);
@@ -158,7 +163,8 @@ class XMLscene extends CGFscene {
 
     if (this.sceneInited) {
       // Draw axis
-      this.axis.display();
+      if(this.showAxis)
+        this.axis.display();
 
       var i = 0;
       for (var key in this.lightValues) {
@@ -181,7 +187,8 @@ class XMLscene extends CGFscene {
     }
     else {
       // Draw axis
-      this.axis.display();
+      if(this.showAxis)
+        this.axis.display();
     }
 
     this.popMatrix();

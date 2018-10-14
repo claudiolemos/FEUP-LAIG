@@ -7,7 +7,7 @@
 class MyCircle extends CGFobject
 {
 
-	constructor(scene, slices) 
+	constructor(scene, slices)
 	{
 	     super(scene);
 	     this.slices = slices;
@@ -19,8 +19,8 @@ class MyCircle extends CGFobject
 	     this.initBuffers();
     };
 
-	initBuffers() 
-	{ 
+	initBuffers()
+	{
 		// VERTICES DEFINITION
 		var degToRad = Math.PI / 180;
 
@@ -41,7 +41,7 @@ class MyCircle extends CGFobject
 		for (var i = 0; i < this.vertices.length/3; i++) {
 			this.normals.push(0, 0, 1);
 		}
-	
+
 		//TEXTURE DEFINITION
 		var angle = 0;
 		for (var i = 0; i < this.slices; i++) {
@@ -55,4 +55,20 @@ class MyCircle extends CGFobject
 
 		this.initGLBuffers();
 	};
+
+	updateTexCoords(s,t){
+		var angle = 0;
+		var degToRad = Math.PI / 180;
+
+		this.texCoords = [];
+
+		for (var i = 0; i < this.slices; i++) {
+			this.texCoords.push((s/2)+Math.cos(angle*degToRad)/2, (t/2)+Math.sin(angle*degToRad)/2);
+			angle += 360/this.slices;
+		}
+		this.texCoords.push(s/2, t/2);
+
+		this.updateTexCoordsGLBuffers();
+	};
+
 };

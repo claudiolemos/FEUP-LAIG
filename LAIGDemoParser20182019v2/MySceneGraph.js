@@ -1623,6 +1623,12 @@ class MySceneGraph {
     if(this.components[this.root] == null)
       return "root <component> with id '" + this.root + "' must be defined on the <components> block";
 
+    for(var key1 in this.components)
+        for(var key2 in this.components[key1].children)
+          if(this.components[this.components[key1].children[key2]] == null)
+            return "id '" + this.components[key1].children[key2] + "' is not a valid component reference on tag <componentref> on tag <children> on the <component> node with id '" + key1 + "' from the <components> block";
+
+
     this.log("Parsed components");
     return null;
   }
@@ -1677,7 +1683,8 @@ class MySceneGraph {
     }
 
     for(var key in node.primitives){
-      node.primitives[key].updateTexCoords(node.length_s, node.length_t);
+      // if(node.length_s != 1 || node.length_t != 1)
+        node.primitives[key].updateTexCoords(node.length_s, node.length_t);
       node.primitives[key].display();
     }
 

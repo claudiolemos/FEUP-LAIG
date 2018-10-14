@@ -1,15 +1,16 @@
 /**
- * MyHemisphere
+ * MySphere
  * @param gl {WebGLRenderingContext}
  * @constructor
  */
 
-class MyHemisphere extends CGFobject
+class MySphere extends CGFobject
 {
-	constructor(scene, slices, stacks)
+	constructor(scene, radius, slices, stacks)
 	{
 		super(scene);
 
+		this.radius = radius;
 		this.slices = slices;
 		this.stacks = stacks;
 		this.vertices = [];
@@ -29,11 +30,10 @@ class MyHemisphere extends CGFobject
 	{
 		// VERTICES DEFINITION
 		var degToRad = Math.PI / 180;
-		var substack = 1/this.stacks;
 		var k = 0;
 		var verticesN = this.slices*2;
 		var m;
-		var angleFiInc = 90/this.stacks;
+		var angleFiInc = 180/this.stacks;
 		var incS = Math.abs(this.maxS - this.minS)/(this.slices);
 		var incT = Math.abs(this.maxT - this.minT)/(this.stacks);
 
@@ -45,8 +45,8 @@ class MyHemisphere extends CGFobject
 			k = m;
 			for (var i = 0; i < this.slices; i++) {
 				// VERTICES DEFINITION
-				this.vertices.push(Math.sin(angleFi * degToRad) * Math.cos(angleTeta * degToRad), Math.sin(angleFi * degToRad) * Math.sin(angleTeta * degToRad), Math.cos(angleFi * degToRad));
-				this.vertices.push(Math.sin((angleFi+angleFiInc) * degToRad) * Math.cos(angleTeta * degToRad), Math.sin((angleFi+angleFiInc) * degToRad) * Math.sin(angleTeta * degToRad), Math.cos((angleFi+angleFiInc) * degToRad));
+				this.vertices.push(this.radius*Math.sin(angleFi * degToRad) * Math.cos(angleTeta * degToRad), this.radius*Math.sin(angleFi * degToRad) * Math.sin(angleTeta * degToRad), this.radius*Math.cos(angleFi * degToRad));
+				this.vertices.push(this.radius*Math.sin((angleFi+angleFiInc) * degToRad) * Math.cos(angleTeta * degToRad), this.radius*Math.sin((angleFi+angleFiInc) * degToRad) * Math.sin(angleTeta * degToRad), this.radius*Math.cos((angleFi+angleFiInc) * degToRad));
 
 				// INDICES DEFINITION
 				this.indices.push(k, k+1, k+2);
@@ -63,8 +63,8 @@ class MyHemisphere extends CGFobject
 
 				angleTeta += 360/this.slices;
 			}
-			this.vertices.push(Math.sin(angleFi * degToRad) * Math.cos(angleTeta * degToRad), Math.sin(angleFi * degToRad) * Math.sin(angleTeta * degToRad), Math.cos(angleFi * degToRad));
-			this.vertices.push(Math.sin((angleFi+angleFiInc) * degToRad) * Math.cos(angleTeta * degToRad), Math.sin((angleFi+angleFiInc) * degToRad) * Math.sin(angleTeta * degToRad), Math.cos((angleFi+angleFiInc) * degToRad));
+			this.vertices.push(this.radius*Math.sin(angleFi * degToRad) * Math.cos(angleTeta * degToRad), this.radius*Math.sin(angleFi * degToRad) * Math.sin(angleTeta * degToRad), this.radius*Math.cos(angleFi * degToRad));
+			this.vertices.push(this.radius*Math.sin((angleFi+angleFiInc) * degToRad) * Math.cos(angleTeta * degToRad), this.radius*Math.sin((angleFi+angleFiInc) * degToRad) * Math.sin(angleTeta * degToRad), this.radius*Math.cos((angleFi+angleFiInc) * degToRad));
 			this.normals.push(Math.sin(angleFi * degToRad) * Math.cos(angleTeta * degToRad), Math.sin(angleFi * degToRad) * Math.sin(angleTeta * degToRad), Math.cos(angleFi * degToRad));
 			this.normals.push(Math.sin((angleFi+angleFiInc) * degToRad) * Math.cos(angleTeta * degToRad), Math.sin((angleFi+angleFiInc) * degToRad) * Math.sin(angleTeta * degToRad), Math.cos((angleFi+angleFiInc) * degToRad));
 			this.texCoords.push(0.5+(Math.sin(angleFi * degToRad) * Math.cos(angleTeta * degToRad))/2, 0.5-(Math.sin(angleFi * degToRad) * Math.sin(angleTeta * degToRad))/2);
@@ -75,6 +75,9 @@ class MyHemisphere extends CGFobject
 		this.texCoords.push(0.5, 0.5);
 
 		this.initGLBuffers();
+	};
+
+	updateTexCoords(s,t){
 	};
 
 };

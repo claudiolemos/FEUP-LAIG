@@ -37,6 +37,9 @@ class MyCylinder
 	}
 
 	updateTexCoords(s,t){
+		this.cylinder.updateTexCoords(s,t);
+		this.circle1.updateTexCoords(s,t);
+		this.circle2.updateTexCoords(s,t);
 	};
 
 

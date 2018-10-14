@@ -2,23 +2,23 @@
 <yas>
   <scene root="root" axis_length="5" />
 
-  <views default="perspective1" >
-    <perspective id="perspective1" near="0.1" far="50" angle="0.5">
-      <from x="15" y="15" z="15" />
-      <to x="0" y="0" z="0" />
+  <views default="living room" >
+    <perspective id="living room" near="0.1" far="50" angle="0.5">
+      <from x="3.5" y="7" z="20" />
+      <to x="3.5" y="1" z="0" />
     </perspective>
     <perspective id="tv" near="0.1" far="50" angle="1">
       <from x="4" y="0.5" z="4" />
       <to x="4" y="0.5" z="5" />
     </perspective>
-    <ortho id="ortho1"  near="0.1" far="50" left="0" right="3" top="3" bottom="0">
+    <ortho id="ortho"  near="0.1" far="50" left="0" right="3" top="3" bottom="0">
       <from x="5" y="10" z="5" />
       <to x="5" y="0" z="5" />
     </ortho>
     </views>
 
     <ambient>
-      <ambient r="0.2" g="0.2" b="0.2" a="0" />
+      <ambient r="0.2" g="0.2" b="0.2" a="0.2" />
       <background r="0.05" g="0.05" b="0.05" a="1" />
     </ambient>
 
@@ -30,11 +30,11 @@
         <diffuse r="1" g="1" b="1" a="0" />
         <specular r="0" g="0" b="0" a="1" />
       </spot>
-      <omni id="sala" enabled="0">
-        <location x="3" y="5" z="3" w="1" />
-        <ambient r="0" g="0" b="0" a="0" />
-        <diffuse r="1" g="1" b="1" a="0" />
-        <specular r="0" g="0" b="0" a="0" />
+      <omni id="sala" enabled="1">
+        <location x="3" y="3" z="3" w="1" />
+        <ambient r="0" g="0" b="0" a="1" />
+        <diffuse r="1" g="1" b="1" a="1" />
+        <specular r="0" g="0" b="0" a="1" />
       </omni>
       <spot id="candeeiro" enabled="0" angle="0" exponent="0">
         <location x="1" y="2.25" z="1" w="1" />
@@ -43,14 +43,13 @@
         <diffuse r="1" g="1" b="1" a="0" />
         <specular r="0" g="0" b="0" a="0" />
       </spot>
-      <spot id="televisao" enabled="1" angle="10" exponent="0">
+      <spot id="televisao" enabled="0" angle="10" exponent="0">
         <location x="4" y="0.25" z="6.25" w="1" />
         <target x="3" y="0.5" z="5" />
         <ambient r="0" g="0" b="0" a="0" />
         <diffuse r="1" g="1" b="1" a="0" />
         <specular r="0" g="0" b="0" a="0" />
       </spot>
-
     </lights>
 
     <textures>
@@ -64,75 +63,75 @@
 
     <materials>
       <material id="default" shininess = "1" >
-        <emission r="0.5" g="0.5" b="0.5" a="1" />
-        <ambient r="0.5" g="0.5" b="0.5" a="1" />
-        <diffuse r="0.5" g="0.5" b="0.5" a="1" />
-        <specular r="0.5" g="0.5" b="0.5" a="1" />
+        <emission r="0" g="0" b="0" a="1" />
+        <ambient r="0" g="0" b="0" a="1" />
+        <diffuse r="1" g="1" b="1" a="1" />
+        <specular r="0.1" g="0.1" b="0.1" a="1" />
       </material>
-      <material id="luxoball" shininess = "50" >
-        <emission r="0.5" g="0.5" b="0.5" a="1" />
-        <ambient r="0.5" g="0.5" b="0.5" a="1" />
+      <material id="luxoball" shininess = "1" >
+        <emission r="0" g="0" b="0" a="1" />
+        <ambient r="0" g="0" b="0" a="1" />
         <diffuse r="1" g="1" b="1" a="1" />
         <specular r="1" g="1" b="1" a="1" />
       </material>
       <material id="walls" shininess = "1" >
-        <emission r="0.88" g="0.60" b="0.64" a="1" />
-        <diffuse r="0.3" g="0.3" b="0.3" a="1" />
-        <ambient r="0.1" g="0.1" b="0.1" a="1" />
-        <specular r="0.1" g="0.1" b="0.1" a="1" />
+        <emission r="0" g="0" b="0" a="1" />
+        <ambient r="0" g="0" b="0" a="1" />
+        <diffuse r="0.5" g="0" b="0.3" a="1" />
+        <specular r="0" g="0" b="0" a="1" />
       </material>
       <material id="couch" shininess = "1" >
-        <emission r="0.686" g="0.345" b="0.082" a="1" />
-        <diffuse r="0.1" g="0.1" b="0.1" a="1" />
-        <ambient r="0.1" g="0.1" b="0.1" a="1" />
-        <specular r="0.1" g="0.1" b="0.1" a="1" />
+        <emission r="0" g="0" b="0" a="1" />
+        <ambient r="0.2" g="0.2" b="0.2" a="1" />
+        <diffuse r="0.4" g="0.3" b="0.2" a="1" />
+        <specular r="0.5" g="0.5" b="0.5" a="1" />
       </material>
       <material id="couchpillows" shininess = "1" >
-        <emission r="0.478" g="0.243" b="0.062" a="1" />
-        <diffuse r="0.1" g="0.1" b="0.1" a="1" />
+        <emission r="0" g="0" b="0" a="1" />
+        <diffuse r="0.478" g="0.243" b="0.062" a="1" />
         <ambient r="0.1" g="0.1" b="0.1" a="1" />
         <specular r="0.1" g="0.1" b="0.1" a="1" />
       </material>
       <material id="wood" shininess = "1" >
-        <emission r="0.4" g="0.2" b="0.0" a="1" />
+        <emission r="0" g="0" b="0.0" a="1" />
         <diffuse r="0.1" g="0.1" b="0.1" a="1" />
-        <ambient r="0.1" g="0.1" b="0.1" a="1" />
+        <ambient r="0.4" g="0.2" b="0.0" a="1" />
         <specular r="0.1" g="0.1" b="0.1" a="1" />
       </material>
       <material id="donut" shininess = "1" >
-        <emission r="1" g="0.690" b="0.756" a="1" />
-        <diffuse r="0.1" g="0.1" b="0.1" a="1" />
+        <emission r="0" g="0" b="0.0" a="1" />
+        <diffuse  r="1" g="0.690" b="0.756" a="1" />
         <ambient r="0.1" g="0.1" b="0.1" a="1" />
         <specular r="0.1" g="0.1" b="0.1" a="1" />
       </material>
       <material id="floor" shininess = "1" >
-        <emission r="0.047" g="0.552" b="0.466" a="1" />
-        <diffuse r="0.1" g="0.1" b="0.1" a="1" />
-        <ambient r="0.1" g="0.1" b="0.1" a="1" />
+        <emission r="0" g="0" b="0.0" a="1" />
+        <diffuse r="0" g="1" b="0" a="1" />
+        <ambient r="0" g="0.1" b="0" a="1" />
         <specular r="0.1" g="0.1" b="0.1" a="1" />
       </material>
       <material id="carpet" shininess = "1" >
-        <emission r="1" g="1" b="1" a="1" />
-        <diffuse r="0.1" g="0.1" b="0.1" a="1" />
+        <emission r="0" g="0" b="0" a="1" />
+        <diffuse r="0.6" g="0.6" b="0.6" a="1" />
+        <ambient r="0.6" g="0.6" b="0.6" a="1" />
+        <specular r="0.1" g="0.1" b="0.1" a="1" />
+      </material>
+      <material id="lamptop" shininess = "1" >
+        <emission r="0" g="0" b="0" a="1" />
+        <diffuse r="0.847" g="0.501" b="0.321" a="1" />
         <ambient r="0.1" g="0.1" b="0.1" a="1" />
         <specular r="0.1" g="0.1" b="0.1" a="1" />
       </material>
-      <material id="lamptop" shininess = "0" >
-        <emission r="0.847" g="0.501" b="0.321" a="0" />
-        <diffuse r="0.1" g="0.1" b="0.1" a="0" />
-        <ambient r="0.1" g="0.1" b="0.1" a="0" />
-        <specular r="0.1" g="0.1" b="0.1" a="0" />
-      </material>
       <material id="lampholder" shininess = "1" >
-        <emission r="0.666" g="0.372" b="0.705" a="1" />
-        <diffuse r="0.1" g="0.1" b="0.1" a="1" />
+        <emission r="0" g="0" b="0" a="1" />
+        <diffuse r="0.666" g="0.372" b="0.705" a="1" />
         <ambient r="0.1" g="0.1" b="0.1" a="1" />
         <specular r="0.1" g="0.1" b="0.1" a="1" />
       </material>
       <material id="tv" shininess = "1" >
-        <emission r="0.674" g="0.678" b="0.823" a="1" />
-        <diffuse r="0.1" g="0.1" b="0.1" a="1" />
-        <ambient r="0.1" g="0.1" b="0.1" a="1" />
+        <emission r="0" g="0" b="0" a="1" />
+        <diffuse r="0" g="0" b="0" a="1" />
+        <ambient r="0.674" g="0.678" b="0.823" a="1" />
         <specular r="0.1" g="0.1" b="0.1" a="1" />
       </material>
       <material id="tvscreen" shininess = "1" >
@@ -177,8 +176,11 @@
       <primitive id="cylinder">
         <cylinder base="0.5" top="0.5" height="1" slices="20" stacks="20" />
       </primitive>
+      <primitive id="carpet">
+        <cylinder base="0.5" top="0.5" height="0.01" slices="30" stacks="1" />
+      </primitive>
       <primitive id="sphere">
-        <sphere radius="0.5" slices="15" stacks="15" />
+        <sphere radius="0.5" slices="30" stacks="30" />
       </primitive>
       <primitive id="torus">
         <torus inner="0.2" outer="0.3" slices="15" loops="15"/>
@@ -188,6 +190,9 @@
       </primitive>
       <primitive id="cabecaprimitive">
         <cylinder base="0.5" top="0.1" height="1" slices="6" stacks="15" />
+      </primitive>
+      <primitive id="torus2">
+        <torus inner="0.5" outer="2" slices="15" loops="15"/>
       </primitive>
     </primitives >
 
@@ -267,7 +272,7 @@
         <materials>
           <material id="inherit" />
         </materials>
-        <texture id="none" length_s="1" length_t="1" />
+        <texture id="none" length_s="2" length_t="2" />
         <children>
           <primitiveref id="cylinder" />
         </children>
@@ -281,7 +286,7 @@
         <materials>
           <material id="inherit" />
         </materials>
-        <texture id="none" length_s="1" length_t="1" />
+        <texture id="inherit" length_s="1" length_t="1" />
         <children>
           <primitiveref id="cylinder" />
         </children>
@@ -403,7 +408,7 @@
         <transformation>
         </transformation>
         <materials>
-          <material id="inherit" />
+          <material id="default" />
         </materials>
         <texture id="none" length_s="1" length_t="1" />
         <children>
@@ -460,7 +465,7 @@
         <materials>
           <material id="donut" />
         </materials>
-        <texture id="donut" length_s="1" length_t="1" />
+        <texture id="donut" length_s="3" length_t="3" />
         <children>
           <primitiveref id="torus" />
         </children>
@@ -604,7 +609,7 @@
       <component id="carpet">
         <transformation>
           <translate x="4" y="0" z="4"/>
-          <scale x="4" y="0.01" z="3"/>
+          <scale x="4" y="1" z="3"/>
           <rotate axis="x" angle="-90"/>
         </transformation>
         <materials>
@@ -612,7 +617,7 @@
         </materials>
         <texture id="carpet" length_s="1" length_t="1" />
         <children>
-          <primitiveref id="cylinder" />
+          <primitiveref id="carpet" />
         </children>
       </component>
 
