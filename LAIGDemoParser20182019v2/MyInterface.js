@@ -57,8 +57,6 @@ class MyInterface extends CGFinterface {
       for (var key in views)
         viewsID.push(key);
 
-      //this.scene.selectedCamera = this.scene.default;
-
       var controller = this.gui.add(this.scene, 'selectedCamera', viewsID).name("Camera");
 
       controller.onChange(function(value){

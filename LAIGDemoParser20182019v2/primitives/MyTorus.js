@@ -26,8 +26,7 @@ class MyTorus extends CGFobject
 		this.initBuffers();
 	};
 
-	initBuffers()
-	    {
+	initBuffers(){
 
 	        var incSlices = (2 * Math.PI) / this.slices;
 	    var incLoops = (2 * Math.PI) / this.loops;
