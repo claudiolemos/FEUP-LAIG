@@ -15,8 +15,6 @@ class XMLscene extends CGFscene {
     this.lightValues = {};
     this.selectedCamera;
     this.showAxis = true;
-    this.perspectiveCamera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 10, 15), vec3.fromValues(0, 0, 0));
-    this.orthoCamera = new CGFcameraOrtho(0, 3, 0, 3, 0.1, 50, vec3.fromValues(5, 10, 5), vec3.fromValues(5, 0, 5), vec3.fromValues(10, 10, 10));
   }
 
   /**
@@ -44,7 +42,7 @@ class XMLscene extends CGFscene {
   * Initializes the scene cameras.
   */
   initCameras() {
-    this.camera = this.perspectiveCamera;
+    this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 10, 15), vec3.fromValues(0, 0, 0));
   }
   /**
   * Initializes the scene lights with the values read from the XML file.
@@ -118,27 +116,12 @@ class XMLscene extends CGFscene {
   updateCamera(newCamera){
     this.selectedCamera = newCamera;
 
-    if(this.graph.views[newCamera].type == "perspective"){
-      this.camera = this.perspectiveCamera;
-      this.camera.near = this.graph.views[newCamera].near;
-      this.camera.far = this.graph.views[newCamera].far;
-      this.camera.fov = this.graph.views[newCamera].angle;
-      this.camera.setPosition(vec3.fromValues(this.graph.views[newCamera].from.x, this.graph.views[newCamera].from.y, this.graph.views[newCamera].from.z));
-      this.camera.setTarget(vec3.fromValues(this.graph.views[newCamera].to.x, this.graph.views[newCamera].to.y, this.graph.views[newCamera].to.z));
-    }
-    else if(this.graph.views[newCamera].type == "ortho"){
-      this.camera = this.orthoCamera;
-      this.camera.near = this.graph.views[newCamera].near;
-      this.camera.far = this.graph.views[newCamera].far;
-      this.camera.left = this.graph.views[newCamera].left;
-      this.camera.right = this.graph.views[newCamera].right;
-      this.camera.top = this.graph.views[newCamera].top;
-      this.camera.bottom = this.graph.views[newCamera].bottom;
-      this.camera.setPosition(vec3.fromValues(this.graph.views[newCamera].from.x, this.graph.views[newCamera].from.y, this.graph.views[newCamera].from.z));
-      this.camera.setTarget(vec3.fromValues(this.graph.views[newCamera].to.x, this.graph.views[newCamera].to.y, this.graph.views[newCamera].to.z));
-      //this.camera.setUp(vec3.fromValues(this.graph.views[newCamera].to.x, this.graph.views[newCamera].to.y, this.graph.views[newCamera].to.z));
+    if(this.graph.views[newCamera].type == "perspective")
+      this.camera = new CGFcamera(this.graph.views[newCamera].angle, this.graph.views[newCamera].near, this.graph.views[newCamera].far, vec3.fromValues(this.graph.views[newCamera].from.x, this.graph.views[newCamera].from.y, this.graph.views[newCamera].from.z), vec3.fromValues(this.graph.views[newCamera].to.x, this.graph.views[newCamera].to.y, this.graph.views[newCamera].to.z));
+    else if(this.graph.views[newCamera].type == "ortho")
+      this.camera = new CGFcameraOrtho(this.graph.views[newCamera].left, this.graph.views[newCamera].right, this.graph.views[newCamera].bottom, this.graph.views[newCamera].top, this.graph.views[newCamera].near, this.graph.views[newCamera].far, vec3.fromValues(this.graph.views[newCamera].from.x, this.graph.views[newCamera].from.y, this.graph.views[newCamera].from.z), vec3.fromValues(this.graph.views[newCamera].to.x, this.graph.views[newCamera].to.y, this.graph.views[newCamera].to.z), vec3.fromValues(0,1,0));
 
-    }
+    this.interface.setActiveCamera(this.camera);
   }
 
 
