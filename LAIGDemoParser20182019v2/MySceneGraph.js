@@ -1658,14 +1658,17 @@ class MySceneGraph {
   }
 
   /**
-  * Displays the scene, processing each node, starting in the root node.
+  * Displays the scene, starting in the root node.
   */
   displayScene() {
     this.displayNode(this.components[this.root], this.components[this.root].materials[0], this.components[this.root].texture);
   }
 
   /**
-  * Displays the scene, processing just one node at a time
+  * Displays the scene recursively , processing one node at a time
+  * @param {MyGraphNode} node
+  * @param {CGFappearance} parentMaterial
+  * @param {string} parentTexture
   */
   displayNode(node, parentMaterial, parentTexture){
     this.scene.pushMatrix();
@@ -1673,28 +1676,33 @@ class MySceneGraph {
 
     var currentMaterial;
     var currentTexture;
+    var allMaterials = [];
+    var materialIndex = this.scene.currentMaterial;
+    var i = 0;
 
     for(var key in node.materials){
-      if(node.materials[key] == "inherit")
-        currentMaterial = parentMaterial;
-      else
-        currentMaterial = node.materials[key];
+      allMaterials[i] = node.materials[key];
+      i++;
+    }
 
-      if(node.texture == "inherit")
-        currentTexture = parentTexture
-      else if(node.texture == "none")
-        currentTexture = "none";
-      else
-        currentTexture = node.texture;
+    if(allMaterials[materialIndex % i] == "inherit")
+      currentMaterial = parentMaterial;
+    else
+      currentMaterial = allMaterials[materialIndex % i];
+
+    if(node.texture == "inherit")
+      currentTexture = parentTexture
+    else if(node.texture == "none")
+      currentTexture = "none";
+    else
+      currentTexture = node.texture;
 
     if(currentTexture != "none")
       currentMaterial.setTexture(currentTexture);
     else
       currentMaterial.setTexture(null);
 
-      //inherit
     currentMaterial.apply();
-    }
 
     for(var key in node.primitives){
         node.primitives[key].updateTexCoords(node.length_s, node.length_t);

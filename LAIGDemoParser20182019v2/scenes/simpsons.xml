@@ -7,13 +7,13 @@
       <from x="3.5" y="7" z="20" />
       <to x="3.5" y="1" z="0" />
     </perspective>
-    <perspective id="tv" near="0.1" far="50" angle="1">
-      <from x="4" y="0.5" z="4" />
-      <to x="4" y="0.5" z="5" />
-    </perspective>
     <perspective id="kitchen" near="0.1" far="50" angle="0.5">
       <from x="11.5" y="7" z="20" />
       <to x="11.5" y="1" z="0" />
+    </perspective>
+    <perspective id="tv" near="0.1" far="50" angle="1">
+      <from x="4" y="0.5" z="4" />
+      <to x="4" y="0.5" z="5" />
     </perspective>
     <perspective id="house" near="0.1" far="50" angle="0.5">
       <from x="7" y="4" z="25" />
@@ -66,6 +66,7 @@
       <texture id="carpet" file="./scenes/images/carpet.jpg" />
       <texture id="donut" file="./scenes/images/donut.jpg" />
       <texture id="simpsons" file="./scenes/images/simpsons.jpg" />
+      <texture id="tiles" file="./scenes/images/tiles.jpg" />
       <texture id="painting" file="./scenes/images/painting.jpg" />
     </textures>
 
@@ -112,9 +113,33 @@
         <ambient r="0.1" g="0.1" b="0.1" a="1" />
         <specular r="0.1" g="0.1" b="0.1" a="1" />
       </material>
-      <material id="floor" shininess = "1" >
+      <material id="floor1" shininess = "1" >
         <emission r="0" g="0" b="0.0" a="0" />
         <diffuse r="0" g="0.6" b="0.2" a="0" />
+        <ambient r="0" g="0" b="0" a="0" />
+        <specular r="0.1" g="0.1" b="0.1" a="0" />
+      </material>
+      <material id="floor2" shininess = "1" >
+        <emission r="0" g="0" b="0.0" a="0" />
+        <diffuse r="0.6" g="0.15" b="0.15" a="0" />
+        <ambient r="0" g="0" b="0" a="0" />
+        <specular r="0.1" g="0.1" b="0.1" a="0" />
+      </material>
+      <material id="floor3" shininess = "1" >
+        <emission r="0" g="0" b="0.0" a="0" />
+        <diffuse r="0.15" g="0.15" b="0.7" a="0" />
+        <ambient r="0" g="0" b="0" a="0" />
+        <specular r="0.1" g="0.1" b="0.1" a="0" />
+      </material>
+      <material id="floor4" shininess = "1" >
+        <emission r="0" g="0" b="0.0" a="0" />
+        <diffuse r="0.7" g="0.7" b="0.1" a="0" />
+        <ambient r="0" g="0" b="0" a="0" />
+        <specular r="0.1" g="0.1" b="0.1" a="0" />
+      </material>
+      <material id="floor5" shininess = "1" >
+        <emission r="0" g="0" b="0.0" a="0" />
+        <diffuse r="0.1" g="0.7" b="0.7" a="0" />
         <ambient r="0" g="0" b="0" a="0" />
         <specular r="0.1" g="0.1" b="0.1" a="0" />
       </material>
@@ -142,9 +167,15 @@
         <ambient r="0" g="0" b="0" a="1" />
         <specular r="0.1" g="0.1" b="0.1" a="1" />
       </material>
-      <material id="tvscreen" shininess = "1" >
+      <material id="tvon" shininess = "1" >
         <emission r="1" g="1" b="1" a="1" />
         <diffuse r="0" g="0" b="0" a="1" />
+        <ambient r="0" g="0" b="0" a="1" />
+        <specular r="0" g="0" b="0" a="1" />
+      </material>
+      <material id="tvoff" shininess = "1" >
+        <emission r="0" g="0" b="0" a="0" />
+        <diffuse r="1" g="1" b="1" a="1" />
         <ambient r="0" g="0" b="0" a="1" />
         <specular r="0" g="0" b="0" a="1" />
       </material>
@@ -599,7 +630,7 @@
         <materials>
           <material id="luxoball" />
         </materials>
-        <texture id="simpsons" length_s="1" length_t="1" />
+        <texture id="luxoball" length_s="1" length_t="1" />
         <children>
           <primitiveref id="sphere" />
         </children>
@@ -808,7 +839,11 @@
           <rotate axis="x" angle="-90"/>
         </transformation>
         <materials>
-          <material id="floor" />
+          <material id="floor1" />
+          <material id="floor2" />
+          <material id="floor3" />
+          <material id="floor4" />
+          <material id="floor5" />
         </materials>
         <texture id="none" length_s="1" length_t="1" />
         <children>
@@ -823,9 +858,9 @@
           <rotate axis="x" angle="-90"/>
         </transformation>
         <materials>
-          <material id="floor" />
+          <material id="default" />
         </materials>
-        <texture id="none" length_s="1" length_t="1" />
+        <texture id="tiles" length_s="5" length_t="5" />
         <children>
           <primitiveref id="rectangle" />
         </children>
@@ -982,7 +1017,8 @@
           <scale x="1.4" y="0.9" z="1"/>
         </transformation>
         <materials>
-          <material id="tvscreen" />
+          <material id="tvon" />
+          <material id="tvoff" />
         </materials>
         <texture id="simpsons" length_s="1" length_t="1" />
         <children>

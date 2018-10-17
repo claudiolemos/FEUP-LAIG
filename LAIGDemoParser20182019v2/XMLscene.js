@@ -13,7 +13,8 @@ class XMLscene extends CGFscene {
 
     this.interface = myinterface;
     this.lightValues = {};
-    this.selectedCamera;
+    this.currentCamera;
+    this.currentMaterial = 0;
     this.showAxis = true;
   }
 
@@ -115,7 +116,7 @@ class XMLscene extends CGFscene {
   * Updates camera appropriately depending on the view, whether it's perspective or ortho
   */
   updateCamera(newCamera){
-    this.selectedCamera = newCamera;
+    this.currentCamera = newCamera;
 
     if(this.graph.views[newCamera].type == "perspective")
       this.camera = new CGFcamera(this.graph.views[newCamera].angle, this.graph.views[newCamera].near, this.graph.views[newCamera].far, vec3.fromValues(this.graph.views[newCamera].from.x, this.graph.views[newCamera].from.y, this.graph.views[newCamera].from.z), vec3.fromValues(this.graph.views[newCamera].to.x, this.graph.views[newCamera].to.y, this.graph.views[newCamera].to.z));
@@ -124,7 +125,6 @@ class XMLscene extends CGFscene {
 
     this.interface.setActiveCamera(this.camera);
   }
-
 
   /**
   * Displays the scene.
@@ -168,11 +168,6 @@ class XMLscene extends CGFscene {
 
       // Displays the scene (MySceneGraph function).
       this.graph.displayScene();
-    }
-    else {
-      // Draw axis
-      if(this.showAxis)
-        this.axis.display();
     }
 
     this.popMatrix();

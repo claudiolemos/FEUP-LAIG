@@ -1,12 +1,13 @@
 /**
- * MyGraphNode
- * @constructor
- */
-
- class MyGraphNode
- {
- 	constructor(graph, id)
- 	{
+* MyGraphNode class, which represents a node in the scene graph
+*/
+class MyGraphNode {
+  /**
+  * @constructor
+  * @param {MySceneGraph} graph
+  */
+  constructor(graph, id)
+  {
     this.graph = graph;
     this.id = id;
     this.transformation = mat4.create();
@@ -17,16 +18,16 @@
     this.length_t = 1;
     this.children = [];
     this.primitives = [];
- 	};
+  };
 
- 	addChild(id)
- 	{
+  addChild(id)
+  {
     this.children.push(id);
- 	};
+  };
 
   addPrimitive(id)
- 	{
+  {
     this.primitives.push(id);
- 	};
+  };
 
- };
+};

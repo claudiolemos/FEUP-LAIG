@@ -23,6 +23,8 @@ class MyInterface extends CGFinterface {
 
         // add a group of controls (and open/expand by defult)
 
+        this.initKeys();
+
         return true;
     }
 
@@ -57,11 +59,23 @@ class MyInterface extends CGFinterface {
       for (var key in views)
         viewsID.push(key);
 
-      var controller = this.gui.add(this.scene, 'selectedCamera', viewsID).name("Camera");
+      var controller = this.gui.add(this.scene, 'currentCamera', viewsID).name("Camera");
 
       controller.onChange(function(value){
         scene.updateCamera(value);
       });
     }
 
+    initKeys() {
+  		this.scene.gui=this;
+  		this.processKeyboard=function(){};
+  		this.activeKeys={};
+  	};
+
+  	processKeyDown(event) {
+  		this.activeKeys[event.code]=true;
+      if(event.key == "m" || event.key == "M")
+        this.scene.currentMaterial++;
+    	this.activeKeys[event.code]=false;
+  	};
 }
