@@ -33,6 +33,8 @@ class MyTriangle extends CGFobject
 		this.minT = 0.0;
 		this.maxT = 1.0;
 
+		this.defaultTexCoords = [];
+
 		this.initBuffers();
 	};
 
@@ -80,25 +82,19 @@ class MyTriangle extends CGFobject
 				(v12-v23*Math.cos(angle)),(d-v23*Math.sin(angle))
 		];
 
+		this.defaultTexCoords = this.texCoords;
+
 		this.initGLBuffers();
 	};
 
 	updateTexCoords(s,t){
+		this.texCoords = this.defaultTexCoords.slice();
 
-		var v23 = Math.sqrt(Math.pow(this.v2[0] - this.v3[0], 2) + Math.pow(this.v2[1] - this.v3[1], 2) + Math.pow(this.v2[2] - this.v3[2], 2));
-		var v13 = Math.sqrt(Math.pow(this.v1[0] - this.v3[0], 2) + Math.pow(this.v1[1] - this.v3[1], 2) + Math.pow(this.v1[2] - this.v3[2], 2));
-		var v12 = Math.sqrt(Math.pow(this.v2[0] - this.v1[0], 2) + Math.pow(this.v2[1] - this.v1[1], 2) + Math.pow(this.v2[2] - this.v1[2], 2));
+		for(var i = 0; i < this.texCoords.length; i+=2){
+			this.texCoords[i] *= s;
+			this.texCoords[i+1] *= t;
+		}
 
-     var angle = Math.acos((Math.pow(v23, 2) - Math.pow(v13, 2) + Math.pow(v12, 2)) / (2 * v23 * v12));
-
-     var d = v23 * Math.sin(angle);
-
-     this.texCoords = [
-         0, d*t,
-         v12*s, d*t,
-         (v12-v23*Math.cos(angle))*s,(d-v23*Math.sin(angle))*t
-     ];
-
-     this.updateTexCoordsGLBuffers();
-    };
+		this.updateTexCoordsGLBuffers();
+	};
 };

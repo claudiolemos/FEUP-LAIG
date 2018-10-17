@@ -1520,9 +1520,8 @@ class MySceneGraph {
               return "unable to parse id component (null) on tag <material> with index " + j + " on tag <materials> on the <component> node with index " + i + " from the <components> block";
 
               // Checks if id exists
-              if(materialID == "inherit"){
-                //TODO
-              }
+              if(materialID == "inherit")
+                this.components[id].materials[materialID] = materialID
               else
                 if(this.materials[materialID] != null)
                   this.components[id].materials[materialID] = this.materials[materialID];
@@ -1591,7 +1590,6 @@ class MySceneGraph {
               if(componentID == null)
               return "unable to parse id component (null) on tag <componentref> with index " + j +" on tag <children> on the <component> node with index " + i + " from the <components> block";
 
-              //TODO: erro para quando o componentref ainda nao foi adicionado
               this.components[id].addChild(componentID);
             }
             else if(childrenChildren[j].nodeName == "primitiveref"){
@@ -1663,33 +1661,48 @@ class MySceneGraph {
   * Displays the scene, processing each node, starting in the root node.
   */
   displayScene() {
-    this.displayNode(this.components[this.root]);
+    this.displayNode(this.components[this.root], this.components[this.root].materials[0], this.components[this.root].texture);
   }
 
   /**
   * Displays the scene, processing just one node at a time
   */
-  displayNode(node){
+  displayNode(node, parentMaterial, parentTexture){
     this.scene.pushMatrix();
     this.scene.multMatrix(node.transformation);
 
-    for(var key in node.materials){
-      node.materials[key].apply();
+    var currentMaterial;
+    var currentTexture;
 
-      if(node.texture == "none")
-        node.materials[key].setTexture(null);
-      else if(node.texture != "inherit")
-        node.materials[key].setTexture(node.texture);
+    for(var key in node.materials){
+      if(node.materials[key] == "inherit")
+        currentMaterial = parentMaterial;
+      else
+        currentMaterial = node.materials[key];
+
+      if(node.texture == "inherit")
+        currentTexture = parentTexture
+      else if(node.texture == "none")
+        currentTexture = "none";
+      else
+        currentTexture = node.texture;
+
+    if(currentTexture != "none")
+      currentMaterial.setTexture(currentTexture);
+    else
+      currentMaterial.setTexture(null);
+
+      //inherit
+    currentMaterial.apply();
     }
 
     for(var key in node.primitives){
-      // if(node.length_s != 1 || node.length_t != 1)
         node.primitives[key].updateTexCoords(node.length_s, node.length_t);
       node.primitives[key].display();
     }
 
     for(var i = 0; i < node.children.length; i++)
-      this.displayNode(this.components[node.children[i]]);
+      this.displayNode(this.components[node.children[i]], currentMaterial, currentTexture);
 
     this.scene.popMatrix();
   }

@@ -19,9 +19,9 @@
       <from x="7" y="4" z="25" />
       <to x="7" y="1" z="0" />
     </perspective>
-    <ortho id="ortho"  near="0.1" far="50" left="0" right="2" bottom="0" top="2">
-      <from x="4" y="0.5" z="4" />
-      <to x="4" y="0.5" z="5" />
+    <ortho id="sala1"  near="0.1" far="50" left="0" right="7" bottom="0" top="5">
+      <from x="7" y="2.5" z="-5" />
+      <to x="7" y="0" z="4" />
     </ortho>
     </views>
 
@@ -113,10 +113,10 @@
         <specular r="0.1" g="0.1" b="0.1" a="1" />
       </material>
       <material id="floor" shininess = "1" >
-        <emission r="0" g="0" b="0.0" a="1" />
-        <diffuse r="0" g="0.6" b="0.2" a="1" />
-        <ambient r="0" g="0" b="0" a="1" />
-        <specular r="0.1" g="0.1" b="0.1" a="1" />
+        <emission r="0" g="0" b="0.0" a="0" />
+        <diffuse r="0" g="0.6" b="0.2" a="0" />
+        <ambient r="0" g="0" b="0" a="0" />
+        <specular r="0.1" g="0.1" b="0.1" a="0" />
       </material>
       <material id="carpet" shininess = "1" >
         <emission r="0" g="0" b="0" a="1" />
@@ -220,13 +220,8 @@
         </materials>
         <texture id="none" length_s="1" length_t="1" />
         <children>
-          <componentref id="couch" />
-          <componentref id="table" />
           <componentref id="room1" />
           <componentref id="room2" />
-          <componentref id="luxoball" />
-          <componentref id="lamp1" />
-          <componentref id="lamp2" />
         </children>
       </component>
 
@@ -568,6 +563,10 @@
           <componentref id="candeeiro" />
           <componentref id="televisao" />
           <componentref id="completeframe" />
+          <componentref id="luxoball" />
+          <componentref id="couch" />
+          <componentref id="table" />
+          <componentref id="lamp1" />
         </children>
       </component>
 
@@ -600,7 +599,7 @@
         <materials>
           <material id="luxoball" />
         </materials>
-        <texture id="luxoball" length_s="1" length_t="1" />
+        <texture id="simpsons" length_s="1" length_t="1" />
         <children>
           <primitiveref id="sphere" />
         </children>
@@ -615,7 +614,7 @@
         <materials>
           <material id="donut" />
         </materials>
-        <texture id="donut" length_s="3" length_t="3" />
+        <texture id="donut" length_s="2" length_t="1" />
         <children>
           <primitiveref id="torus" />
         </children>
@@ -633,7 +632,7 @@
         <materials>
           <material id="donut" />
         </materials>
-        <texture id="donut" length_s="1" length_t="1" />
+        <texture id="donut" length_s="2" length_t="1" />
         <children>
           <primitiveref id="torus" />
         </children>
@@ -1189,6 +1188,7 @@
           <componentref id="wall5" />
           <componentref id="floor2" />
           <componentref id="kitchentable" />
+          <componentref id="lamp2" />
         </children>
       </component>
 

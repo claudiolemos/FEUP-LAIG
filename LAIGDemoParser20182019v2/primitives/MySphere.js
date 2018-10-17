@@ -16,12 +16,8 @@ class MySphere extends CGFobject
 		this.vertices = [];
 		this.indices = [];
 		this.normals = [];
-
-		this.minS = 0;
-		this.maxS = 1;
-		this.minT = 0;
-		this.maxT = 1;
 		this.texCoords = [];
+		this.defaultTexCoords = [];
 
 		this.initBuffers();
 	};
@@ -31,11 +27,8 @@ class MySphere extends CGFobject
 		// VERTICES DEFINITION
 		var degToRad = Math.PI / 180;
 		var k = 0;
-		var verticesN = this.slices*2;
 		var m;
 		var angleFiInc = 180/this.stacks;
-		var incS = Math.abs(this.maxS - this.minS)/(this.slices);
-		var incT = Math.abs(this.maxT - this.minT)/(this.stacks);
 
 		var angleFi = 0;
 		for (var j = 0; j < this.stacks; j++) {
@@ -73,11 +66,20 @@ class MySphere extends CGFobject
 			angleFi += angleFiInc;
 		}
 		this.texCoords.push(0.5, 0.5);
+		this.defaultTexCoords = this.texCoords;
 
 		this.initGLBuffers();
 	};
 
 	updateTexCoords(s,t){
+		this.texCoords = this.defaultTexCoords.slice();
+
+		for(var i = 0; i < this.texCoords.length; i+=2){
+			this.texCoords[i] *= s;
+			this.texCoords[i+1] *= t;
+		}
+
+		this.updateTexCoordsGLBuffers();
 	};
 
 };

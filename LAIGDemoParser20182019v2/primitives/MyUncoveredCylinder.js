@@ -24,6 +24,7 @@ class MyUncoveredCylinder extends CGFobject
 		this.minT = 0;
 		this.maxT = 1;
 		this.texCoords = [];
+		this.defaultTexCoords = [];
 
 		this.initBuffers();
 	};
@@ -81,22 +82,16 @@ class MyUncoveredCylinder extends CGFobject
 			z+= substack;
 		}
 
+		this.defaultTexCoords = this.texCoords;
 		this.initGLBuffers();
 	};
 
 	updateTexCoords(s,t){
-		var incS = s/this.slices;
-		var incT = t/this.stacks;
+		this.texCoords = this.defaultTexCoords.slice();
 
-		this.texCoords = [];
-
-		for (var j = 0; j < this.stacks; j++) {
-			for (var i = 0; i < this.slices; i++) {
-				this.texCoords.push(i*incS, j*incT);
-				this.texCoords.push(i*incS, (j+1)*incT);
-			}
-			this.texCoords.push(1,j*incT);
-			this.texCoords.push(1,(j+1)*incT);
+		for(var i = 0; i < this.texCoords.length; i+=2){
+			this.texCoords[i] *= s;
+			this.texCoords[i+1] *= t;
 		}
 
 		this.updateTexCoordsGLBuffers();
