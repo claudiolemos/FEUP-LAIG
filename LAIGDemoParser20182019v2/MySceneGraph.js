@@ -202,6 +202,7 @@ class MySceneGraph {
 
   /**
   * Parses the <scene> block.
+  * @param {array} sceneNode
   */
   parseScene(sceneNode) {
     // Reads root and axis length
@@ -231,6 +232,7 @@ class MySceneGraph {
 
   /**
   * Parses the <views> block.
+  * @param {array} viewsNode
   */
   parseViews(viewsNode) {
     // Reads views children and node names
@@ -278,7 +280,7 @@ class MySceneGraph {
         this.views[id].type = "perspective"
         this.views[id].near = near;
         this.views[id].far = far;
-        this.views[id].angle = angle;
+        this.views[id].angle = angle * DEGREE_TO_RAD;
 
         // Creates from and to variables
         this.views[id].from = [];
@@ -434,6 +436,7 @@ class MySceneGraph {
 
   /**
   * Parses the <ambient> block.
+  * @param {array} ambientNode
   */
   parseAmbient(ambientNode) {
 
@@ -509,6 +512,7 @@ class MySceneGraph {
 
   /**
   * Parses the <lights> block.
+  * @param {array} lightsNode
   */
   parseLights(lightsNode) {
 
@@ -858,6 +862,7 @@ class MySceneGraph {
 
   /**
   * Parses the <textures> block.
+  * @param {array} texturesNode
   */
   parseTextures(texturesNode) {
 
@@ -903,6 +908,7 @@ class MySceneGraph {
 
   /**
   * Parses the <materials> block.
+  * @param {array} materialsNode
   */
   parseMaterials(materialsNode) {
 
@@ -1081,6 +1087,7 @@ class MySceneGraph {
 
   /**
   * Parses the <transformations> block.
+  * @param {array} transformationsNode
   */
   parseTransformations(transformationsNode) {
 
@@ -1194,6 +1201,7 @@ class MySceneGraph {
 
   /**
   * Parses the <primitives> block.
+  * @param {array} primitivesNode
   */
   parsePrimitives(primitivesNode) {
 
@@ -1356,6 +1364,7 @@ class MySceneGraph {
 
   /**
   * Parses the <components> block.
+  * @param {array} componentsNode
   */
   parseComponents(componentsNode) {
 
@@ -1548,7 +1557,7 @@ class MySceneGraph {
           return "unable to parse id, length_s, length_t components (null) on tag <texture> on the <component> node with index " + i + " from the <components> block";
           else if(isNaN(length_s) || isNaN(length_t))
           return "unable to length_s, length_t components (NaN) on tag <texture> on the <component> node with index " + i + " from the <components> block";
-          else if(length_s < 0 || length_t < 0)
+          else if(length_s <= 0 || length_t <= 0)
           return "unable to length_s, length_t components (out of 0-inf. range) on tag <texture> on the <component> node with index " + i + " from the <components> block";
 
           // Checks if id exists
@@ -1631,7 +1640,7 @@ class MySceneGraph {
     return null;
   }
 
-  /*
+  /**
   * Callback to be executed on any read error, showing an error on the console.
   * @param {string} message
   */
@@ -1672,45 +1681,47 @@ class MySceneGraph {
   */
   displayNode(node, parentMaterial, parentTexture){
     this.scene.pushMatrix();
-    this.scene.multMatrix(node.transformation);
 
-    var currentMaterial;
-    var currentTexture;
-    var allMaterials = [];
-    var materialIndex = this.scene.currentMaterial;
-    var i = 0;
+      // Applies the node transformation
+      this.scene.multMatrix(node.transformation);
 
-    for(var key in node.materials){
-      allMaterials[i] = node.materials[key];
-      i++;
-    }
+      var currentMaterial;
+      var currentTexture;
+      var allMaterials = [];
+      var materialIndex = this.scene.currentMaterial;
+      var i = 0;
 
-    if(allMaterials[materialIndex % i] == "inherit")
-      currentMaterial = parentMaterial;
-    else
-      currentMaterial = allMaterials[materialIndex % i];
+      for(var key in node.materials){
+        allMaterials[i] = node.materials[key];
+        i++;
+      }
 
-    if(node.texture == "inherit")
-      currentTexture = parentTexture
-    else if(node.texture == "none")
-      currentTexture = "none";
-    else
-      currentTexture = node.texture;
+      if(allMaterials[materialIndex % i] == "inherit")
+        currentMaterial = parentMaterial;
+      else
+        currentMaterial = allMaterials[materialIndex % i];
 
-    if(currentTexture != "none")
-      currentMaterial.setTexture(currentTexture);
-    else
-      currentMaterial.setTexture(null);
+      if(node.texture == "inherit")
+        currentTexture = parentTexture
+      else if(node.texture == "none")
+        currentTexture = "none";
+      else
+        currentTexture = node.texture;
 
-    currentMaterial.apply();
+      if(currentTexture != "none")
+        currentMaterial.setTexture(currentTexture);
+      else
+        currentMaterial.setTexture(null);
 
-    for(var key in node.primitives){
+      currentMaterial.apply();
+
+      for(var key in node.primitives){
         node.primitives[key].updateTexCoords(node.length_s, node.length_t);
-      node.primitives[key].display();
-    }
+        node.primitives[key].display();
+      }
 
-    for(var i = 0; i < node.children.length; i++)
-      this.displayNode(this.components[node.children[i]], currentMaterial, currentTexture);
+      for(var i = 0; i < node.children.length; i++)
+        this.displayNode(this.components[node.children[i]], currentMaterial, currentTexture);
 
     this.scene.popMatrix();
   }

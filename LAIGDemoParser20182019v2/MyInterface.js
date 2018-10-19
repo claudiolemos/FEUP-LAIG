@@ -66,12 +66,18 @@ class MyInterface extends CGFinterface {
       });
     }
 
+    /**
+    * Starts the keyboard event listener
+    */
     initKeys() {
   		this.scene.gui=this;
   		this.processKeyboard=function(){};
   		this.activeKeys={};
   	};
 
+    /**
+    * Updates currentMaterial when the M key is pressed
+    */
   	processKeyDown(event) {
   		this.activeKeys[event.code]=true;
       if(event.key == "m" || event.key == "M")

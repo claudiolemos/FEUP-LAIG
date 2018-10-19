@@ -4,7 +4,8 @@
 class MyGraphNode {
   /**
   * @constructor
-  * @param {MySceneGraph} graph
+  * @param {MySceneGraph} graph graph that represents the whole scene
+  * @param {string}       id    node's id
   */
   constructor(graph, id)
   {
@@ -20,11 +21,19 @@ class MyGraphNode {
     this.primitives = [];
   };
 
+  /**
+  * Adds a child to the chidlren array
+  * @param {string} id id of the new child
+  */
   addChild(id)
   {
     this.children.push(id);
   };
 
+  /**
+  * Adds a primitive to the primitives array
+  * @param {string} id id of the new primitive
+  */
   addPrimitive(id)
   {
     this.primitives.push(id);

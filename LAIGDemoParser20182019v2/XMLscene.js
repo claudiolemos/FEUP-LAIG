@@ -46,6 +46,7 @@ class XMLscene extends CGFscene {
   initCameras() {
     this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 10, 15), vec3.fromValues(0, 0, 0));
   }
+
   /**
   * Initializes the scene lights with the values read from the XML file.
   */
@@ -114,6 +115,7 @@ class XMLscene extends CGFscene {
 
   /**
   * Updates camera appropriately depending on the view, whether it's perspective or ortho
+  * @param {string} newCamera id for the new camera
   */
   updateCamera(newCamera){
     this.currentCamera = newCamera;
