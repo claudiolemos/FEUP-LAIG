@@ -36,7 +36,6 @@ class XMLscene extends CGFscene {
     this.gl.enable(this.gl.CULL_FACE);
     this.gl.depthFunc(this.gl.LEQUAL);
 
-
     this.axis = new CGFaxis(this);
   }
 
@@ -52,12 +51,10 @@ class XMLscene extends CGFscene {
   */
   initLights() {
     var i = 0;
-    // Lights index.
 
-    // Reads the lights from the scene graph.
     for (var key in this.graph.lights) {
       if (i >= 8)
-      break;              // Only eight lights allowed by WebGL.
+      break;
 
       if (this.graph.lights.hasOwnProperty(key)) {
         var light = this.graph.lights[key];
@@ -132,47 +129,39 @@ class XMLscene extends CGFscene {
   * Displays the scene.
   */
   display() {
-    // ---- BEGIN Background, camera and axis setup
-
-    // Clear image and depth buffer everytime we update the scene
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
-    // Initialize Model-View matrix as identity (no transformation
     this.updateProjectionMatrix();
     this.loadIdentity();
 
-    // Apply transformations corresponding to the camera position relative to the origin
     this.applyViewMatrix();
 
     this.pushMatrix();
 
-    if (this.sceneInited) {
-      // Draw axis
-      if(this.showAxis)
-        this.axis.display();
+      if (this.sceneInited) {
+        if(this.showAxis)
+          this.axis.display();
 
-      var i = 0;
-      for (var key in this.lightValues) {
-        if (this.lightValues.hasOwnProperty(key)) {
-          if (this.lightValues[key]) {
-            this.lights[i].setVisible(true);
-            this.lights[i].enable();
+        var i = 0;
+        for (var key in this.lightValues) {
+          if (this.lightValues.hasOwnProperty(key)) {
+            if (this.lightValues[key]) {
+              this.lights[i].setVisible(true);
+              this.lights[i].enable();
+            }
+            else {
+              this.lights[i].setVisible(false);
+              this.lights[i].disable();
+            }
+            this.lights[i].update();
+            i++;
           }
-          else {
-            this.lights[i].setVisible(false);
-            this.lights[i].disable();
-          }
-          this.lights[i].update();
-          i++;
         }
+
+        this.graph.displayScene();
       }
 
-      // Displays the scene (MySceneGraph function).
-      this.graph.displayScene();
-    }
-
     this.popMatrix();
-    // ---- END Background, camera and axis setup
   }
 }
