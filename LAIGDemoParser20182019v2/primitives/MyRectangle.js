@@ -1,26 +1,30 @@
 /**
- * MyObject
- * @param gl {WebGLRenderingContext}
- * @constructor
- */
-
+* MyRectangle class, which represents a rectangle object
+*/
 class MyRectangle extends CGFobject
 {
+	/**
+	* @constructor
+	* @param {XMLScene} scene	represents the CGFscene
+	* @param {number}   x1    bottom left x coordinate
+	* @param {number}   x2    top right x coordinate
+	* @param {number}   y1    bottom left y coordinate
+	* @param {number}   y2    top right y coordinate
+	*/
 	constructor(scene, x1, x2, y1, y2)
 	{
 		super(scene);
-
-		// Position coordinates
 		this.x1 = x1;
 		this.x2 = x2;
 		this.y1 = y1;
 		this.y2 = y2;
-
 		this.defaultTexCoords = [];
-
 		this.initBuffers();
 	};
 
+	/**
+	* Creates vertices, indices, normals and texCoords
+	*/
 	initBuffers()
 	{
 		this.vertices = [
@@ -52,10 +56,14 @@ class MyRectangle extends CGFobject
 		];
 
 		this.defaultTexCoords = this.texCoords;
-
 		this.initGLBuffers();
 	};
 
+	/**
+	* Updates the rectangle's texCoords
+	* @param {number} s represents the amount of times the texture will be repeated in the s coordinate
+	* @param {number} t represents the amount of times the texture will be repeated in the t coordinate
+	*/
 	updateTexCoords(s,t){
 		this.texCoords = this.defaultTexCoords.slice();
 

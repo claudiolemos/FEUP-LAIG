@@ -1685,22 +1685,26 @@ class MySceneGraph {
       // Applies the node transformation
       this.scene.multMatrix(node.transformation);
 
+      // Creates variables
       var currentMaterial;
       var currentTexture;
       var allMaterials = [];
       var materialIndex = this.scene.currentMaterial;
       var i = 0;
 
+      // Stores all node's materials in order
       for(var key in node.materials){
         allMaterials[i] = node.materials[key];
         i++;
       }
 
+      // Checks if it's going to use node or parent material
       if(allMaterials[materialIndex % i] == "inherit")
         currentMaterial = parentMaterial;
       else
         currentMaterial = allMaterials[materialIndex % i];
 
+      // Checks if it's going to use node or parent texture or even none
       if(node.texture == "inherit")
         currentTexture = parentTexture
       else if(node.texture == "none")
@@ -1715,11 +1719,13 @@ class MySceneGraph {
 
       currentMaterial.apply();
 
+      // Displays node's primitives and updates their texCoords
       for(var key in node.primitives){
         node.primitives[key].updateTexCoords(node.length_s, node.length_t);
         node.primitives[key].display();
       }
 
+      // recursively, calls displayNode for all node's children
       for(var i = 0; i < node.children.length; i++)
         this.displayNode(this.components[node.children[i]], currentMaterial, currentTexture);
 
