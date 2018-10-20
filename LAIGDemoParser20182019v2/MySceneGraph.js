@@ -1549,16 +1549,19 @@ class MySceneGraph {
 
           // Reads id, length_s, length_t
           var textureID = this.reader.getString(componentChildren[textureIndex], 'id');
-          var length_s = this.reader.getFloat(componentChildren[textureIndex], 'length_s');
-          var length_t = this.reader.getFloat(componentChildren[textureIndex], 'length_t');
+          var length_s = this.reader.getFloat(componentChildren[textureIndex], 'length_s', false);
+          var length_t = this.reader.getFloat(componentChildren[textureIndex], 'length_t', false);
 
           // Validates id, length_s, length_t
-          if(textureID == null || length_s == null || length_t == null)
-          return "unable to parse id, length_s, length_t components (null) on tag <texture> on the <component> node with index " + i + " from the <components> block";
-          else if(isNaN(length_s) || isNaN(length_t))
-          return "unable to length_s, length_t components (NaN) on tag <texture> on the <component> node with index " + i + " from the <components> block";
-          else if(length_s <= 0 || length_t <= 0)
-          return "unable to length_s, length_t components (out of 0-inf. range) on tag <texture> on the <component> node with index " + i + " from the <components> block";
+          if(textureID == null)
+            return "unable to parse id component (null) on tag <texture> on the <component> node with index " + i + " from the <components> block";
+          if((length_s == null || length_t == null) && textureID != "none" && textureID != "inherit")
+            return "unable to parse length_s, length_t components (null) on tag <texture> on the <component> node with index " + i + " from the <components> block";
+          if(length_s != null && length_t != null)
+            if(isNaN(length_s) || isNaN(length_t))
+              return "unable to length_s, length_t components (NaN) on tag <texture> on the <component> node with index " + i + " from the <components> block";
+            else if(length_s <= 0 || length_t <= 0)
+              return "unable to length_s, length_t components (out of 0-inf. range) on tag <texture> on the <component> node with index " + i + " from the <components> block";
 
           // Checks if id exists
           if(textureID == "inherit" || textureID == "none")
@@ -1582,7 +1585,7 @@ class MySceneGraph {
 
           // Checks if there are any children defined
           if(componentChildren[childrenIndex].getElementsByTagName("componentref").length == 0 && componentChildren[childrenIndex].getElementsByTagName("primitiveref").length == 0)
-          return "at least one children (either <componentref> or  <primitiveref>) should be defined on tag <children> on the <component> node with index " + i + " from the <components> block";
+            return "at least one children (either <componentref> or  <primitiveref>) should be defined on tag <children> on the <component> node with index " + i + " from the <components> block";
 
           // Reads children children and node names
           var childrenChildren = componentChildren[childrenIndex].children;
@@ -1675,19 +1678,22 @@ class MySceneGraph {
 
   /**
   * Displays the scene recursively , processing one node at a time
-  * @param {MyGraphNode} node
-  * @param {CGFappearance} parentMaterial
-  * @param {string} parentTexture
+  * @param {MyGraphNode} node             represents the current node being displayed
+  * @param {CGFappearance} parentMaterial represents the current node's parent's material
+  * @param {string} parentTexture         represents the current node's parent's texture
+  * @param {number} parentS               represents the current node's parent's length_s
+  * @param {number} parentT               represents the current node's parent's length_t
   */
-  displayNode(node, parentMaterial, parentTexture){
+  displayNode(node, parentMaterial, parentTexture, parentS, parentT){
     this.scene.pushMatrix();
 
       // Applies the node transformation
       this.scene.multMatrix(node.transformation);
 
-      // Creates variables
       var currentMaterial;
       var currentTexture;
+      var currentS;
+      var currentT;
       var allMaterials = [];
       var materialIndex = this.scene.currentMaterial;
       var i = 0;
@@ -1712,6 +1718,24 @@ class MySceneGraph {
       else
         currentTexture = node.texture;
 
+      // Checks if it's going to use node or parent texture lengths
+      if(node.texture == "inherit" && node.length_s == null && node.length_t == null){
+        currentS = parentS;
+        currentT = parentT
+      }
+      else if(node.texture == "inherit" && node.length_s == null){
+        currentS = parentS;
+        currentT = node.length_t;
+      }
+      else if(node.texture == "inherit" && node.length_t == null){
+        currentS = node.length_s;
+        currentT = parentT;
+      }
+      else if(node.texture != "none"){
+        currentS = node.length_s;
+        currentT = node.length_t;
+      }
+
       if(currentTexture != "none")
         currentMaterial.setTexture(currentTexture);
       else
@@ -1721,13 +1745,14 @@ class MySceneGraph {
 
       // Displays node's primitives and updates their texCoords
       for(var key in node.primitives){
-        node.primitives[key].updateTexCoords(node.length_s, node.length_t);
+        if(currentTexture != "none")
+          node.primitives[key].updateTexCoords(currentS, currentT);
         node.primitives[key].display();
       }
 
-      // recursively, calls displayNode for all node's children
+      // Recursively calls displayNode for all node's children
       for(var i = 0; i < node.children.length; i++)
-        this.displayNode(this.components[node.children[i]], currentMaterial, currentTexture);
+        this.displayNode(this.components[node.children[i]], currentMaterial, currentTexture, currentS, currentT);
 
     this.scene.popMatrix();
   }

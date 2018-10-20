@@ -26,7 +26,7 @@ main=function()
 
   myInterface.setActiveCamera(myScene.camera);
 
-	var filename=getUrlVars()['file'] || "demo.xml";
+	var filename=getUrlVars()['file'] || "simpsons.xml";
 
 	var myGraph = new MySceneGraph(filename, myScene);
 
