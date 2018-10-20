@@ -43,6 +43,7 @@ class MyUncoveredCylinder extends CGFobject
 		var mult2 = this.base + inc;
 		var incS = 1/this.slices;
 		var incT = 1/this.stacks;
+		var angleSlope = 90-(Math.atan((substack/this.base)))/degToRad;
 
 		var z = 0;
 		for (var j = 0; j < this.stacks; j++) {
@@ -58,8 +59,8 @@ class MyUncoveredCylinder extends CGFobject
 				this.indices.push(k+1, k+2, k+3);
 				k += 2;
 
-				this.normals.push(Math.cos(angle * degToRad), Math.sin(angle * degToRad), 0);
-				this.normals.push(Math.cos(angle * degToRad), Math.sin(angle * degToRad), 0);
+				this.normals.push(Math.cos(angle * degToRad), Math.sin(angle * degToRad), Math.sin(angleSlope * degToRad));
+				this.normals.push(Math.cos(angle * degToRad), Math.sin(angle * degToRad), Math.sin(angleSlope * degToRad));
 				angle += 360/this.slices;
 
 				this.texCoords.push(i*incS, j*incT);
@@ -69,9 +70,9 @@ class MyUncoveredCylinder extends CGFobject
 			this.vertices.push(mult1 * Math.cos(angle * degToRad), mult1 * Math.sin(angle * degToRad), z);
 			this.vertices.push(mult2 * Math.cos(angle * degToRad), mult2 * Math.sin(angle * degToRad), z+substack);
 
-			this.normals.push(Math.cos(angle * degToRad), Math.sin(angle * degToRad), 0);
-			this.normals.push(Math.cos(angle * degToRad), Math.sin(angle * degToRad), 0);
-			
+			this.normals.push(Math.cos(angle * degToRad), Math.sin(angle * degToRad), Math.sin(angleSlope * degToRad));
+			this.normals.push(Math.cos(angle * degToRad), Math.sin(angle * degToRad), Math.sin(angleSlope * degToRad));
+
 			this.texCoords.push(1,j*incT);
 			this.texCoords.push(1,(j+1)*incT);
 
