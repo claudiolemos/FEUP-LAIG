@@ -6,11 +6,13 @@ class MyCircle extends CGFobject{
   * @constructor
   * @param {XMLScene} scene	 represents the CGFscene
   * @param {number}   slices number of circle slices
+  * @param {number}   radius number of circle slices
   */
-	constructor(scene, slices)
+	constructor(scene, slices, radius)
 	{
      super(scene);
      this.slices = slices;
+     this.radius = radius;
      this.vertices = [];
      this.indices = [];
      this.normals = [];
@@ -28,7 +30,7 @@ class MyCircle extends CGFobject{
 
 		var angle = 0;
 		for (var i = 0; i < this.slices; i++) {
-			this.vertices.push(Math.cos(angle * degToRad), Math.sin(angle * degToRad), 0);
+			this.vertices.push(this.radius*(Math.cos(angle * degToRad)), this.radius*(Math.sin(angle * degToRad)), 0);
 			angle += 360/this.slices;
 		}
 		this.vertices.push(0,0,0);
@@ -42,7 +44,7 @@ class MyCircle extends CGFobject{
 
 		var angle = 0;
 		for (var i = 0; i < this.slices; i++) {
-			this.texCoords.push(0.5+Math.cos(angle*degToRad)/2, 0.5-Math.sin(angle*degToRad)/2);
+			this.texCoords.push(this.radius*2*(0.5+Math.cos(angle*degToRad)/2), this.radius*2*(0.5-Math.sin(angle*degToRad)/2));
 			angle += 360/this.slices;
 		}
 		this.texCoords.push(0.5, 0.5);

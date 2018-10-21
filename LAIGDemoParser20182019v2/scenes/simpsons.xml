@@ -2499,7 +2499,7 @@
       <materials>
         <material id="default" />
       </materials>
-      <texture id="paper" length_s="1" length_t="0.5"/>
+      <texture id="simpsons" length_s="1" length_t="0.5"/>
       <children>
         <primitiveref id="cylinder" />
       </children>

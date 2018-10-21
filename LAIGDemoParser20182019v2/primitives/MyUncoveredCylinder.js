@@ -63,8 +63,8 @@ class MyUncoveredCylinder extends CGFobject
 				this.normals.push(Math.cos(angle * degToRad), Math.sin(angle * degToRad), Math.sin(angleSlope * degToRad));
 				angle += 360/this.slices;
 
-				this.texCoords.push(i*incS, j*incT);
-				this.texCoords.push(i*incS, (j+1)*incT);
+				this.texCoords.push(i*incS*mult1, j*incT*this.height);
+				this.texCoords.push(i*incS*mult2, (j+1)*incT*this.height);
 			}
 
 			this.vertices.push(mult1 * Math.cos(angle * degToRad), mult1 * Math.sin(angle * degToRad), z);
@@ -73,8 +73,8 @@ class MyUncoveredCylinder extends CGFobject
 			this.normals.push(Math.cos(angle * degToRad), Math.sin(angle * degToRad), Math.sin(angleSlope * degToRad));
 			this.normals.push(Math.cos(angle * degToRad), Math.sin(angle * degToRad), Math.sin(angleSlope * degToRad));
 
-			this.texCoords.push(1,j*incT);
-			this.texCoords.push(1,(j+1)*incT);
+			this.texCoords.push(1*mult1,j*incT*this.height);
+			this.texCoords.push(1*mult2,(j+1)*incT*this.height);
 
 			mult1 = mult2;
 			mult2 = (j + 2) * inc + this.base;
