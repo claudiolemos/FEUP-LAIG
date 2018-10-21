@@ -1427,6 +1427,7 @@ class MySceneGraph {
             // Create variables
             var transformationMatrix = mat4.create();
             mat4.identity(transformationMatrix);
+            var transformationRef = false;
 
             // Reads transformation
             for(var j = 0; j < transformationChildren.length; j++){
@@ -1439,10 +1440,12 @@ class MySceneGraph {
                 return "unable to parse id component (null) on tag <transformationref> on tag <transformations> on the <component> node with index " + i + " from the <components> block";
 
                 // Checks if id exists
-                  if(this.transformations[transformationID] != null)
-                    this.components[id].transformation = this.transformations[transformationID];
-                  else
-                    return "id '" + transformationID + "' is not a valid transformation reference on tag <transformation> on the <component> node with index " + i + " from the <components> block";
+                if(this.transformations[transformationID] != null)
+                  this.components[id].transformation = this.transformations[transformationID];
+                else
+                  return "id '" + transformationID + "' is not a valid transformation reference on tag <transformation> on the <component> node with index " + i + " from the <components> block";
+
+                transformationRef = true;
               }
               else if(transformationNodeNames[j] == "translate"){
                 // Reads x, y, z
@@ -1500,7 +1503,8 @@ class MySceneGraph {
             }
 
             // Sets transformation
-            this.components[id].transformation = transformationMatrix;
+            if(!transformationRef)
+              this.components[id].transformation = transformationMatrix;
           }
         }
         else

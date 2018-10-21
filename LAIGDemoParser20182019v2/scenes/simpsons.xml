@@ -931,7 +931,7 @@
       <materials>
         <material id="donut" />
       </materials>
-      <texture id="donut" length_s="2" length_t="1" />
+      <texture id="donut" length_s="0.5" length_t="1" />
       <children>
         <primitiveref id="torus" />
       </children>
@@ -949,7 +949,7 @@
       <materials>
         <material id="donut" />
       </materials>
-      <texture id="donut" length_s="2" length_t="1" />
+      <texture id="donut" length_s="0.5" length_t="1" />
       <children>
         <primitiveref id="torus" />
       </children>
@@ -1114,7 +1114,7 @@
       <materials>
         <material id="default" />
       </materials>
-      <texture id="tiles" length_s="5" length_t="5" />
+      <texture id="tiles" length_s="0.2" length_t="0.2" />
       <children>
         <primitiveref id="rectangle" />
       </children>
@@ -2035,7 +2035,7 @@
       <materials>
         <material id="inherit" />
       </materials>
-      <texture id="inherit" length_s="2" length_t="2" />
+      <texture id="inherit" length_s="0.33" length_t="0.5" />
       <children>
         <primitiveref id="triangle1"/>
       </children>
@@ -2051,7 +2051,7 @@
       <materials>
         <material id="inherit" />
       </materials>
-      <texture id="inherit" length_s="2" length_t="3" />
+      <texture id="inherit" length_s="0.5" length_t="0.33" />
       <children>
         <primitiveref id="triangle1"/>
       </children>
@@ -2499,7 +2499,7 @@
       <materials>
         <material id="default" />
       </materials>
-      <texture id="paper" length_s="1" length_t="2"/>
+      <texture id="paper" length_s="1" length_t="0.5"/>
       <children>
         <primitiveref id="cylinder" />
       </children>
