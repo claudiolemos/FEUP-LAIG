@@ -44,7 +44,7 @@ class MyCircle extends CGFobject{
 
 		var angle = 0;
 		for (var i = 0; i < this.slices; i++) {
-			this.texCoords.push(this.radius*2*(0.5+Math.cos(angle*degToRad)/2), this.radius*2*(0.5-Math.sin(angle*degToRad)/2));
+			this.texCoords.push((0.5+Math.cos(angle*degToRad)/2), (0.5-Math.sin(angle*degToRad)/2));
 			angle += 360/this.slices;
 		}
 		this.texCoords.push(0.5, 0.5);
