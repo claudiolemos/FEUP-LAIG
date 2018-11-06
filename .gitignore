@@ -1,0 +1,4 @@
+.DS_Store
+lib/
+Mongoose.app/
+mongoose.conf
