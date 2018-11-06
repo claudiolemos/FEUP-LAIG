@@ -56,6 +56,12 @@
 
   <!--Animations-->
   <animations>
+    <linear id="animation1" span="2">
+      <controlpoint xx="1" yy="2" zz="3"/>
+      <controlpoint xx="4" yy="5" zz="6"/>
+    </linear>
+
+    <circular id="animation2" span="2" centerx="11" centery="22" centerz="33" radius="5" startang="180" rotang="360"/>
   </animations>
 
   <!--Primitives-->
@@ -101,6 +107,10 @@
       <materials>
         <material id="default" />
       </materials>
+      <animations>
+        <animationref id="animation1" />
+        <animationref id="animation2" />
+      </animations>
       <texture id="flanders" length_s="1" length_t="1" />
       <children>
         <primitiveref id="rectangle" />

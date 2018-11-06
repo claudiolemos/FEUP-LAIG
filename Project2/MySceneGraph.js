@@ -1229,30 +1229,86 @@ class MySceneGraph {
 
     // Reads animations
     for (var i = 0; i < children.length; i++){
-      if(children[i].nodeName == "texture"){
+      if(children[i].nodeName == "linear"){
 
-        // Reads id and file
+        // Reads id and span
         var id = this.reader.getString(children[i], 'id');
-        var file = this.reader.getString(children[i], 'file');
+        var span = this.reader.getFloat(children[i], 'span');
 
-        // Validates id and file
-        if(id == null || file == null)
-        return "unable to parse id and file components (null) on the <texture> node with index " + i + " from the <textures> block";
+        // Validates id and span
+        if(id == null || span == null)
+          return "unable to parse id and span components (null) on the <linear> node with index " + i + " from the <animations> block";
+        else if(isNaN(span))
+          return "unable to parse span component (NaN) on the <linear> node with index " + i + " from the <animations> block";
+        else if(span < 0)
+          return "unable to parse span component (out of range) on the <linear> node with index " + i + " from the <animations> block";
+
+        var controlpoints = [];
+        var linearChildren = children[i].children;
+
+        // Checks number of control points
+        if(linearChildren.length < 2)
+          return "there should be at least two control points on the <linear> node with index " + i + " from the <animations> block";
+
+        // Reads control points
+        for (var j = 0; j < linearChildren.length; j++){
+          // Reads xx, yy, zz
+          var xx = this.reader.getFloat(linearChildren[j], 'xx');
+          var yy = this.reader.getFloat(linearChildren[j], 'yy');
+          var zz = this.reader.getFloat(linearChildren[j], 'zz');
+
+          // Validates xx, yy, zz
+          if(isNaN(xx) || isNaN(yy) || isNaN(zz))
+            return "unable to parse xx, yy, zz components (NaN) on <controlpoint> with index " + j + " on the <linear> node with index " + i + " from the <animations> block";
+          else if(xx == null || yy == null || zz == null)
+            return "unable to parse xx, yy, zz components (null) on <controlpoint> with index " + j + " on the <linear> node with index " + i + " from the <animations> block";
+          else if(xx <= 0 || yy <= 0 || zz <= 0)
+            return "unable to parse xx, yy, zz components (out of 0-inf range) on <controlpoint> with index " + j + " on the <linear> node with index " + i + " from the <animations> block";
+
+          controlpoints.push([xx,yy,zz]);
+        }
 
         // Checks if id is unique
-        if(this.textures[id] != null)
-        return "id '" + id + "' on the <texture> node with index " + i + " from the <textures> block is not unique";
+        if(this.animations[id] != null)
+          return "id '" + id + "' on the <linear> node with index " + i + " from the <animations> block is not unique";
 
-        // Sets texture
-        this.textures[id] = new CGFtexture(this.scene, file);
+        // Sets linear animation
+        this.animations[id] = new LinearAnimation(span, controlpoints);
+      }
+      else if(children[i].nodeName == "circular"){
+
+        // Reads id, span, centerx, centery, centerz, radius, startang, rotang
+        var id = this.reader.getString(children[i], 'id');
+        var span = this.reader.getFloat(children[i], 'span');
+        var centerx = this.reader.getFloat(children[i], 'centerx');
+        var centery = this.reader.getFloat(children[i], 'centery');
+        var centerz = this.reader.getFloat(children[i], 'centerz');
+        var radius = this.reader.getFloat(children[i], 'radius');
+        var startang = this.reader.getFloat(children[i], 'startang');
+        var rotang = this.reader.getFloat(children[i], 'rotang');
+
+        // Validates id, span, centerx, centery, centerz, radius, startang, rotang
+        if(id == null || span == null || centerx == null || centery == null || centerz == null || radius == null || startang == null || rotang == null)
+          return "unable to parse id, span, centerx, centery, centerz, radius, startang, rotang components (null) on the <circular> node with index " + i + " from the <animations> block";
+        else if(isNaN(span) || isNaN(centerx) || isNaN(centery) || isNaN(centerz) || isNaN(radius) || isNaN(startang) || isNaN(rotang))
+          return "unable to parse span, centerx, centery, centerz, radius, startang, rotang component (NaN) on the <circular> node with index " + i + " from the <animations> block";
+        else if(span < 0 || radius <= 0)
+          return "unable to parse span, radius component (out of range) on the <circular> node with index " + i + " from the <animations> block";
+
+        // Checks if id is unique
+        if(this.animations[id] != null)
+          return "id '" + id + "' on the <circular> node with index " + i + " from the <animations> block is not unique";
+
+        // Sets circular animation
+        this.animations[id] = new CircularAnimation(span, centerx, centery, centerz, radius, startang, rotang);
       }
       else
-      this.onXMLMinorError("<" + children[i].nodeName + "> node with index " + i + " is not valid on the <textures> block");
-    }
-
-    this.log("Parsed textures");
-    return null;
+        this.onXMLMinorError("<" + children[i].nodeName + "> node with index " + i + " is not valid on the <animations> block");
   }
+
+  this.log("Parsed animations");
+  return null;
+}
 
   /**
   * Parses the <primitives> block.
@@ -1587,6 +1643,7 @@ class MySceneGraph {
 
         // Gets indexes of transformation, materials, texture and children
         var transformationIndex = componentNodeNames.indexOf("transformation");
+        var animationsIndex = componentNodeNames.indexOf("animations");
         var materialsIndex = componentNodeNames.indexOf("materials");
         var textureIndex = componentNodeNames.indexOf("texture");
         var childrenIndex = componentNodeNames.indexOf("children");
@@ -1729,6 +1786,35 @@ class MySceneGraph {
         else
         return "tag <materials> is not defined on the <component> node with index " + i + " from the <components> block";
 
+        // Reads animations tag
+        if(animationsIndex != -1){
+
+          // Reads animations children and node names
+          var animationsChildren = componentChildren[animationsIndex].children;
+          var animationsNodeNames = [];
+          for (var j = 0; j < animationsChildren.length; j++)
+          animationsNodeNames.push(animationsChildren[j].nodeName);
+
+          for(var j = 0; j < animationsChildren.length; j++){
+            if(animationsNodeNames[j] == "animationref"){
+              // Reads id
+              var animationID = this.reader.getString(animationsChildren[j], 'id');
+
+              // Validates id
+              if(animationID == null)
+                return "unable to parse id component (null) on tag <animationref> with index " + j + " on tag <animations> on the <component> node with index " + i + " from the <components> block";
+
+              // Checks if id exists
+              if(this.animations[animationID] != null)
+                this.components[id].addAnimation(animationID);
+              else
+                return "id '" + animationID + "' is not a valid animation reference on tag <animationref> with index " + j + " on tag <animations> on the <component> node with index " + i + " from the <components> block";
+            }
+            else
+              this.onXMLMinorError("tag <" + animationsNodeNames[j] + "> with index " + j + " is not valid on tag <animations> on the <component> node with index " + i + " from the <components> block");
+          }
+        }
+
         // Reads texture tag
         if(textureIndex != -1){
 
@@ -1822,7 +1908,6 @@ class MySceneGraph {
         for(var key2 in this.components[key1].children)
           if(this.components[this.components[key1].children[key2]] == null)
             return "id '" + this.components[key1].children[key2] + "' is not a valid component reference on tag <componentref> on tag <children> on the <component> node with id '" + key1 + "' from the <components> block";
-
 
     this.log("Parsed components");
     return null;

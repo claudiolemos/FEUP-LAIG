@@ -19,6 +19,7 @@ class MyGraphNode {
     this.length_t = 1;
     this.children = [];
     this.primitives = [];
+    this.animations = [];
   };
 
   /**
@@ -37,6 +38,15 @@ class MyGraphNode {
   addPrimitive(id)
   {
     this.primitives.push(id);
+  };
+
+  /**
+  * Adds an animation to the animations array
+  * @param {string} id id of the new animation
+  */
+  addAnimation(id)
+  {
+    this.animations.push(id);
   };
 
 };
