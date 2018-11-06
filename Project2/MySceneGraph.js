@@ -8,8 +8,9 @@ var LIGHTS_INDEX = 3;
 var TEXTURES_INDEX = 4;
 var MATERIALS_INDEX = 5;
 var TRANSFORMATIONS_INDEX = 6;
-var PRIMITIVES_INDEX = 7;
-var COMPONENTS_INDEX = 8;
+var ANIMATIONS_INDEX = 7;
+var PRIMITIVES_INDEX = 8;
+var COMPONENTS_INDEX = 9;
 
 /**
 * MySceneGraph class, representing the scene graph.
@@ -172,6 +173,18 @@ class MySceneGraph {
 
       //Parse transformations block
       if ((error = this.parseTransformations(nodes[index])) != null)
+      return error;
+    }
+
+    // <primitives>
+    if ((index = nodeNames.indexOf("animations")) == -1)
+    return "tag <animations> missing";
+    else {
+      if (index != ANIMATIONS_INDEX)
+      this.onXMLMinorError("tag <animations> out of order");
+
+      //Parse animations block
+      if ((error = this.parseAnimations(nodes[index])) != null)
       return error;
     }
 
@@ -1200,6 +1213,48 @@ class MySceneGraph {
   }
 
   /**
+  * Parses the <animations> block.
+  * @param {array} animationsNode
+  */
+  parseAnimations(animationsNode) {
+
+    // Reads animations children and node names
+    var children = animationsNode.children;
+    var nodeNames = [];
+    for (var i = 0; i < children.length; i++)
+    nodeNames.push(children[i].nodeName);
+
+    // Creates variables
+    this.animations = [];
+
+    // Reads animations
+    for (var i = 0; i < children.length; i++){
+      if(children[i].nodeName == "texture"){
+
+        // Reads id and file
+        var id = this.reader.getString(children[i], 'id');
+        var file = this.reader.getString(children[i], 'file');
+
+        // Validates id and file
+        if(id == null || file == null)
+        return "unable to parse id and file components (null) on the <texture> node with index " + i + " from the <textures> block";
+
+        // Checks if id is unique
+        if(this.textures[id] != null)
+        return "id '" + id + "' on the <texture> node with index " + i + " from the <textures> block is not unique";
+
+        // Sets texture
+        this.textures[id] = new CGFtexture(this.scene, file);
+      }
+      else
+      this.onXMLMinorError("<" + children[i].nodeName + "> node with index " + i + " is not valid on the <textures> block");
+    }
+
+    this.log("Parsed textures");
+    return null;
+  }
+
+  /**
   * Parses the <primitives> block.
   * @param {array} primitivesNode
   */
@@ -1230,9 +1285,9 @@ class MySceneGraph {
 
         // Checks if there's at most one of rectangle, triangle, cylinder, sphere or torus
         if(children[i].children.length > 1)
-        return "only one tag <rectangle>, <triangle>, <cylinder>, <sphere> or <torus> should be defined on the <primitive> node with index " + i + " from the <primitives> block";
+        return "only one primitive tag should be defined on the <primitive> node with index " + i + " from the <primitives> block";
         else if(children[i].children.length == 0)
-        return "one tag <rectangle>, <triangle>, <cylinder>, <sphere> or <torus> must be defined on the <primitive> node with index " + i + " from the <primitives> block";
+        return "one primitive tag must be defined on the <primitive> node with index " + i + " from the <primitives> block";
 
         // Creates variables
         var tagIndex = 0;
@@ -1299,13 +1354,13 @@ class MySceneGraph {
 
           // Validates base, top, height, slices, stacks
           if(isNaN(base) || isNaN(top) || isNaN(height) || isNaN(slices) || isNaN(stacks))
-          return "unable to parse base, top, height, slices, stacks components (NaN) on tag <cylinder> from the <primitive> node with index " + i + " from the <primitives> block";
+            return "unable to parse base, top, height, slices, stacks components (NaN) on tag <cylinder> from the <primitive> node with index " + i + " from the <primitives> block";
           else if(base == null || top == null || height == null || slices == null || stacks == null)
-          return "unable to parse base, top, height, slices, stacks components (null) on tag <cylinder> from the <primitive> node with index " + i + " from the <primitives> block";
+            return "unable to parse base, top, height, slices, stacks components (null) on tag <cylinder> from the <primitive> node with index " + i + " from the <primitives> block";
           else if(slices < 1 || stacks < 1)
-          return "unable to parse slices and stacks components (out of 1-inf range) on tag <cylinder> from the <primitive> node with index " + i + " from the <primitives> block";
+            return "unable to parse slices and stacks components (out of 1-inf range) on tag <cylinder> from the <primitive> node with index " + i + " from the <primitives> block";
           else if(height < 0)
-          return "unable to parse height component (out of 0-inf range) on tag <cylinder> from the <primitive> node with index " + i + " from the <primitives> block";
+            return "unable to parse height component (out of 0-inf range) on tag <cylinder> from the <primitive> node with index " + i + " from the <primitives> block";
 
           // Sets cylinder
           this.primitives[id] = new MyCylinder(this.scene, base, top, height, slices, stacks);
@@ -1319,13 +1374,13 @@ class MySceneGraph {
 
           // Validates radius, slices, stacks
           if(isNaN(radius) || isNaN(slices) || isNaN(stacks))
-          return "unable to parse radius, slices, stacks components (NaN) on tag <sphere> from the <primitive> node with index " + i + " from the <primitives> block";
+            return "unable to parse radius, slices, stacks components (NaN) on tag <sphere> from the <primitive> node with index " + i + " from the <primitives> block";
           else if(radius == null || slices == null || stacks == null)
-          return "unable to parse radius, slices, stacks components (null) on tag <sphere> from the <primitive> node with index " + i + " from the <primitives> block";
+            return "unable to parse radius, slices, stacks components (null) on tag <sphere> from the <primitive> node with index " + i + " from the <primitives> block";
           else if(slices < 1 || stacks < 1)
-          return "unable to parse slices and stacks components (out of 1-inf range) on tag <sphere> from the <primitive> node with index " + i + " from the <primitives> block";
+            return "unable to parse slices and stacks components (out of 1-inf range) on tag <sphere> from the <primitive> node with index " + i + " from the <primitives> block";
           else if(radius <= 0)
-          return "unable to parse radius component (out of 0-inf range) on tag <sphere> from the <primitive> node with index " + i + " from the <primitives> block";
+            return "unable to parse radius component (out of 0-inf range) on tag <sphere> from the <primitive> node with index " + i + " from the <primitives> block";
 
           // Sets sphere
           this.primitives[id] = new MySphere(this.scene, radius, slices, stacks);
@@ -1340,16 +1395,142 @@ class MySceneGraph {
 
           // Validates inner, outer, slices, loops
           if(isNaN(inner) || isNaN(outer) || isNaN(slices) || isNaN(loops))
-          return "unable to parse inner, outer, slices, loops components (NaN) on tag <torus> from the <primitive> node with index " + i + " from the <primitives> block";
+            return "unable to parse inner, outer, slices, loops components (NaN) on tag <torus> from the <primitive> node with index " + i + " from the <primitives> block";
           else if(inner == null || outer == null || slices == null || loops == null)
-          return "unable to parse inner, outer, slices, loops components (null) on tag <torus> from the <primitive> node with index " + i + " from the <primitives> block";
+            return "unable to parse inner, outer, slices, loops components (null) on tag <torus> from the <primitive> node with index " + i + " from the <primitives> block";
           else if(slices < 1 || stacks < 1)
-          return "unable to parse slices and stacks components (out of 1-inf range) on tag <torus> from the <primitive> node with index " + i + " from the <primitives> block";
+            return "unable to parse slices and stacks components (out of 1-inf range) on tag <torus> from the <primitive> node with index " + i + " from the <primitives> block";
           else if(inner < 0 || outer <= 0)
-          return "unable to parse inner and outer components (out of 0-inf range) on tag <torus> from the <primitive> node with index " + i + " from the <primitives> block";
+            return "unable to parse inner and outer components (out of 0-inf range) on tag <torus> from the <primitive> node with index " + i + " from the <primitives> block";
 
           // Sets torus
           this.primitives[id] = new MyTorus(this.scene, inner, outer, slices, loops);
+        }
+        else if(children[i].children[tagIndex].nodeName == "plane"){
+
+          // Reads npartsU, npartsV
+          var npartsU = this.reader.getInteger(children[i].children[tagIndex], 'npartsU');
+          var npartsV = this.reader.getInteger(children[i].children[tagIndex], 'npartsV');
+
+          // Validates npartsU, npartsV
+          if(isNaN(npartsU) || isNaN(npartsV))
+            return "unable to parse npartsU, npartsV components (NaN) on tag <plane> from the <primitive> node with index " + i + " from the <primitives> block";
+          else if(npartsU == null || npartsV == null)
+            return "unable to parse npartsU, npartsV components (null) on tag <plane> from the <primitive> node with index " + i + " from the <primitives> block";
+          else if(npartsU <= 0 || npartsV <= 0)
+            return "unable to parse npartsU, npartsV components (out of 0-inf range) on tag <plane> from the <primitive> node with index " + i + " from the <primitives> block";
+
+          // Sets plane
+          this.primitives[id] = new MyPlane(this.scene, npartsU, npartsV);
+        }
+        else if(children[i].children[tagIndex].nodeName == "patch"){
+
+          // Reads npartsU, npartsV, npointsU, npointsV
+          var npartsU = this.reader.getInteger(children[i].children[tagIndex], 'npartsU');
+          var npartsV = this.reader.getInteger(children[i].children[tagIndex], 'npartsV');
+          var npointsU = this.reader.getInteger(children[i].children[tagIndex], 'npointsU');
+          var npointsV = this.reader.getInteger(children[i].children[tagIndex], 'npointsV');
+
+          // Validates npartsU, npartsV, npointsU, npointsV
+          if(isNaN(npartsU) || isNaN(npartsV) || isNaN(npointsU) || isNaN(npointsV))
+            return "unable to parse npartsU, npartsV, npointsU, npointsV components (NaN) on tag <patch> from the <primitive> node with index " + i + " from the <primitives> block";
+          else if(npartsU == null || npartsV == null || npointsU == null || npointsV == null)
+            return "unable to parse npartsU, npartsV, npointsU, npointsV components (null) on tag <patch> from the <primitive> node with index " + i + " from the <primitives> block";
+          else if(npartsU <= 0 || npartsV <= 0 || npointsU <= 0 || npointsV <= 0)
+            return "unable to parse npartsU, npartsV, npointsU, npointsV components (out of 0-inf range) on tag <patch> from the <primitive> node with index " + i + " from the <primitives> block";
+
+          // Reads control points
+          var controlpoints = [];
+          var patchChildren = children[i].children[tagIndex].children;
+          for (var j = 0; j < patchChildren.length; j++){
+              // Reads xx, yy, zz
+              var xx = this.reader.getFloat(patchChildren[j], 'xx');
+              var yy = this.reader.getFloat(patchChildren[j], 'yy');
+              var zz = this.reader.getFloat(patchChildren[j], 'zz');
+
+              // Validates xx, yy, zz
+              if(isNaN(xx) || isNaN(yy) || isNaN(zz))
+                return "unable to parse xx, yy, zz components (NaN) on tag <controlpoint> with index " + j + " from tag <patch> from the <primitive> node with index " + i + " from the <primitives> block";
+              else if(xx == null || yy == null || zz == null)
+                return "unable to parse xx, yy, zz components (null) on tag <controlpoint> with index " + j + " from tag <patch> from the <primitive> node with index " + i + " from the <primitives> block";
+              else if(xx <= 0 || yy <= 0 || zz <= 0)
+                return "unable to parse xx, yy, zz components (out of 0-inf range) on tag <controlpoint> with index " + j + " from tag <patch> from the <primitive> node with index " + i + " from the <primitives> block";
+
+              controlpoints.push([xx,yy,zz]);
+          }
+
+          // Check if controlpoints length is npointsU*npointsV
+          if(controlpoints.length != npointsU*npointsV)
+            return "invalid number of control points on tag <patch> from the <primitive> node with index " + i + " from the <primitives> block";
+
+          // Sets patch
+          this.primitives[id] = new MyPatch(this.scene, npointsU, npointsV, npartsU, npartsV, controlpoints);
+        }
+        else if(children[i].children[tagIndex].nodeName == "vehicle"){
+          // Sets vehicle
+          this.primitives[id] = new MyVehicle(this.scene);
+        }
+        else if(children[i].children[tagIndex].nodeName == "cylinder2"){
+          // Reads base, top, height, slices, stacks
+          var base = this.reader.getFloat(children[i].children[tagIndex], 'base');
+          var top = this.reader.getFloat(children[i].children[tagIndex], 'top');
+          var height = this.reader.getFloat(children[i].children[tagIndex], 'height');
+          var slices = this.reader.getInteger(children[i].children[tagIndex], 'slices');
+          var stacks = this.reader.getInteger(children[i].children[tagIndex], 'stacks');
+
+          // Validates base, top, height, slices, stacks
+          if(isNaN(base) || isNaN(top) || isNaN(height) || isNaN(slices) || isNaN(stacks))
+            return "unable to parse base, top, height, slices, stacks components (NaN) on tag <cylinder2> from the <primitive> node with index " + i + " from the <primitives> block";
+          else if(base == null || top == null || height == null || slices == null || stacks == null)
+            return "unable to parse base, top, height, slices, stacks components (null) on tag <cylinder2> from the <primitive> node with index " + i + " from the <primitives> block";
+          else if(slices < 1 || stacks < 1)
+            return "unable to parse slices and stacks components (out of 1-inf range) on tag <cylinder2> from the <primitive> node with index " + i + " from the <primitives> block";
+          else if(height < 0)
+            return "unable to parse height component (out of 0-inf range) on tag <cylinder2> from the <primitive> node with index " + i + " from the <primitives> block";
+
+          // Sets cylinder
+          this.primitives[id] = new MyCylinder2(this.scene, base, top, height, slices, stacks);
+        }
+        else if(children[i].children[tagIndex].nodeName == "terrain"){
+          // Reads idtexture, idheightmap, parts, heightscale
+          var idtexture = this.reader.getString(children[i].children[tagIndex], 'idtexture');
+          var idheightmap = this.reader.getString(children[i].children[tagIndex], 'idheightmap');
+          var parts = this.reader.getInteger(children[i].children[tagIndex], 'parts');
+          var heightscale = this.reader.getFloat(children[i].children[tagIndex], 'heightscale');
+
+          // Validates idtexture, idheightmap, parts, heightscale
+          if(isNaN(parts) || isNaN(heightscale))
+            return "unable to parse parts, heightscale components (NaN) on tag <terrain> from the <primitive> node with index " + i + " from the <primitives> block";
+          else if(idtexture == null || idheightmap == null || parts == null || heightscale == null)
+            return "unable to parse idtexture, idheightmap, parts, heightscale components (null) on tag <terrain> from the <primitive> node with index " + i + " from the <primitives> block";
+          else if(parts <= 0 || heightscale <= 0)
+            return "unable to parse parts, heightscale components (out of 1-inf range) on tag <terrain> from the <primitive> node with index " + i + " from the <primitives> block";
+          else if(this.textures[idtexture] == null || this.textures[idheightmap] == null)
+            return "invalid texture id on tag <terrain> from the <primitive> node with index " + i + " from the <primitives> block";
+
+          // Sets terrain
+          this.primitives[id] = new MyTerrain(this.scene, idtexture, idheightmap, parts, heightscale);
+        }
+        else if(children[i].children[tagIndex].nodeName == "water"){
+          // Reads idtexture, idwavemap, parts, heightscale, texscale
+          var idtexture = this.reader.getString(children[i].children[tagIndex], 'idtexture');
+          var idwavemap = this.reader.getString(children[i].children[tagIndex], 'idwavemap');
+          var parts = this.reader.getInteger(children[i].children[tagIndex], 'parts');
+          var heightscale = this.reader.getFloat(children[i].children[tagIndex], 'heightscale');
+          var texscale = this.reader.getFloat(children[i].children[tagIndex], 'texscale');
+
+          // Validates idtexture, idwavemap, parts, heightscale, texscale
+          if(isNaN(parts) || isNaN(heightscale) || isNaN(texscale))
+            return "unable to parse parts, heightscale, texscale components (NaN) on tag <water> from the <primitive> node with index " + i + " from the <primitives> block";
+          else if(idtexture == null || idwavemap == null || parts == null || heightscale == null || texscale == null)
+            return "unable to parse idtexture, idwavemap, parts, heightscale, texscale components (null) on tag <water> from the <primitive> node with index " + i + " from the <primitives> block";
+          else if(parts <= 0 || heightscale <= 0 || texscale <= 0)
+            return "unable to parse parts, heightscale, texscale components (out of 1-inf range) on tag <water> from the <primitive> node with index " + i + " from the <primitives> block";
+          else if(this.textures[idtexture] == null || this.textures[idwavemap] == null)
+            return "invalid texture id on tag <water> from the <primitive> node with index " + i + " from the <primitives> block";
+
+          // Sets terrain
+          this.primitives[id] = new MyWater(this.scene, idtexture, idwavemap, parts, heightscale, texscale);
         }
         else
         this.onXMLMinorError("tag <" + children[i].children[tagIndex].nodeName + "> is not valid on the <primitive> node with index " + i + " from the <primitives> block");

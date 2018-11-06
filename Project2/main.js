@@ -10,7 +10,7 @@ function getUrlVars() {
     return vars;
 }
 
-serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'MyInterface.js', 'MyGraphNode.js', './primitives/MyRectangle.js',  './primitives/MyTriangle.js', './primitives/MyCylinder.js',  './primitives/MySphere.js', './primitives/MyTorus.js',  './primitives/MyCircle.js','./primitives/MyUncoveredCylinder.js',
+serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'MyInterface.js', 'MyGraphNode.js', './primitives/MyRectangle.js',  './primitives/MyTriangle.js', './primitives/MyCylinder.js',  './primitives/MySphere.js', './primitives/MyTorus.js',  './primitives/MyCircle.js','./primitives/MyUncoveredCylinder.js','./primitives/MyPlane.js','./primitives/MyPatch.js','./primitives/MyVehicle.js','./primitives/MyCylinder2.js','./primitives/MyTerrain.js','./primitives/MyWater.js',
 
 main=function()
 {
