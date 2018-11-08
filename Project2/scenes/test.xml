@@ -61,7 +61,7 @@
       <controlpoint xx="4" yy="5" zz="6"/>
     </linear>
 
-    <circular id="animation2" span="2" centerx="11" centery="22" centerz="33" radius="5" startang="180" rotang="360"/>
+    <circular id="animation2" span="2" center="11 22 33" radius="5" startang="180" rotang="360"/>
   </animations>
 
   <!--Primitives-->

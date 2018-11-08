@@ -16,6 +16,7 @@ class XMLscene extends CGFscene {
     this.currentCamera;
     this.currentMaterial = 0;
     this.showAxis = true;
+    this.prevTime = -1;
   }
 
   /**
@@ -108,6 +109,7 @@ class XMLscene extends CGFscene {
     this.interface.addViews(this.graph.views);
 
     this.sceneInited = true;
+    this.setUpdatePeriod(1000/30);
   }
 
   /**
@@ -163,5 +165,15 @@ class XMLscene extends CGFscene {
       }
 
     this.popMatrix();
+  }
+
+
+  update(currTime) {
+    if(this.prevTime == -1)
+      this.graph.update(0);
+    else
+      this.graph.update(currTime - this.prevTime);
+
+    this.prevTime = currTime;
   }
 }

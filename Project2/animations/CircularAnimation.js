@@ -3,12 +3,12 @@
 */
 class CircularAnimation extends Animation
 {
-	constructor(span, centerx, centery, centerz, radius, startang, rotang)
+	constructor(span, centerX, centerY, centerZ, radius, startang, rotang)
 	{
     super(span);
-    this.centerx = centerx;
-    this.centery = centery;
-    this.centerz = centerz;
+    this.centerX = centerX;
+    this.centerY = centerY;
+    this.centerZ = centerZ;
     this.radius = radius;
     this.startang = startang;
     this.rotang = rotang;

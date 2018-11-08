@@ -1277,21 +1277,31 @@ class MySceneGraph {
       }
       else if(children[i].nodeName == "circular"){
 
-        // Reads id, span, centerx, centery, centerz, radius, startang, rotang
+        // Reads id, span, centerX, centerY, centerZ, radius, startang, rotang
         var id = this.reader.getString(children[i], 'id');
         var span = this.reader.getFloat(children[i], 'span');
-        var centerx = this.reader.getFloat(children[i], 'centerx');
-        var centery = this.reader.getFloat(children[i], 'centery');
-        var centerz = this.reader.getFloat(children[i], 'centerz');
+        var center = this.reader.getString(children[i], 'center');
         var radius = this.reader.getFloat(children[i], 'radius');
         var startang = this.reader.getFloat(children[i], 'startang');
         var rotang = this.reader.getFloat(children[i], 'rotang');
 
-        // Validates id, span, centerx, centery, centerz, radius, startang, rotang
-        if(id == null || span == null || centerx == null || centery == null || centerz == null || radius == null || startang == null || rotang == null)
-          return "unable to parse id, span, centerx, centery, centerz, radius, startang, rotang components (null) on the <circular> node with index " + i + " from the <animations> block";
-        else if(isNaN(span) || isNaN(centerx) || isNaN(centery) || isNaN(centerz) || isNaN(radius) || isNaN(startang) || isNaN(rotang))
-          return "unable to parse span, centerx, centery, centerz, radius, startang, rotang component (NaN) on the <circular> node with index " + i + " from the <animations> block";
+        // Parses center into centerX, centerY, centerZ
+        center = center.split(" ");
+
+        //Validates center length
+        if(center.length != 3)
+          return "unable to parse center component (wrong quantity of values) on the <circular> node with index " + i + " from the <animations> block";
+
+        // Sets centerX, centerY, centerZ
+        var centerX = parseFloat(center[0]);
+        var centerY = parseFloat(center[1]);
+        var centerZ = parseFloat(center[2]);
+
+        // Validates id, span, centerX, centerY, centerZ, radius, startang, rotang
+        if(id == null || span == null || centerX == null || centerY == null || centerZ == null || radius == null || startang == null || rotang == null)
+          return "unable to parse id, span, centerX, centerY, centerZ, radius, startang, rotang components (null) on the <circular> node with index " + i + " from the <animations> block";
+        else if(isNaN(span) || isNaN(centerX) || isNaN(centerY) || isNaN(centerZ) || isNaN(radius) || isNaN(startang) || isNaN(rotang))
+          return "unable to parse span, centerX, centerY, centerZ, radius, startang, rotang component (NaN) on the <circular> node with index " + i + " from the <animations> block";
         else if(span < 0 || radius <= 0)
           return "unable to parse span, radius component (out of range) on the <circular> node with index " + i + " from the <animations> block";
 
@@ -1300,7 +1310,7 @@ class MySceneGraph {
           return "id '" + id + "' on the <circular> node with index " + i + " from the <animations> block is not unique";
 
         // Sets circular animation
-        this.animations[id] = new CircularAnimation(span, centerx, centery, centerz, radius, startang, rotang);
+        this.animations[id] = new CircularAnimation(span, centerX, centerY, centerZ, radius, startang, rotang);
       }
       else
         this.onXMLMinorError("<" + children[i].nodeName + "> node with index " + i + " is not valid on the <animations> block");
@@ -2025,5 +2035,13 @@ class MySceneGraph {
         this.displayNode(this.components[node.children[i]], currentMaterial, currentTexture, currentS, currentT);
 
     this.scene.popMatrix();
+  }
+
+  update(delta){
+
+  }
+
+  updateNode(delta){
+
   }
 }
