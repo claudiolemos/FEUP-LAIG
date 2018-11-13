@@ -1262,8 +1262,6 @@ class MySceneGraph {
             return "unable to parse xx, yy, zz components (NaN) on <controlpoint> with index " + j + " on the <linear> node with index " + i + " from the <animations> block";
           else if(xx == null || yy == null || zz == null)
             return "unable to parse xx, yy, zz components (null) on <controlpoint> with index " + j + " on the <linear> node with index " + i + " from the <animations> block";
-          else if(xx <= 0 || yy <= 0 || zz <= 0)
-            return "unable to parse xx, yy, zz components (out of 0-inf range) on <controlpoint> with index " + j + " on the <linear> node with index " + i + " from the <animations> block";
 
           controlpoints.push([xx,yy,zz]);
         }
@@ -1967,7 +1965,9 @@ class MySceneGraph {
   displayNode(node, parentMaterial, parentTexture, parentS, parentT){
     this.scene.pushMatrix();
 
-      // Applies the node transformation
+      // Applies the node and animation transformation
+      if(node.animations.length > 0 && !node.isAnimationOver())
+        node.applyAnimation(node.getAnimation(this.scene.deltaTime/1000));
       this.scene.multMatrix(node.transformation);
 
       var currentMaterial;
@@ -2037,11 +2037,11 @@ class MySceneGraph {
     this.scene.popMatrix();
   }
 
-  update(delta){
-
-  }
-
-  updateNode(delta){
-
-  }
+  // update(delta){
+  //
+  // }
+  //
+  // updateNode(delta){
+  //
+  // }
 }

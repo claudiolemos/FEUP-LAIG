@@ -289,6 +289,17 @@
     </transformation>
   </transformations>
 
+  <!--Animations-->
+  <animations>
+    <linear id="animation1" span="5">
+      <controlpoint xx="0" yy="0" zz="0"/>
+      <controlpoint xx="2.5" yy="2.5" zz="2.5"/>
+      <controlpoint xx="0" yy="0" zz="0"/>
+    </linear>
+
+    <circular id="animation2" span="2" center="11 22 33" radius="5" startang="180" rotang="360"/>
+  </animations>
+
   <!--Primitives-->
 
   <primitives>

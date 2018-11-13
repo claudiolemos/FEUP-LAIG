@@ -19,10 +19,31 @@
   <!--Lights-->
 
   <lights>
-    <omni id="living room 1" enabled="1">
-      <location x="0" y="3" z="0" w="1" />
-      <ambient r="0.2" g="0.2" b="0.2" a="1" />
-      <diffuse r="0.6" g="0.6" b="0.6" a="1" />
+    <omni id="1" enabled="1">
+      <location x="0" y="4" z="0" w="1" />
+      <ambient r="0" g="0" b="0" a="1" />
+      <diffuse r="0.3" g="0.3" b="0.3" a="1" />
+      <specular r="0.3" g="0.3" b="0.3" a="1" />
+    </omni>
+
+    <omni id="2" enabled="1">
+      <location x="0" y="4" z="4" w="1" />
+      <ambient r="0" g="0" b="0" a="1" />
+      <diffuse r="0.3" g="0.3" b="0.3" a="1" />
+      <specular r="0.3" g="0.3" b="0.3" a="1" />
+    </omni>
+
+    <omni id="3" enabled="1">
+      <location x="4" y="4" z="4" w="1" />
+      <ambient r="0" g="0" b="0" a="1" />
+      <diffuse r="0.3" g="0.3" b="0.3" a="1" />
+      <specular r="0.3" g="0.3" b="0.3" a="1" />
+    </omni>
+
+    <omni id="4" enabled="1">
+      <location x="4" y="4" z="0" w="1" />
+      <ambient r="0" g="0" b="0" a="1" />
+      <diffuse r="0.3" g="0.3" b="0.3" a="1" />
       <specular r="0.3" g="0.3" b="0.3" a="1" />
     </omni>
   </lights>
@@ -56,9 +77,14 @@
 
   <!--Animations-->
   <animations>
-    <linear id="animation1" span="2">
-      <controlpoint xx="1" yy="2" zz="3"/>
-      <controlpoint xx="4" yy="5" zz="6"/>
+    <linear id="animation1" span="5">
+      <controlpoint xx="0" yy="0" zz="0"/>
+      <controlpoint xx="3" yy="0" zz="0"/>
+    </linear>
+
+    <linear id="animation3" span="2">
+      <controlpoint xx="0" yy="0" zz="0"/>
+      <controlpoint xx="0" yy="0" zz="2"/>
     </linear>
 
     <circular id="animation2" span="2" center="11 22 33" radius="5" startang="180" rotang="360"/>
@@ -91,7 +117,7 @@
     </primitive>
 
     <primitive id="rectangle">
-      <plane npartsU="1" npartsV="1"/>
+      <rectangle x1="0" y1="0" x2="1" y2="1" />
     </primitive>
   </primitives >
 
@@ -109,12 +135,112 @@
       </materials>
       <animations>
         <animationref id="animation1" />
-        <animationref id="animation2" />
       </animations>
       <texture id="flanders" length_s="1" length_t="1" />
       <children>
-        <primitiveref id="rectangle" />
+        <componentref id="cube" />
       </children>
     </component>
-  </components>
+
+  <component id="cube">
+    <transformation>
+    </transformation>
+    <materials>
+      <material id="inherit" />
+    </materials>
+    <texture id="inherit" length_s="1" length_t="1" />
+    <children>
+      <componentref id="face1" />
+      <componentref id="face2" />
+      <componentref id="face3" />
+      <componentref id="face4" />
+      <componentref id="face5" />
+      <componentref id="face6" />
+    </children>
+  </component>
+
+  <component id="face1">
+    <transformation>
+      <translate x="0" y="1" z="0"/>
+      <rotate axis="x" angle="180"/>
+    </transformation>
+    <materials>
+      <material id="inherit" />
+    </materials>
+    <texture id="inherit" length_s="1" length_t="1" />
+    <children>
+      <primitiveref id="rectangle" />
+    </children>
+  </component>
+
+  <component id="face2">
+    <transformation>
+      <translate x="0" y="0" z="1"/>
+    </transformation>
+    <materials>
+      <material id="inherit" />
+    </materials>
+    <animations>
+      <animationref id="animation3" />
+    </animations>
+    <texture id="inherit" length_s="1" length_t="1" />
+    <children>
+      <primitiveref id="rectangle" />
+    </children>
+  </component>
+
+  <component id="face3">
+    <transformation>
+      <translate x="0" y="1" z="1"/>
+      <rotate axis="x" angle="-90"/>
+    </transformation>
+    <materials>
+      <material id="inherit" />
+    </materials>
+    <texture id="inherit" length_s="1" length_t="1" />
+    <children>
+      <primitiveref id="rectangle" />
+    </children>
+  </component>
+
+  <component id="face4">
+    <transformation>
+      <rotate axis="x" angle="90"/>
+    </transformation>
+    <materials>
+      <material id="inherit" />
+    </materials>
+    <texture id="inherit" length_s="1" length_t="1" />
+    <children>
+      <primitiveref id="rectangle" />
+    </children>
+  </component>
+
+  <component id="face5">
+    <transformation>
+      <rotate axis="y" angle="-90"/>
+    </transformation>
+    <materials>
+      <material id="inherit" />
+    </materials>
+    <texture id="inherit" length_s="1" length_t="1" />
+    <children>
+      <primitiveref id="rectangle" />
+    </children>
+  </component>
+
+  <component id="face6">
+    <transformation>
+      <translate x="1" y="0" z="1"/>
+      <rotate axis="y" angle="90"/>
+    </transformation>
+    <materials>
+      <material id="inherit" />
+    </materials>
+    <texture id="inherit" length_s="1" length_t="1" />
+    <children>
+      <primitiveref id="rectangle" />
+    </children>
+  </component>
+</components>
 </yas>

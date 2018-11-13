@@ -17,6 +17,7 @@ class XMLscene extends CGFscene {
     this.currentMaterial = 0;
     this.showAxis = true;
     this.prevTime = -1;
+    this.deltaTime;
   }
 
   /**
@@ -109,7 +110,7 @@ class XMLscene extends CGFscene {
     this.interface.addViews(this.graph.views);
 
     this.sceneInited = true;
-    this.setUpdatePeriod(1000/30);
+    this.setUpdatePeriod(10);
   }
 
   /**
@@ -167,12 +168,11 @@ class XMLscene extends CGFscene {
     this.popMatrix();
   }
 
-
   update(currTime) {
     if(this.prevTime == -1)
-      this.graph.update(0);
+      this.deltaTime = 0;
     else
-      this.graph.update(currTime - this.prevTime);
+      this.deltaTime = currTime - this.prevTime;
 
     this.prevTime = currTime;
   }
