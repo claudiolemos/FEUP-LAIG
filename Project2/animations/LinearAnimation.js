@@ -13,9 +13,6 @@ class LinearAnimation extends Animation
 		this.totalDistance = 0;
 		this.calculateVectors();
 		this.calculateTime();
-		this.passedTime = 0;
-		this.currentMatrix;
-		this.over = false;
 	};
 
 	calculateVectors(){
@@ -35,14 +32,20 @@ class LinearAnimation extends Animation
 			this.vectorsTime.push((this.vectorsLength[i]/this.totalDistance)*this.span);
 	}
 
-	getVector(deltaTime){
-		if(this.passedTime + deltaTime < this.span){
-			this.passedTime += deltaTime;
+	updateMatrix(vector, percentage){
+		var matrix = mat4.create();
+		mat4.identity(matrix);
+		mat4.translate(matrix, matrix,[vector[0]*percentage,vector[1]*percentage,vector[2]*percentage]);
+		this.currentMatrix = matrix;
+	}
+
+  update(delta){
+		if(this.passedTime + delta < this.span){
+			this.passedTime += delta;
 			var previousVectors = 0;
 			for(var i = 0; i < this.vectorsTime.length; i++){
 				if(this.passedTime < this.vectorsTime[i] + previousVectors){
-					this.getMatrix(this.vectors[i], deltaTime/this.vectorsTime[i]);
-					return this.currentMatrix;
+					this.updateMatrix(this.vectors[i], delta/this.vectorsTime[i]);
 				}
 				else
 					previousVectors += this.vectorsTime[i];
@@ -50,19 +53,11 @@ class LinearAnimation extends Animation
 		}
 		else
 			this.over = true;
-	}
-
-	getMatrix(vector, percentage){
-		var matrix = mat4.create();
-		mat4.identity(matrix);
-		mat4.translate(matrix, matrix,[vector[0]*percentage,vector[1]*percentage,vector[2]*percentage]);
-		this.currentMatrix = matrix;
-	}
-
-  update(){
   };
 
-  apply(){
-  };
+	getAnimation(delta){
+		if(this.animations.length > 0)
+			return this.graph.animations[this.animations[0]].getVector(delta);
+	}
 
 };

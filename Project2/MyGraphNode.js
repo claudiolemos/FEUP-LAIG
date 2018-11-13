@@ -50,17 +50,4 @@ class MyGraphNode {
     this.animations.push(id);
   };
 
-  applyAnimation(matrix){
-    mat4.multiply(this.transformation, this.transformation, matrix);
-  }
-
-  getAnimation(deltaTime){
-    if(this.animations.length > 0)
-      return this.graph.animations[this.animations[0]].getVector(deltaTime);
-  }
-
-  isAnimationOver(){
-    return this.graph.animations[this.animations[0]].over;
-  }
-
 };

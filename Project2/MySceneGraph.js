@@ -1965,9 +1965,7 @@ class MySceneGraph {
   displayNode(node, parentMaterial, parentTexture, parentS, parentT){
     this.scene.pushMatrix();
 
-      // Applies the node and animation transformation
-      if(node.animations.length > 0 && !node.isAnimationOver())
-        node.applyAnimation(node.getAnimation(this.scene.deltaTime/1000));
+      // Applies the node transformation
       this.scene.multMatrix(node.transformation);
 
       var currentMaterial;
@@ -2037,11 +2035,24 @@ class MySceneGraph {
     this.scene.popMatrix();
   }
 
-  // update(delta){
-  //
-  // }
-  //
-  // updateNode(delta){
-  //
-  // }
+  update(){
+    this.updateNode(this.components[this.root]);
+  }
+
+  updateNode(node){
+    for(var i = 0; i < node.animations.length; i++){
+      this.animations[node.animations[i]].update(this.scene.delta/1000);
+      if(!this.animations[node.animations[i]].isAnimationOver())
+        this.animations[node.animations[i]].apply(node);
+    }
+
+    // this.animations[node.animations[node.currentAnimation]].update(this.scene.delta/1000);
+    // if(!this.animations[node.animations[node.currentAnimation]].isAnimationOver())
+    //   this.animations[node.animations[node.currentAnimation]].apply(node);
+    // else if(this.animations[node.animations[node.currentAnimation]].isAnimationOver() && node.currentAnimation + 1 < node.animations.length)
+    //   node.currentAnimation++;
+
+    for(var i = 0; i < node.children.length; i++)
+      this.updateNode(this.components[node.children[i]]);
+  }
 }
