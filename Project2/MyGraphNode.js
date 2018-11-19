@@ -21,6 +21,7 @@ class MyGraphNode {
     this.primitives = [];
     this.animations = [];
     this.currentAnimation = 0;
+    this.vector = vec3.fromValues(0,0,1);
   };
 
   /**

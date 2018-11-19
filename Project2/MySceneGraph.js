@@ -1271,7 +1271,7 @@ class MySceneGraph {
           return "id '" + id + "' on the <linear> node with index " + i + " from the <animations> block is not unique";
 
         // Sets linear animation
-        this.animations[id] = new LinearAnimation(span, controlpoints);
+        this.animations[id] = new LinearAnimation(span*1000, controlpoints);
       }
       else if(children[i].nodeName == "circular"){
 
@@ -1308,7 +1308,7 @@ class MySceneGraph {
           return "id '" + id + "' on the <circular> node with index " + i + " from the <animations> block is not unique";
 
         // Sets circular animation
-        this.animations[id] = new CircularAnimation(span, centerX, centerY, centerZ, radius, startang, rotang);
+        this.animations[id] = new CircularAnimation(span*1000, centerX, centerY, centerZ, radius, startang, rotang);
       }
       else
         this.onXMLMinorError("<" + children[i].nodeName + "> node with index " + i + " is not valid on the <animations> block");
@@ -1814,7 +1814,7 @@ class MySceneGraph {
 
               // Checks if id exists
               if(this.animations[animationID] != null)
-                this.components[id].addAnimation(animationID);
+                this.components[id].addAnimation(this.animations[animationID].copy());
               else
                 return "id '" + animationID + "' is not a valid animation reference on tag <animationref> with index " + j + " on tag <animations> on the <component> node with index " + i + " from the <components> block";
             }
@@ -1967,6 +1967,13 @@ class MySceneGraph {
 
       // Applies the node transformation
       this.scene.multMatrix(node.transformation);
+      if(node.animations.length > 0){
+        node.animations[node.currentAnimation].update(this.scene.delta);
+        // if(!node.animations[node.currentAnimation].isFinished())
+          node.animations[node.currentAnimation].apply(this.scene);
+        if(node.animations[node.currentAnimation].isFinished() && node.currentAnimation + 1 < node.animations.length)
+          node.currentAnimation++;
+      }
 
       var currentMaterial;
       var currentTexture;
@@ -2033,26 +2040,5 @@ class MySceneGraph {
         this.displayNode(this.components[node.children[i]], currentMaterial, currentTexture, currentS, currentT);
 
     this.scene.popMatrix();
-  }
-
-  update(){
-    this.updateNode(this.components[this.root]);
-  }
-
-  updateNode(node){
-    for(var i = 0; i < node.animations.length; i++){
-      this.animations[node.animations[i]].update(this.scene.delta/1000);
-      if(!this.animations[node.animations[i]].isAnimationOver())
-        this.animations[node.animations[i]].apply(node);
-    }
-
-    // this.animations[node.animations[node.currentAnimation]].update(this.scene.delta/1000);
-    // if(!this.animations[node.animations[node.currentAnimation]].isAnimationOver())
-    //   this.animations[node.animations[node.currentAnimation]].apply(node);
-    // else if(this.animations[node.animations[node.currentAnimation]].isAnimationOver() && node.currentAnimation + 1 < node.animations.length)
-    //   node.currentAnimation++;
-
-    for(var i = 0; i < node.children.length; i++)
-      this.updateNode(this.components[node.children[i]]);
   }
 }

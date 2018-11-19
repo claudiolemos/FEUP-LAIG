@@ -14,6 +14,10 @@ class CircularAnimation extends Animation
     this.rotang = rotang;
 	};
 
+	copy(){
+		return new CircularAnimation(this.span, this.centerX, this.centerY, this.centerZ, this.radius, this.startang, this.rotang);
+	};
+
   update(){
   };
 

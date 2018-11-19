@@ -8,56 +8,76 @@ class LinearAnimation extends Animation
     super(span);
     this.controlpoints = controlpoints;
 		this.vectors = [];
-		this.vectorsLength = [];
-		this.vectorsTime = [];
-		this.totalDistance = 0;
-		this.calculateVectors();
-		this.calculateTime();
+		this.percentagesPerVector = [];
+		this.calculate();
+		this.percentage = 0;
 	};
 
-	calculateVectors(){
+	copy(){
+		return new LinearAnimation(this.span, this.controlpoints);
+	};
+
+	calculate(){
+		var totalDistance = 0;
+
 		for(var i = 0; i < this.controlpoints.length - 1; i++){
-			var vector = vec3.fromValues(this.controlpoints[i+1][0] - this.controlpoints[i][0],
-															 this.controlpoints[i+1][1] - this.controlpoints[i][1],
-															 this.controlpoints[i+1][2] - this.controlpoints[i][2]);
-
+			var vector1 = vec3.fromValues(this.controlpoints[i][0],this.controlpoints[i][1],this.controlpoints[i][2]);
+			var vector2 = vec3.fromValues(this.controlpoints[i+1][0],this.controlpoints[i+1][1],this.controlpoints[i+1][2]);
+			var vector = vec3.create();
+			vec3.subtract(vector,vector2,vector1);
 			this.vectors.push(vector);
-			this.totalDistance += vec3.length(vector);
-			this.vectorsLength.push(vec3.length(vector));
+			totalDistance += vec3.length(vector);
 		}
-	};
 
-	calculateTime(){
 		for(var i = 0; i < this.vectors.length; i++)
-			this.vectorsTime.push((this.vectorsLength[i]/this.totalDistance)*this.span);
+			this.percentagesPerVector.push(vec3.length(this.vectors[i])/totalDistance);
 	}
 
-	updateMatrix(vector, percentage){
+	updateMatrix(vector, angle){
 		var matrix = mat4.create();
 		mat4.identity(matrix);
-		mat4.translate(matrix, matrix,[vector[0]*percentage,vector[1]*percentage,vector[2]*percentage]);
-		this.currentMatrix = matrix;
+		mat4.translate(matrix, matrix, vector);
+		mat4.rotateY(matrix, matrix, angle);
+		this.matrix = matrix;
 	}
 
   update(delta){
-		if(this.passedTime + delta < this.span){
-			this.passedTime += delta;
-			var previousVectors = 0;
-			for(var i = 0; i < this.vectorsTime.length; i++){
-				if(this.passedTime < this.vectorsTime[i] + previousVectors){
-					this.updateMatrix(this.vectors[i], delta/this.vectorsTime[i]);
+		if(this.percentage + delta/this.span < 1){
+			this.time += delta;
+			this.percentage += delta/this.span;
+			var vector = vec3.fromValues(this.controlpoints[0][0],this.controlpoints[0][1],this.controlpoints[0][2]);
+			var vectorsPercentage = 0;
+
+			for(var i = 0; i < this.vectors.length; i++){
+				if(this.percentage < this.percentagesPerVector[i] + vectorsPercentage){
+					this.updateMatrix(this.getVector(i,(this.percentage - vectorsPercentage)/this.percentagesPerVector[i]), this.getAngle(i));
+					break;
 				}
 				else
-					previousVectors += this.vectorsTime[i];
+					vectorsPercentage += this.percentagesPerVector[i];
 			}
 		}
-		else
-			this.over = true;
+		else{
+			this.updateMatrix(this.getVector(this.vectors.length-1, 1), this.getAngle(this.vectors.length-1));
+			this.finished = true;
+		}
   };
 
-	getAnimation(delta){
-		if(this.animations.length > 0)
-			return this.graph.animations[this.animations[0]].getVector(delta);
+	getVector(n, p){
+		var vector = vec3.fromValues(this.controlpoints[0][0],this.controlpoints[0][1],this.controlpoints[0][2]);
+
+		for(var i = 0; i < n; i++)
+			vec3.add(vector,vector,this.vectors[i]);
+
+		vec3.add(vector, vector, vec3.fromValues(this.vectors[n][0]*p, this.vectors[n][1]*p, this.vectors[n][2]*p));
+		return vector;
+	}
+
+	getAngle(i){
+		if(i == 0)
+			return Math.atan2(1,0) - Math.atan2(this.vectors[0][2],this.vectors[0][0]);
+		else
+			return Math.atan2(1,0) - Math.atan2(this.vectors[i][2],this.vectors[i][0]);
 	}
 
 };

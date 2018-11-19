@@ -174,8 +174,6 @@ class XMLscene extends CGFscene {
     else
       this.delta = currTime - this.previous;
 
-    this.graph.update();
-
     this.previous = currTime;
   }
 }

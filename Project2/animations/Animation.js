@@ -7,19 +7,21 @@ class Animation
 	{
     this.span = span;
 		this.currentMatrix;
-		this.over = false;
-		this.passedTime = 0;
+		this.matrix = mat4.create();
+		mat4.identity(this.matrix);
+		this.finished = false;
+		this.time = 0;
 	};
 
   update(){
   };
 
-	apply(node){
-		mat4.multiply(node.transformation, node.transformation, this.currentMatrix);
+	apply(scene){
+		scene.multMatrix(this.matrix);
   };
 
-	isAnimationOver(){
-		return this.over;
+	isFinished(){
+		return this.finished;
 	}
 
 };
