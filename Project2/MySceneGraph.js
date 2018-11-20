@@ -1280,8 +1280,8 @@ class MySceneGraph {
         var span = this.reader.getFloat(children[i], 'span');
         var center = this.reader.getString(children[i], 'center');
         var radius = this.reader.getFloat(children[i], 'radius');
-        var startang = this.reader.getFloat(children[i], 'startang');
-        var rotang = this.reader.getFloat(children[i], 'rotang');
+        var startang = this.reader.getFloat(children[i], 'startang')*DEGREE_TO_RAD;
+        var rotang = this.reader.getFloat(children[i], 'rotang')*DEGREE_TO_RAD;
 
         // Parses center into centerX, centerY, centerZ
         center = center.split(" ");
@@ -1300,7 +1300,7 @@ class MySceneGraph {
           return "unable to parse id, span, centerX, centerY, centerZ, radius, startang, rotang components (null) on the <circular> node with index " + i + " from the <animations> block";
         else if(isNaN(span) || isNaN(centerX) || isNaN(centerY) || isNaN(centerZ) || isNaN(radius) || isNaN(startang) || isNaN(rotang))
           return "unable to parse span, centerX, centerY, centerZ, radius, startang, rotang component (NaN) on the <circular> node with index " + i + " from the <animations> block";
-        else if(span < 0 || radius <= 0)
+        else if(span < 0 || radius < 0)
           return "unable to parse span, radius component (out of range) on the <circular> node with index " + i + " from the <animations> block";
 
         // Checks if id is unique
@@ -1308,7 +1308,8 @@ class MySceneGraph {
           return "id '" + id + "' on the <circular> node with index " + i + " from the <animations> block is not unique";
 
         // Sets circular animation
-        this.animations[id] = new CircularAnimation(span*1000, centerX, centerY, centerZ, radius, startang, rotang);
+        var centerVector = vec3.fromValues(centerX, centerY, centerZ);
+        this.animations[id] = new CircularAnimation(span*1000, centerVector, radius, startang, rotang);
       }
       else
         this.onXMLMinorError("<" + children[i].nodeName + "> node with index " + i + " is not valid on the <animations> block");

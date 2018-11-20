@@ -3,25 +3,40 @@
 */
 class CircularAnimation extends Animation
 {
-	constructor(span, centerX, centerY, centerZ, radius, startang, rotang)
+	constructor(span, center, radius, startang, rotang)
 	{
     super(span);
-    this.centerX = centerX;
-    this.centerY = centerY;
-    this.centerZ = centerZ;
+    this.center = center;
     this.radius = radius;
+    this.angle = startang;
     this.startang = startang;
     this.rotang = rotang;
 	};
 
 	copy(){
-		return new CircularAnimation(this.span, this.centerX, this.centerY, this.centerZ, this.radius, this.startang, this.rotang);
+		return new CircularAnimation(this.span, this.center, this.radius, this.startang, this.rotang);
 	};
 
-  update(){
+	update(delta){
+		if(this.percentage + delta/this.span < 1){
+			this.time += delta;
+			this.percentage += delta/this.span;
+			this.angle += this.rotang*(delta/this.span);
+			this.updateMatrix(this.angle);
+		}
+		else{
+			this.updateMatrix(this.startang + this.rotang);
+			this.finished = true;
+		}
   };
 
-  apply(){
-  };
+	updateMatrix(angle){
+		var matrix = mat4.create();
+		mat4.identity(matrix);
+		mat4.translate(matrix, matrix, this.center);
+		mat4.translate(matrix, matrix, vec3.fromValues(Math.sin(angle)*this.radius,0,Math.cos(angle)*this.radius));
+		mat4.rotateY(matrix, matrix, angle);
+		this.matrix = matrix;
+	};
 
 };

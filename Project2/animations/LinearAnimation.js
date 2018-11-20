@@ -9,15 +9,14 @@ class LinearAnimation extends Animation
     this.controlpoints = controlpoints;
 		this.vectors = [];
 		this.percentagesPerVector = [];
-		this.calculate();
-		this.percentage = 0;
+		this.calculateVectors();
 	};
 
 	copy(){
 		return new LinearAnimation(this.span, this.controlpoints);
 	};
 
-	calculate(){
+	calculateVectors(){
 		var totalDistance = 0;
 
 		for(var i = 0; i < this.controlpoints.length - 1; i++){
@@ -31,15 +30,7 @@ class LinearAnimation extends Animation
 
 		for(var i = 0; i < this.vectors.length; i++)
 			this.percentagesPerVector.push(vec3.length(this.vectors[i])/totalDistance);
-	}
-
-	updateMatrix(vector, angle){
-		var matrix = mat4.create();
-		mat4.identity(matrix);
-		mat4.translate(matrix, matrix, vector);
-		mat4.rotateY(matrix, matrix, angle);
-		this.matrix = matrix;
-	}
+	};
 
   update(delta){
 		if(this.percentage + delta/this.span < 1){
@@ -63,6 +54,15 @@ class LinearAnimation extends Animation
 		}
   };
 
+
+	updateMatrix(vector, angle){
+		var matrix = mat4.create();
+		mat4.identity(matrix);
+		mat4.translate(matrix, matrix, vector);
+		mat4.rotateY(matrix, matrix, angle);
+		this.matrix = matrix;
+	};
+
 	getVector(n, p){
 		var vector = vec3.fromValues(this.controlpoints[0][0],this.controlpoints[0][1],this.controlpoints[0][2]);
 
@@ -71,13 +71,13 @@ class LinearAnimation extends Animation
 
 		vec3.add(vector, vector, vec3.fromValues(this.vectors[n][0]*p, this.vectors[n][1]*p, this.vectors[n][2]*p));
 		return vector;
-	}
+	};
 
 	getAngle(i){
 		if(i == 0)
 			return Math.atan2(1,0) - Math.atan2(this.vectors[0][2],this.vectors[0][0]);
 		else
 			return Math.atan2(1,0) - Math.atan2(this.vectors[i][2],this.vectors[i][0]);
-	}
+	};
 
 };

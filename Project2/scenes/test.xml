@@ -99,20 +99,17 @@
 
   <!--Animations-->
   <animations>
-    <linear id="animation1" span="5">
+    <linear id="animation1" span="2">
+      <controlpoint xx="0" yy="0" zz="2"/>
       <controlpoint xx="0" yy="0" zz="0"/>
-      <controlpoint xx="2" yy="0" zz="0"/>
-      <controlpoint xx="2" yy="0" zz="2"/>
-      <controlpoint xx="1" yy="0" zz="2"/>
-      <controlpoint xx="1" yy="0" zz="1"/>
     </linear>
 
-    <linear id="animation2" span="2.5">
-      <controlpoint xx="0" yy="0" zz="0"/>
-      <controlpoint xx="0" yy="0" zz="1"/>
+    <linear id="animation2" span="2">
+    <controlpoint xx="0" yy="0" zz="0"/>
+      <controlpoint xx="0" yy="0" zz="2"/>
     </linear>
 
-    <!-- <circular id="animation3" span="2" center="11 22 33" radius="5" startang="180" rotang="360"/> -->
+    <circular id="animation3" span="2" center="0 0 0" radius="2" startang="0" rotang="360"/>
   </animations>
 
   <!--Primitives-->
@@ -171,7 +168,9 @@
       <material id="inherit" />
     </materials>
     <animations>
+      <animationref id="animation3" />
       <animationref id="animation1" />
+      <animationref id="animation2" />
     </animations>
     <texture id="inherit" length_s="1" length_t="1" />
     <children>
@@ -186,7 +185,7 @@
 
   <component id="face1">
     <transformation>
-      <translate x="0" y="1" z="0"/>
+      <translate x="-0.5" y="0.5" z="-0.5"/>
       <rotate axis="x" angle="180"/>
     </transformation>
     <materials>
@@ -200,13 +199,13 @@
 
   <component id="face2">
     <transformation>
-      <translate x="0" y="0" z="1"/>
+      <translate x="-0.5" y="-0.5" z="0.5"/>
     </transformation>
     <materials>
       <material id="inherit" />
     </materials>
     <animations>
-      <animationref id="animation2" />
+      <!-- <animationref id="animation2" /> -->
     </animations>
     <texture id="flanders" length_s="1" length_t="1" />
     <children>
@@ -216,7 +215,7 @@
 
   <component id="face3">
     <transformation>
-      <translate x="0" y="1" z="1"/>
+      <translate x="-0.5" y="0.5" z="0.5"/>
       <rotate axis="x" angle="-90"/>
     </transformation>
     <materials>
@@ -230,6 +229,7 @@
 
   <component id="face4">
     <transformation>
+      <translate x="-0.5" y="-0.5" z="-0.5"/>
       <rotate axis="x" angle="90"/>
     </transformation>
     <materials>
@@ -243,6 +243,7 @@
 
   <component id="face5">
     <transformation>
+      <translate x="-0.5" y="-0.5" z="-0.5"/>
       <rotate axis="y" angle="-90"/>
     </transformation>
     <materials>
@@ -256,7 +257,7 @@
 
   <component id="face6">
     <transformation>
-      <translate x="1" y="0" z="1"/>
+      <translate x="0.5" y="-0.5" z="0.5"/>
       <rotate axis="y" angle="90"/>
     </transformation>
     <materials>
