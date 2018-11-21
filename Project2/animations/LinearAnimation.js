@@ -36,9 +36,7 @@ class LinearAnimation extends Animation
 		if(this.percentage + delta/this.span < 1){
 			this.time += delta;
 			this.percentage += delta/this.span;
-			var vector = vec3.fromValues(this.controlpoints[0][0],this.controlpoints[0][1],this.controlpoints[0][2]);
 			var vectorsPercentage = 0;
-
 			for(var i = 0; i < this.vectors.length; i++){
 				if(this.percentage < this.percentagesPerVector[i] + vectorsPercentage){
 					this.updateMatrix(this.getVector(i,(this.percentage - vectorsPercentage)/this.percentagesPerVector[i]), this.getAngle(i));
@@ -74,9 +72,6 @@ class LinearAnimation extends Animation
 	};
 
 	getAngle(i){
-		if(i == 0)
-			return Math.atan2(1,0) - Math.atan2(this.vectors[0][2],this.vectors[0][0]);
-		else
 			return Math.atan2(1,0) - Math.atan2(this.vectors[i][2],this.vectors[i][0]);
 	};
 

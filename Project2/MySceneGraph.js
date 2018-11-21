@@ -1240,7 +1240,7 @@ class MySceneGraph {
           return "unable to parse id and span components (null) on the <linear> node with index " + i + " from the <animations> block";
         else if(isNaN(span))
           return "unable to parse span component (NaN) on the <linear> node with index " + i + " from the <animations> block";
-        else if(span < 0)
+        else if(span <= 0)
           return "unable to parse span component (out of range) on the <linear> node with index " + i + " from the <animations> block";
 
         var controlpoints = [];
@@ -1300,7 +1300,7 @@ class MySceneGraph {
           return "unable to parse id, span, centerX, centerY, centerZ, radius, startang, rotang components (null) on the <circular> node with index " + i + " from the <animations> block";
         else if(isNaN(span) || isNaN(centerX) || isNaN(centerY) || isNaN(centerZ) || isNaN(radius) || isNaN(startang) || isNaN(rotang))
           return "unable to parse span, centerX, centerY, centerZ, radius, startang, rotang component (NaN) on the <circular> node with index " + i + " from the <animations> block";
-        else if(span < 0 || radius < 0)
+        else if(span <= 0 || radius < 0)
           return "unable to parse span, radius component (out of range) on the <circular> node with index " + i + " from the <animations> block";
 
         // Checks if id is unique
@@ -1518,9 +1518,7 @@ class MySceneGraph {
                 return "unable to parse xx, yy, zz components (NaN) on tag <controlpoint> with index " + j + " from tag <patch> from the <primitive> node with index " + i + " from the <primitives> block";
               else if(xx == null || yy == null || zz == null)
                 return "unable to parse xx, yy, zz components (null) on tag <controlpoint> with index " + j + " from tag <patch> from the <primitive> node with index " + i + " from the <primitives> block";
-              else if(xx <= 0 || yy <= 0 || zz <= 0)
-                return "unable to parse xx, yy, zz components (out of 0-inf range) on tag <controlpoint> with index " + j + " from tag <patch> from the <primitive> node with index " + i + " from the <primitives> block";
-
+            
               controlpoints.push([xx,yy,zz]);
           }
 
@@ -1966,14 +1964,15 @@ class MySceneGraph {
   displayNode(node, parentMaterial, parentTexture, parentS, parentT){
     this.scene.pushMatrix();
 
-      // Applies the node transformation
+      // Applies the node and animation transformation
       this.scene.multMatrix(node.transformation);
       if(node.animations.length > 0){
+
+      if(!node.animations[node.currentAnimation].isFinished())
         node.animations[node.currentAnimation].update(this.scene.delta);
-        // if(!node.animations[node.currentAnimation].isFinished())
-          node.animations[node.currentAnimation].apply(this.scene);
-        if(node.animations[node.currentAnimation].isFinished() && node.currentAnimation + 1 < node.animations.length)
-          node.currentAnimation++;
+      node.animations[node.currentAnimation].apply(this.scene);
+      if(node.animations[node.currentAnimation].isFinished() && node.currentAnimation + 1 < node.animations.length)
+        node.currentAnimation++;
       }
 
       var currentMaterial;
