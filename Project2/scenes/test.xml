@@ -120,7 +120,7 @@
         <controlpoint xx="-0.5" yy="0" zz="0.5"/>
         <controlpoint xx="-0.5" yy="0" zz="-0.5"/>
         <controlpoint xx="0.5" yy="0" zz="0.5"/>
-        <controlpoint xx="-0.5" yy="0" zz="-0.5"/>
+        <controlpoint xx="0.5" yy="0" zz="-0.5"/>
       </patch>
     </primitive>
 

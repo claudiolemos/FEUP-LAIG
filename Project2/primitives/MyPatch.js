@@ -18,10 +18,7 @@ class MyPatch extends CGFobject
 
 		for(var u = 0; u < this.npointsU; u++)
 			for(var v = 0; v < this.npointsV; v++)
-				this.controlvertexes[u][v] = [this.controlpoints[this.npointsU*u+v][0], this.controlpoints[this.npointsU*u+v][1], this.controlpoints[this.npointsU*u+v][2], 1];
-
-		console.log(this.controlvertexes);
-		// this.controlvertexes = [[[-0.5, 0, 0.5, 1], [-0.5, 0, -0.5, 1]], [[0.5, 0, 0.5, 1], [0.5, 0, -0.5, 1]]];
+				this.controlvertexes[u][v] = [this.controlpoints[this.npointsV*u+v][0], this.controlpoints[this.npointsV*u+v][1], this.controlpoints[this.npointsV*u+v][2], 1];
 
 		this.surface = new CGFnurbsSurface(this.npointsU-1, this.npointsV-1, this.controlvertexes);
 		this.nurbsObject = new CGFnurbsObject(this.scene, this.npartsU, this.npartsV, this.surface);
