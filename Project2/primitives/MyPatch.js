@@ -15,7 +15,6 @@ class MyPatch extends CGFobject
 	};
 
 	init() {
-
 		for(var u = 0; u < this.npointsU; u++)
 			for(var v = 0; v < this.npointsV; v++)
 				this.controlvertexes[u][v] = [this.controlpoints[this.npointsV*u+v][0], this.controlpoints[this.npointsV*u+v][1], this.controlpoints[this.npointsV*u+v][2], 1];

@@ -116,7 +116,7 @@
 
   <primitives>
     <primitive id="patch">
-      <patch npointsU="2" npointsV="2" npartsU="3" npartsV="4">
+      <patch npointsU="2" npointsV="2" npartsU="10" npartsV="10">
         <controlpoint xx="-0.5" yy="0" zz="0.5"/>
         <controlpoint xx="-0.5" yy="0" zz="-0.5"/>
         <controlpoint xx="0.5" yy="0" zz="0.5"/>
@@ -133,7 +133,7 @@
     </primitive>
 
     <primitive id="cylinder2">
-      <cylinder2 base="0.55" top="0.5" height="1" slices="2" stacks="20" />
+      <cylinder2 base="1" top="0.3" height="2" slices="30" stacks="30" />
     </primitive>
 
     <primitive id="terrain">
@@ -161,9 +161,12 @@
       <materials>
         <material id="default" />
       </materials>
-      <texture id="flanders" length_s="1" length_t="1" />
+      <animations>
+        <!-- <animationref id="animation3" /> -->
+      </animations>
+      <texture id="simpsons" length_s="1" length_t="1" />
       <children>
-        <primitiveref id="patch" />
+        <primitiveref id="cylinder2" />
         <!-- <componentref id="cube" /> -->
       </children>
     </component>
@@ -175,9 +178,9 @@
       <material id="inherit" />
     </materials>
     <animations>
-      <animationref id="animation3" />
+      <!-- <animationref id="animation3" />
       <animationref id="animation1" />
-      <animationref id="animation2" />
+      <animationref id="animation2" /> -->
     </animations>
     <texture id="inherit" length_s="1" length_t="1" />
     <children>
