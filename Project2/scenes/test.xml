@@ -99,17 +99,17 @@
 
   <!--Animations-->
   <animations>
-    <linear id="animation1" span="1.5">
+    <linear id="up" span="10">
       <controlpoint xx="0" yy="0" zz="0"/>
-      <controlpoint xx="1" yy="0" zz="0"/>
+      <controlpoint xx="0" yy="10" zz="0"/>
     </linear>
 
-    <linear id="animation2" span="1.5">
-    <controlpoint xx="0" yy="0" zz="0"/>
-      <controlpoint xx="0" yy="0" zz="2"/>
+    <linear id="down" span="10">
+      <controlpoint xx="0" yy="10" zz="0"/>
+      <controlpoint xx="0" yy="0" zz="0"/>
     </linear>
 
-    <circular id="animation3" span="20" center="0 0 0" radius="1" startang="0" rotang="90"/>
+    <circular id="orbit" span="20" center="10 10 0" radius="10" startang="-180" rotang="360"/>
   </animations>
 
   <!--Primitives-->
@@ -124,20 +124,6 @@
       </patch>
     </primitive>
 
-    <primitive id="patchrocket">
-      <patch npointsU="3" npointsV="3" npartsU="30" npartsV="30">
-        <controlpoint xx="-0.25" yy="0" zz="0.25"/>
-        <controlpoint xx="-0.45" yy="0" zz="0"/>
-        <controlpoint xx="-0.25" yy="0" zz="-0.25"/>
-        <controlpoint xx="0" yy="0" zz="0.5"/>
-        <controlpoint xx="0" yy="2" zz="0"/>
-        <controlpoint xx="0" yy="0" zz="-0.5"/>
-        <controlpoint xx="0.25" yy="0" zz="0.25"/>
-        <controlpoint xx="0.45" yy="0" zz="0"/>
-        <controlpoint xx="0.25" yy="0" zz="-0.25"/>
-      </patch>
-    </primitive>
-
     <primitive id="plane">
       <plane npartsU="2" npartsV="1" />
     </primitive>
@@ -146,9 +132,9 @@
       <vehicle/>
     </primitive>
 
-    <!-- <primitive id="cylinder2">
-      <cylinder2 base="1" top="0.3" height="2" slices="30" stacks="30" />
-    </primitive> -->
+    <primitive id="cylinder2">
+      <cylinder2 base="0.5" top="0" height="1" slices="20" stacks="20" />
+    </primitive>
 
     <primitive id="terrain">
       <terrain idtexture="simpsons" idheightmap="simpsons" parts="1" heightscale="20"/>
@@ -156,6 +142,10 @@
 
     <primitive id="water">
       <water idtexture="simpsons" idwavemap="simpsons" parts="1" heightscale="10" texscale="20"/>
+    </primitive>
+
+    <primitive id="moon">
+      <sphere radius="3" slices="30" stacks="30" />
     </primitive>
 
     <primitive id="rectangle">
@@ -176,17 +166,46 @@
         <material id="default" />
       </materials>
       <animations>
-        <!-- <animationref id="animation1" /> -->
-        <!-- <animationref id="animation3" /> -->
       </animations>
       <texture id="simpsons" length_s="1" length_t="1" />
       <children>
-        <!-- <primitiveref id="cylinder2" /> -->
-      <primitiveref id="vehicle" />
-        <!-- <primitiveref id="patchrocket" /> -->
-        <componentref id="cube" />
+        <componentref id="moon" />
+        <componentref id="rocket" />
       </children>
     </component>
+
+    <component id="moon">
+      <transformation>
+        <translate x="10" y="10" z="0"/>
+      </transformation>
+      <materials>
+        <material id="default" />
+      </materials>
+      <animations>
+      </animations>
+      <texture id="simpsons" length_s="1" length_t="1" />
+      <children>
+        <primitiveref id="moon" />
+      </children>
+    </component>
+
+    <component id="rocket">
+      <transformation>
+      </transformation>
+      <materials>
+        <material id="default" />
+      </materials>
+      <animations>
+        <animationref id="up" />
+        <animationref id="orbit" />
+        <animationref id="down" />
+      </animations>
+      <texture id="simpsons" length_s="1" length_t="1" />
+      <children>
+        <primitiveref id="vehicle" />
+      </children>
+    </component>
+
 
   <component id="cube">
     <transformation>
