@@ -46,7 +46,7 @@ main=function()
 
   myInterface.setActiveCamera(myScene.camera);
 
-	var filename=getUrlVars()['file'] || "simpsons.xml";
+	var filename=getUrlVars()['file'] || "nasa.xml";
 
 	var myGraph = new MySceneGraph(filename, myScene);
 

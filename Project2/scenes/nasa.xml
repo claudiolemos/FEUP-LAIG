@@ -72,8 +72,7 @@
   <!--Textures-->
 
   <textures>
-    <texture id="simpsons" file="./scenes/images/simpsons.jpg" />
-    <texture id="flanders" file="./scenes/images/flanders.jpg" />
+    <texture id="moon" file="./scenes/images/moon.jpg" />
   </textures>
 
   <!--Materials-->
@@ -137,11 +136,11 @@
     </primitive>
 
     <primitive id="terrain">
-      <terrain idtexture="simpsons" idheightmap="simpsons" parts="1" heightscale="20"/>
+      <terrain idtexture="moon" idheightmap="moon" parts="1" heightscale="20"/>
     </primitive>
 
     <primitive id="water">
-      <water idtexture="simpsons" idwavemap="simpsons" parts="1" heightscale="10" texscale="20"/>
+      <water idtexture="moon" idwavemap="moon" parts="1" heightscale="10" texscale="20"/>
     </primitive>
 
     <primitive id="moon">
@@ -167,7 +166,7 @@
       </materials>
       <animations>
       </animations>
-      <texture id="simpsons" length_s="1" length_t="1" />
+      <texture id="none" length_s="1" length_t="1" />
       <children>
         <componentref id="moon" />
         <componentref id="rocket" />
@@ -183,7 +182,7 @@
       </materials>
       <animations>
       </animations>
-      <texture id="simpsons" length_s="1" length_t="1" />
+      <texture id="moon" length_s="1" length_t="1" />
       <children>
         <primitiveref id="moon" />
       </children>
@@ -200,10 +199,9 @@
         <animationref id="orbit" />
         <animationref id="down" />
       </animations>
-      <texture id="simpsons" length_s="1" length_t="1" />
+      <texture id="none" length_s="1" length_t="1" />
       <children>
-        <!-- <primitiveref id="vehicle" /> -->
-          <primitiveref id="rectangle" />
+        <primitiveref id="vehicle" />
       </children>
     </component>
 
@@ -215,9 +213,6 @@
       <material id="inherit" />
     </materials>
     <animations>
-      <!-- <animationref id="animation3" />
-      <animationref id="animation1" />
-      <animationref id="animation2" /> -->
     </animations>
     <texture id="inherit" length_s="1" length_t="1" />
     <children>
@@ -252,9 +247,8 @@
       <material id="inherit" />
     </materials>
     <animations>
-      <!-- <animationref id="animation2" /> -->
     </animations>
-    <texture id="flanders" length_s="1" length_t="1" />
+    <texture id="inherit" length_s="1" length_t="1" />
     <children>
       <primitiveref id="rectangle" />
     </children>
