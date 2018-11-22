@@ -3,8 +3,8 @@
 
   <!--Views-->
   <views default="living room" >
-    <perspective id="living room" near="0.1" far="50" angle="23">
-      <from x="3.5" y="7" z="20" />
+    <perspective id="living room" near="0.1" far="200" angle="23">
+      <from x="3.5" y="25" z="40" />
       <to x="3.5" y="1" z="0" />
     </perspective>
   </views>
@@ -100,8 +100,8 @@
   <!--Animations-->
   <animations>
     <linear id="animation1" span="1.5">
-      <controlpoint xx="0" yy="0" zz="2"/>
       <controlpoint xx="0" yy="0" zz="0"/>
+      <controlpoint xx="1" yy="0" zz="0"/>
     </linear>
 
     <linear id="animation2" span="1.5">
@@ -109,7 +109,7 @@
       <controlpoint xx="0" yy="0" zz="2"/>
     </linear>
 
-    <circular id="animation3" span="2" center="0 0 0" radius="2" startang="0" rotang="360"/>
+    <circular id="animation3" span="20" center="0 0 0" radius="1" startang="0" rotang="90"/>
   </animations>
 
   <!--Primitives-->
@@ -124,6 +124,20 @@
       </patch>
     </primitive>
 
+    <primitive id="patchrocket">
+      <patch npointsU="3" npointsV="3" npartsU="30" npartsV="30">
+        <controlpoint xx="-0.25" yy="0" zz="0.25"/>
+        <controlpoint xx="-0.45" yy="0" zz="0"/>
+        <controlpoint xx="-0.25" yy="0" zz="-0.25"/>
+        <controlpoint xx="0" yy="0" zz="0.5"/>
+        <controlpoint xx="0" yy="2" zz="0"/>
+        <controlpoint xx="0" yy="0" zz="-0.5"/>
+        <controlpoint xx="0.25" yy="0" zz="0.25"/>
+        <controlpoint xx="0.45" yy="0" zz="0"/>
+        <controlpoint xx="0.25" yy="0" zz="-0.25"/>
+      </patch>
+    </primitive>
+
     <primitive id="plane">
       <plane npartsU="2" npartsV="1" />
     </primitive>
@@ -132,9 +146,9 @@
       <vehicle/>
     </primitive>
 
-    <primitive id="cylinder2">
+    <!-- <primitive id="cylinder2">
       <cylinder2 base="1" top="0.3" height="2" slices="30" stacks="30" />
-    </primitive>
+    </primitive> -->
 
     <primitive id="terrain">
       <terrain idtexture="simpsons" idheightmap="simpsons" parts="1" heightscale="20"/>
@@ -162,12 +176,15 @@
         <material id="default" />
       </materials>
       <animations>
+        <!-- <animationref id="animation1" /> -->
         <!-- <animationref id="animation3" /> -->
       </animations>
       <texture id="simpsons" length_s="1" length_t="1" />
       <children>
-        <primitiveref id="cylinder2" />
-        <!-- <componentref id="cube" /> -->
+        <!-- <primitiveref id="cylinder2" /> -->
+      <primitiveref id="vehicle" />
+        <!-- <primitiveref id="patchrocket" /> -->
+        <componentref id="cube" />
       </children>
     </component>
 

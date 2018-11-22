@@ -557,7 +557,7 @@ class MySceneGraph {
 
         // Reads id and enabled
         var id = this.reader.getString(children[i], 'id');
-        var enabled = this.reader.getFloat(children[i], 'enabled');
+        var enabled = this.reader.getBoolean(children[i], 'enabled');
 
         // Validates id and enabled
         if(id == null || enabled == null)
@@ -1518,7 +1518,7 @@ class MySceneGraph {
                 return "unable to parse xx, yy, zz components (NaN) on tag <controlpoint> with index " + j + " from tag <patch> from the <primitive> node with index " + i + " from the <primitives> block";
               else if(xx == null || yy == null || zz == null)
                 return "unable to parse xx, yy, zz components (null) on tag <controlpoint> with index " + j + " from tag <patch> from the <primitive> node with index " + i + " from the <primitives> block";
-            
+
               controlpoints.push([xx,yy,zz]);
           }
 
