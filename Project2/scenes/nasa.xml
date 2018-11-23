@@ -73,6 +73,10 @@
 
   <textures>
     <texture id="moon" file="./scenes/images/moon.jpg" />
+    <texture id="terrain" file="./scenes/images/terrain.jpg" />
+    <texture id="terrainmap" file="./scenes/images/terrainmap.jpg" />
+    <texture id="water" file="./scenes/images/water.jpg" />
+    <texture id="wavemap" file="./scenes/images/wavemap.jpg" />
   </textures>
 
   <!--Materials-->
@@ -136,7 +140,7 @@
     </primitive>
 
     <primitive id="terrain">
-      <terrain idtexture="moon" idheightmap="moon" parts="1" heightscale="20"/>
+      <terrain idtexture="terrain" idheightmap="terrainmap" parts="1" heightscale="20"/>
     </primitive>
 
     <primitive id="water">

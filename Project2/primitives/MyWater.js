@@ -1,30 +1,34 @@
 /**
 * MyPlane class, which represents a rectangle object
 */
-class MyWater extends CGFobject
+class MyWater extends MyPlane
 {
 	constructor(scene, idtexture, idwavemap, parts, heightscale, texscale)
 	{
-		super(scene);
-		this.idtexture = idtexture;
-    this.idwavemap = idwavemap;
-    this.parts = parts;
+		super(scene,parts,parts);
+		this.texture = scene.graph.textures[idtexture];
+    this.wavemap = scene.graph.textures[idwavemap];
     this.heightscale = heightscale;
     this.texscale = texscale;
-    this.vertices = [];
-    this.indices = [];
-    this.normals = [];
-    this.texCoords = [];
-		this.defaultTexCoords = [];
-		this.initBuffers();
+		this.setShader();
 	};
 
+	setShader() {
+		this.shader = new CGFshader(this.scene.gl, "./shaders/water.vert", "./shaders/water.frag");
+		this.shader.setUniformsValues({uSampler2: 1});
+		this.shader.setUniformsValues({normScale: this.heightscale});
 
-	initBuffers()
-	{
-    this.primitiveType=this.scene.gl.TRIANGLES;
-		this.defaultTexCoords = this.texCoords;
-		this.initGLBuffers();
+		this.appearance = new CGFappearance(this.scene);
+		this.appearance.setTexture(this.texture);
+	};
+
+	display() {
+		this.shader.setUniformsValues({timeFactor: this.scene.timeFactor});
+		this.scene.setActiveShader(this.shader);
+		this.appearance.apply();
+		this.wavemap.bind(1);
+		this.nurbsObject.display();
+		this.scene.setActiveShader(this.scene.defaultShader);
 	};
 
 	updateTexCoords(s,t){

@@ -30,6 +30,7 @@ class MyVehicle extends CGFobject
 		this.nose = new MyCylinder2(this.scene, 0.4, 0, 0.5, 30, 30);
 		this.flap1 = new MyPatch(this.scene,2,2,30,30,flap1Points);
 		this.flap2 = new MyPatch(this.scene,2,2,30,30,flap2Points);
+		this.circle = new MyCircle(this.scene, 30, 0.3);
 	};
 
 	display() {
@@ -40,6 +41,11 @@ class MyVehicle extends CGFobject
 			this.frame.display();
 		this.scene.popMatrix();
 
+		this.scene.pushMatrix();
+			this.scene.rotate(Math.PI/2,1,0,0);
+			this.circle.display();
+		this.scene.popMatrix();
+
 		// right tank + nose
 		this.scene.pushMatrix();
 			this.scene.translate(0.6,0,0);
@@ -48,9 +54,15 @@ class MyVehicle extends CGFobject
 		this.scene.popMatrix();
 
 		this.scene.pushMatrix();
-			this.scene.translate(-0.6,4.5,0);
+			this.scene.translate(0.6,4.5,0);
 			this.scene.scale(0.6,0.6,0.6);
 			this.tankNose.display();
+		this.scene.popMatrix();
+
+		this.scene.pushMatrix();
+			this.scene.translate(0.6,0,0);
+			this.scene.rotate(Math.PI/2,1,0,0);
+			this.circle.display();
 		this.scene.popMatrix();
 
 		// left tank + nose
@@ -61,9 +73,15 @@ class MyVehicle extends CGFobject
 		this.scene.popMatrix();
 
 		this.scene.pushMatrix();
-			this.scene.translate(0.6,4.5,0);
+			this.scene.translate(-0.6,4.5,0);
 			this.scene.scale(0.6,0.6,0.6);
 			this.tankNose.display();
+		this.scene.popMatrix();
+
+		this.scene.pushMatrix();
+			this.scene.translate(-0.6,0,0);
+			this.scene.rotate(Math.PI/2,1,0,0);
+			this.circle.display();
 		this.scene.popMatrix();
 
 		// adapter
