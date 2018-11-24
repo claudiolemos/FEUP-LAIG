@@ -1524,7 +1524,7 @@ class MySceneGraph {
 
           // Check if controlpoints length is npointsU*npointsV
           if(controlpoints.length != npointsU*npointsV)
-            return "invalid number of control points on tag <patch> from the <primitive> node with index " + i + " from the <primitives> block";
+            return "there should be " +  npointsU*npointsV + " control points on tag <patch> from the <primitive> node with index " + i + " from the <primitives> block";
 
           // Sets patch
           this.primitives[id] = new MyPatch(this.scene, npointsU, npointsV, npartsU, npartsV, controlpoints);
@@ -1566,7 +1566,7 @@ class MySceneGraph {
             return "unable to parse parts, heightscale components (NaN) on tag <terrain> from the <primitive> node with index " + i + " from the <primitives> block";
           else if(idtexture == null || idheightmap == null || parts == null || heightscale == null)
             return "unable to parse idtexture, idheightmap, parts, heightscale components (null) on tag <terrain> from the <primitive> node with index " + i + " from the <primitives> block";
-          else if(parts <= 0 || heightscale <= 0)
+          else if(parts <= 0)
             return "unable to parse parts, heightscale components (out of 1-inf range) on tag <terrain> from the <primitive> node with index " + i + " from the <primitives> block";
           else if(this.textures[idtexture] == null || this.textures[idheightmap] == null)
             return "invalid texture id on tag <terrain> from the <primitive> node with index " + i + " from the <primitives> block";
@@ -1587,7 +1587,7 @@ class MySceneGraph {
             return "unable to parse parts, heightscale, texscale components (NaN) on tag <water> from the <primitive> node with index " + i + " from the <primitives> block";
           else if(idtexture == null || idwavemap == null || parts == null || heightscale == null || texscale == null)
             return "unable to parse idtexture, idwavemap, parts, heightscale, texscale components (null) on tag <water> from the <primitive> node with index " + i + " from the <primitives> block";
-          else if(parts <= 0 || heightscale <= 0 || texscale <= 0)
+          else if(parts <= 0 || texscale <= 0)
             return "unable to parse parts, heightscale, texscale components (out of 1-inf range) on tag <water> from the <primitive> node with index " + i + " from the <primitives> block";
           else if(this.textures[idtexture] == null || this.textures[idwavemap] == null)
             return "invalid texture id on tag <water> from the <primitive> node with index " + i + " from the <primitives> block";

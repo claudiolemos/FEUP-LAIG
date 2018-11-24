@@ -140,11 +140,11 @@
     </primitive>
 
     <primitive id="terrain">
-      <terrain idtexture="terrain" idheightmap="terrainmap" parts="1" heightscale="20"/>
+      <terrain idtexture="terrain" idheightmap="terrainmap" parts="250" heightscale="0.25"/>
     </primitive>
 
     <primitive id="water">
-      <water idtexture="moon" idwavemap="moon" parts="1" heightscale="10" texscale="20"/>
+      <water idtexture="water" idwavemap="wavemap" parts="200" heightscale="0.075" texscale="1"/>
     </primitive>
 
     <primitive id="moon">
@@ -199,9 +199,9 @@
         <material id="default" />
       </materials>
       <animations>
-        <animationref id="up" />
+        <!-- <animationref id="up" />
         <animationref id="orbit" />
-        <animationref id="down" />
+        <animationref id="down" /> -->
       </animations>
       <texture id="none" length_s="1" length_t="1" />
       <children>

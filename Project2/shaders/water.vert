@@ -10,8 +10,8 @@ varying vec2 vTextureCoord;
 uniform sampler2D uSampler2;
 
 uniform float normScale;
-uniform float delta;
 uniform float texScale;
+uniform float delta;
 
 void main() {
 	vTextureCoord = aTextureCoord;

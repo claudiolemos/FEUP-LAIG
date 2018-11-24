@@ -11,6 +11,7 @@ class CircularAnimation extends Animation
     this.angle = startang;
     this.startang = startang;
     this.rotang = rotang;
+		this.offset = rotang > 0? 0 : Math.PI;
 	};
 
 	copy(){
@@ -35,7 +36,7 @@ class CircularAnimation extends Animation
 		mat4.identity(matrix);
 		mat4.translate(matrix, matrix, this.center);
 		mat4.translate(matrix, matrix, vec3.fromValues(Math.cos(angle)*this.radius,0,Math.sin(angle)*this.radius));
-		mat4.rotateY(matrix, matrix,-angle);
+		mat4.rotateY(matrix, matrix,-angle+this.offset);
 		this.matrix = matrix;
 	};
 

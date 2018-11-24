@@ -31,16 +31,17 @@ class MyVehicle extends CGFobject
 		this.flap1 = new MyPatch(this.scene,2,2,30,30,flap1Points);
 		this.flap2 = new MyPatch(this.scene,2,2,30,30,flap2Points);
 		this.circle = new MyCircle(this.scene, 30, 0.3);
+
+		this.portugal = new CGFappearance(this.scene);
+		this.portugal.setTexture(new CGFtexture(this.scene, './scenes/images/portugal.jpg'));
+
+		this.nasa = new CGFappearance(this.scene);
+		this.nasa.setTexture(new CGFtexture(this.scene, './scenes/images/nasa.jpg'));
 	};
 
 	display() {
 
-		// frame
-		this.scene.pushMatrix();
-			this.scene.rotate(-Math.PI/2,1,0,0);
-			this.frame.display();
-		this.scene.popMatrix();
-
+		// frame circle
 		this.scene.pushMatrix();
 			this.scene.rotate(Math.PI/2,1,0,0);
 			this.circle.display();
@@ -91,12 +92,7 @@ class MyVehicle extends CGFobject
 			this.adapter.display();
 		this.scene.popMatrix();
 
-		// top + nose
-		this.scene.pushMatrix();
-			this.scene.translate(0,6.25,0);
-			this.scene.rotate(-Math.PI/2,1,0,0);
-			this.top.display();
-		this.scene.popMatrix();
+		// top nose
 
 		this.scene.pushMatrix();
 			this.scene.translate(0,7.25,0);
@@ -126,6 +122,21 @@ class MyVehicle extends CGFobject
 			this.scene.translate(1.9,0.5,0);
 			this.scene.rotate(Math.PI,0,1,0);
 			this.flap2.display();
+		this.scene.popMatrix();
+
+		// top
+		this.scene.pushMatrix();
+			this.portugal.apply();
+			this.scene.translate(0,6.25,0);
+			this.scene.rotate(-Math.PI/2,1,0,0);
+			this.top.display();
+		this.scene.popMatrix();
+
+		// frame
+		this.scene.pushMatrix();
+			this.nasa.apply();
+			this.scene.rotate(-Math.PI/2,1,0,0);
+			this.frame.display();
 		this.scene.popMatrix();
 
 	};
