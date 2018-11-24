@@ -17,6 +17,7 @@ class Animation
   };
 
 	apply(scene){
+		//console.log(this.time)
 		scene.multMatrix(this.matrix);
   };
 

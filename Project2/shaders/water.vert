@@ -10,10 +10,11 @@ varying vec2 vTextureCoord;
 uniform sampler2D uSampler2;
 
 uniform float normScale;
-uniform float timeFactor;
+uniform float delta;
+uniform float texScale;
 
 void main() {
 	vTextureCoord = aTextureCoord;
-	vec3 offset = aVertexNormal*texture2D(uSampler2, vTextureCoord).r*normScale*timeFactor;
+	vec3 offset = aVertexNormal*texture2D(uSampler2, vTextureCoord*texScale+delta).r*normScale;
 	gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition+offset, 1.0);
 }

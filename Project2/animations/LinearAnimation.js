@@ -72,7 +72,10 @@ class LinearAnimation extends Animation
 	};
 
 	getAngle(i){
-			return Math.atan2(1,0) - Math.atan2(this.vectors[i][2],this.vectors[i][0]);
+			if(this.vectors[i][2] == 0 && this.vectors[i][0] == 0)
+				return 0;
+			else
+				return Math.atan2(1,0) - Math.atan2(this.vectors[i][2],this.vectors[i][0]);
 	};
 
 };

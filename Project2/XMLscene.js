@@ -18,7 +18,6 @@ class XMLscene extends CGFscene {
     this.showAxis = true;
     this.previous = -1;
     this.delta;
-    this.timeFactor;
   }
 
   /**
@@ -175,7 +174,6 @@ class XMLscene extends CGFscene {
     else
       this.delta = currTime - this.previous;
 
-    this.timeFactor = Math.abs(Math.sin(currTime / 1000));
     this.previous = currTime;
   }
 }
