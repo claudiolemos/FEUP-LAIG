@@ -1964,15 +1964,18 @@ class MySceneGraph {
   displayNode(node, parentMaterial, parentTexture, parentS, parentT){
     this.scene.pushMatrix();
 
-      // Applies the node and animation transformation
+      // Applies the node transformation
       this.scene.multMatrix(node.transformation);
-      if(node.animations.length > 0){
 
-      if(!node.animations[node.currentAnimation].isFinished())
-        node.animations[node.currentAnimation].update(this.scene.delta);
-      node.animations[node.currentAnimation].apply(this.scene);
-      if(node.animations[node.currentAnimation].isFinished() && node.currentAnimation + 1 < node.animations.length)
-        node.currentAnimation++;
+      // Applies the node animation
+      if(node.animations.length > 0){
+        if(!node.animations[node.currentAnimation].isFinished())
+          node.animations[node.currentAnimation].update(this.scene.delta);
+
+        node.animations[node.currentAnimation].apply(this.scene);
+
+        if(node.animations[node.currentAnimation].isFinished() && node.currentAnimation + 1 < node.animations.length)
+          node.currentAnimation++;
       }
 
       var currentMaterial;

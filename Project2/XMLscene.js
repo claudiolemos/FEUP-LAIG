@@ -168,6 +168,10 @@ class XMLscene extends CGFscene {
     this.popMatrix();
   }
 
+  /**
+  * Updates delta (time since last update) and previous (previous currTime)
+  * @param {number} currTime current time in milliseconds
+  */
   update(currTime) {
     if(this.previous == -1)
       this.delta = 0;

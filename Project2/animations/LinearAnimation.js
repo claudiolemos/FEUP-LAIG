@@ -1,8 +1,14 @@
 /**
-* MyPlane class, which represents a rectangle object
+* LinearAnimation class, which represents a polygonal
+* trajectory animation based on control points
 */
 class LinearAnimation extends Animation
 {
+	/**
+	 * @constructor
+	 * @param {number} span          duration of the animation in milliseconds
+	 * @param {array}  controlpoints control points of the trajectory
+	 */
 	constructor(span, controlpoints)
 	{
     super(span);
@@ -12,10 +18,19 @@ class LinearAnimation extends Animation
 		this.calculateVectors();
 	};
 
+	/**
+	 * Returns a copy of the animation, in order to prevent conflicts when
+	 * different nodes reference the same animation
+	 * @return {LinearAnimation} new instance of the animation
+	 */
 	copy(){
 		return new LinearAnimation(this.span, this.controlpoints);
 	};
 
+	/**
+	 * Calculates the animation line segment vectors based on the control points,
+	 * while also calculating the percentage that each vector will take to animate
+	 */
 	calculateVectors(){
 		var totalDistance = 0;
 
@@ -32,6 +47,18 @@ class LinearAnimation extends Animation
 			this.percentagesPerVector.push(vec3.length(this.vectors[i])/totalDistance);
 	};
 
+	/**
+	 * Updates the linear animation matrix, depending on
+	 * the current percentage of animation completed.
+	 *
+	 * While the percentage doesn't reach 100, it will update the current span and
+	 * percentage of animation, and update the animation matrix accordingly.
+	 *
+	 * When the percentage reaches 100, it will update
+	 * the matrix representing the completed animation.
+	 *
+	 * @param  {number} delta time in milliseconds since last update
+	 */
   update(delta){
 		if(this.percentage + delta/this.span < 1){
 			this.time += delta;
@@ -52,7 +79,12 @@ class LinearAnimation extends Animation
 		}
   };
 
-
+	/**
+	 * Updates the animation matrix, applying the current
+	 * animation position and angle to an identity matrix
+	 * @param  {vec3} vector 	 vector that represents the current position of the animation
+	 * @param  {number} angle  current angle that makes the object face the direction of the animation
+	 */
 	updateMatrix(vector, angle){
 		var matrix = mat4.create();
 		mat4.identity(matrix);
@@ -61,16 +93,27 @@ class LinearAnimation extends Animation
 		this.matrix = matrix;
 	};
 
-	getVector(n, p){
+	/**
+	 * Returns a vector that represents the current position
+	 * @param  {number} n 				 index of the line segment on which the animation is currently at
+	 * @param  {number} percentage current animation percentage
+	 * @return {vec3} current position
+	 */
+	getVector(n, percentage){
 		var vector = vec3.fromValues(this.controlpoints[0][0],this.controlpoints[0][1],this.controlpoints[0][2]);
 
 		for(var i = 0; i < n; i++)
 			vec3.add(vector,vector,this.vectors[i]);
 
-		vec3.add(vector, vector, vec3.fromValues(this.vectors[n][0]*p, this.vectors[n][1]*p, this.vectors[n][2]*p));
+		vec3.add(vector, vector, vec3.fromValues(this.vectors[n][0]*percentage, this.vectors[n][1]*percentage, this.vectors[n][2]*percentage));
 		return vector;
 	};
 
+	/**
+	 * Calculates the angle that will make the object face the direction of the animation
+	 * @param  {number} i index of the line segment on which the animation is currently at
+	 * @return {number} angle
+	 */
 	getAngle(i){
 			if(this.vectors[i][2] == 0 && this.vectors[i][0] == 0)
 				return 0;

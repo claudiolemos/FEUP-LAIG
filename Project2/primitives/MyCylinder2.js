@@ -1,8 +1,17 @@
 /**
-* MyPlane class, which represents a rectangle object
+* MyCylinder2 class, which represents a cylinder NURBS object
 */
 class MyCylinder2 extends CGFobject
 {
+	/**
+	* @constructor
+	* @param {XMLScene} scene	 represents the CGFscene
+	* @param {number}   base   radius of cylinder's base
+	* @param {number}   top    radius of cylinder's top
+	* @param {number}   height cylinder's height
+	* @param {number}   slices number of cylinder slices
+	* @param {number}   stacks number of cylinder stacks
+	*/
 	constructor(scene, base, top, height, slices, stacks)
 	{
 		super(scene);
@@ -14,6 +23,9 @@ class MyCylinder2 extends CGFobject
 		this.init();
 	};
 
+	/**
+	 * Initializes a quarter of the cylinder's control vertexes, its NURBS surface and object
+	 */
 	init() {
 		var w = Math.pow(2, 0.5)/2;
 		this.controlvertexes = [
@@ -26,6 +38,10 @@ class MyCylinder2 extends CGFobject
 		this.nurbsObject = new CGFnurbsObject(this.scene, this.slices, this.stacks, this.surface);
 	};
 
+	/**
+	 * Displays the first quarter of the cylinder, and rotates
+	 * it 3 times in order to make the complete cylinder
+	 */
 	display() {
 		this.nurbsObject.display();
 
