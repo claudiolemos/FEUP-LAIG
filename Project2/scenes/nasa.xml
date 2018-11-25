@@ -123,17 +123,28 @@
 
   <!--Animations-->
   <animations>
-    <linear id="up" span="10">
+    <linear id="rocketUp" span="10">
       <controlpoint xx="0" yy="0" zz="0"/>
-      <controlpoint xx="0" yy="22.5" zz="0"/>
+      <controlpoint xx="0" yy="19" zz="0"/>
     </linear>
 
-    <linear id="down" span="10">
-      <controlpoint xx="0" yy="22.5" zz="0"/>
+    <linear id="rocketDown" span="10">
+      <controlpoint xx="0" yy="19" zz="0"/>
       <controlpoint xx="0" yy="0" zz="0"/>
     </linear>
 
-    <circular id="orbit" span="22.5" center="-6 22.5 -6" radius="8.4852813742" startang="45" rotang="360"/>
+    <linear id="platformUp" span="5">
+      <controlpoint xx="0" yy="0" zz="0"/>
+      <controlpoint xx="0" yy="4.5" zz="0"/>
+    </linear>
+
+    <linear id="platformDown" span="5">
+      <controlpoint xx="0" yy="4.5" zz="0"/>
+      <controlpoint xx="0" yy="0" zz="0"/>
+    </linear>
+
+
+    <circular id="orbit" span="22.5" center="-6 19 -6" radius="8.4852813742" startang="45" rotang="360"/>
   </animations>
 
   <!--Primitives-->
@@ -196,6 +207,20 @@
     <primitive id="moon">
       <sphere radius="6" slices="30" stacks="30" />
     </primitive>
+
+    <primitive id="support">
+      <cylinder2 base="0.085" top="0.085" height="1.5" slices="10" stacks="1" />
+    </primitive>
+
+    <primitive id="platform">
+      <patch npointsU="2" npointsV="2" npartsU="10" npartsV="10">
+        <controlpoint xx="0" yy="0" zz="0"/>
+        <controlpoint xx="-0.75" yy="0" zz="-0.75"/>
+        <controlpoint xx="1.5" yy="0" zz="0"/>
+        <controlpoint xx="2.25" yy="0" zz="-0.75"/>
+      </patch>
+    </primitive>
+
   </primitives >
 
   <!--Components-->
@@ -215,13 +240,31 @@
       <texture id="none" length_s="1" length_t="1" />
       <children>
         <componentref id="moon" />
-        <componentref id="rocket" />
         <componentref id="stars" />
         <componentref id="rivers" />
         <componentref id="terrains" />
+        <componentref id="launchpad" />
+      </children>
+    </component>
+
+    <component id="launchpad">
+      <transformation>
+        <translate x="0" y="3.5" z="0"/>
+      </transformation>
+      <materials>
+        <material id="default" />
+      </materials>
+      <animations>
+      </animations>
+      <texture id="none" length_s="1" length_t="1" />
+      <children>
+        <componentref id="rocket" />
+        <componentref id="support" />
         <componentref id="floor" />
         <componentref id="flag" />
         <componentref id="nasabuilding" />
+        <componentref id="riverwall1" />
+        <componentref id="riverwall2" />
       </children>
     </component>
 
@@ -404,8 +447,6 @@
         <componentref id="river1" />
         <componentref id="river2" />
         <componentref id="river3" />
-        <componentref id="riverwall1" />
-        <componentref id="riverwall2" />
       </children>
     </component>
 
@@ -453,6 +494,7 @@
 
     <component id="riverwall1">
       <transformation>
+        <translate x="0" y="-3.5" z="50"/>
         <scale x="50" y="3.5" z="1"/>
       </transformation>
       <materials>
@@ -466,7 +508,7 @@
 
     <component id="riverwall2">
       <transformation>
-        <translate x="0" y="0" z="50"/>
+        <translate x="50" y="-3.5" z="50"/>
         <rotate axis="y" angle="90"/>
         <scale x="50" y="3.5" z="1"/>
       </transformation>
@@ -579,9 +621,9 @@
         <material id="default" />
       </materials>
       <animations>
-        <animationref id="up" />
+        <animationref id="rocketUp" />
         <animationref id="orbit" />
-        <animationref id="down" />
+        <animationref id="rocketDown" />
       </animations>
       <texture id="none" length_s="1" length_t="1" />
       <children>
@@ -882,6 +924,193 @@
       <primitiveref id="plane" />
     </children>
   </component>
+
+  <component id="support">
+      <transformation>
+        <translate x="11.5" y="0.5" z="13"/>
+        <rotate axis="y" angle="-90"/>
+      </transformation>
+      <materials>
+        <material id="inherit" />
+      </materials>
+      <texture id="inherit" length_s="1" length_t="1" />
+      <children>
+        <componentref id="sup1" />
+        <componentref id="sup2" />
+        <componentref id="sup3" />
+        <componentref id="sup4" />
+        <componentref id="sup5" />
+        <componentref id="sup6" />
+        <componentref id="sup7" />
+        <componentref id="sup8" />
+        <componentref id="sup9" />
+        <componentref id="sup10" />
+        <componentref id="sup11" />
+      </children>
+    </component>
+
+
+    <component id="sup1">
+      <transformation>
+      </transformation>
+      <materials>
+        <material id="inherit" />
+      </materials>
+      <texture id="inherit" length_s="1" length_t="1" />
+      <children>
+        <primitiveref id="support" />
+      </children>
+    </component>
+
+    <component id="sup2">
+      <transformation>
+        <rotate axis="y" angle="45"/>
+        <translate x="0" y="0" z="-1.08"/>
+        <scale x="1" y="1" z="0.75"/>
+      </transformation>
+      <materials>
+        <material id="inherit" />
+      </materials>
+      <texture id="inherit" length_s="1" length_t="1" />
+      <children>
+        <primitiveref id="support" />
+      </children>
+    </component>
+
+    <component id="sup3">
+      <transformation>
+        <rotate axis="y" angle="-45"/>
+        <translate x="1.05" y="0" z="1.0"/>
+        <scale x="1" y="1" z="0.75"/>
+      </transformation>
+      <materials>
+        <material id="inherit" />
+      </materials>
+      <texture id="inherit" length_s="1" length_t="1" />
+      <children>
+        <primitiveref id="support" />
+      </children>
+    </component>
+
+    <component id="sup4">
+      <transformation>
+        <rotate axis="x" angle="-90"/>
+        <scale x="1" y="1" z="3"/>
+      </transformation>
+      <materials>
+        <material id="inherit" />
+      </materials>
+      <texture id="inherit" length_s="1" length_t="1" />
+      <children>
+        <primitiveref id="support" />
+      </children>
+    </component>
+
+    <component id="sup9">
+      <transformation>
+        <rotate axis="x" angle="-72"/>
+        <scale x="1" y="1" z="3.1"/>
+        <translate x="0" y="0" z="0"/>
+      </transformation>
+      <materials>
+        <material id="inherit" />
+      </materials>
+      <texture id="inherit" length_s="1" length_t="1" />
+      <children>
+        <primitiveref id="support" />
+      </children>
+    </component>
+
+    <component id="sup10">
+      <transformation>
+        <rotate axis="x" angle="72"/>
+        <scale x="1" y="1" z="3.1"/>
+        <translate x="0" y="1.43" z="-1.35"/>
+      </transformation>
+      <materials>
+        <material id="inherit" />
+      </materials>
+      <texture id="inherit" length_s="1" length_t="1" />
+      <children>
+        <primitiveref id="support" />
+      </children>
+    </component>
+
+    <component id="sup11">
+      <transformation>
+        <rotate axis="y" angle="90"/>
+        <translate x="-1.5" y="0" z="0"/>
+      </transformation>
+      <animations>
+        <animationref id ="platformUp"/>
+        <animationref id ="platformDown"/>
+      </animations>
+      <materials>
+        <material id="inherit" />
+      </materials>
+      <texture id="inherit" length_s="1" length_t="1" />
+      <children>
+        <primitiveref id="platform" />
+      </children>
+    </component>
+
+    <component id="sup5">
+      <transformation>
+        <rotate axis="x" angle="-90"/>
+        <translate x="0" y="-1.48" z="0"/>
+        <scale x="1" y="1" z="3"/>
+      </transformation>
+      <materials>
+        <material id="inherit" />
+      </materials>
+      <texture id="inherit" length_s="1" length_t="1" />
+      <children>
+        <primitiveref id="support" />
+      </children>
+    </component>
+
+    <component id="sup6">
+      <transformation>
+        <translate x="0" y="4.48" z="0"/>
+      </transformation>
+      <materials>
+        <material id="inherit" />
+      </materials>
+      <texture id="inherit" length_s="1" length_t="1" />
+      <children>
+        <primitiveref id="support" />
+      </children>
+    </component>
+
+    <component id="sup7">
+      <transformation>
+        <rotate axis="y" angle="45"/>
+        <translate x="0" y="4.48" z="-1.08"/>
+        <scale x="1" y="1" z="0.75"/>
+      </transformation>
+      <materials>
+        <material id="inherit" />
+      </materials>
+      <texture id="inherit" length_s="1" length_t="1" />
+      <children>
+        <primitiveref id="support" />
+      </children>
+    </component>
+
+    <component id="sup8">
+      <transformation>
+        <rotate axis="y" angle="-45"/>
+        <translate x="1.05" y="4.48" z="1.0"/>
+        <scale x="1" y="1" z="0.75"/>
+      </transformation>
+      <materials>
+        <material id="inherit" />
+      </materials>
+      <texture id="inherit" length_s="1" length_t="1" />
+      <children>
+        <primitiveref id="support" />
+      </children>
+    </component>
 
 </components>
 </yas>

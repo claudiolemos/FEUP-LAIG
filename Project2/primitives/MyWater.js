@@ -19,18 +19,21 @@ class MyWater extends MyPlane
     this.wavemap = scene.graph.textures[idwavemap];
     this.heightscale = heightscale;
     this.texscale = texscale;
-		this.offset = 0;
-		this.delta;
+		this.delta = 0;
 		this.setShader();
 	};
 
 	/**
 	 * Initializes the water's shader, setting its uniform
 	 * values (texture scale, height map, and height scale)
+	 * and creates the water's appearance
 	 */
 	setShader() {
 		this.shader = new CGFshader(this.scene.gl, "./shaders/water.vert", "./shaders/water.frag");
 		this.shader.setUniformsValues({uSampler2: 1, heightScale: this.heightscale, texScale: this.texscale});
+
+		this.appearance = new CGFappearance(this.scene);
+		this.appearance.setTexture(this.texture);
 	};
 
 	/**
@@ -42,11 +45,10 @@ class MyWater extends MyPlane
 	 * After displaying the water, it sets back the scene's default shader
 	 */
 	display() {
-		this.offset = (this.offset + 0.001) % 1;
-		this.delta = this.offset - 0.5;
+		this.delta = (this.delta + 0.001) % 1;
 		this.shader.setUniformsValues({delta: this.delta});
 		this.scene.setActiveShader(this.shader);
-		this.texture.bind();
+		this.appearance.apply();
 		this.wavemap.bind(1);
 		this.nurbsObject.display();
 		this.scene.setActiveShader(this.scene.defaultShader);
