@@ -22,28 +22,24 @@ class MyTerrain extends MyPlane
 
 	/**
 	 * Initializes the terrain's shader, setting its uniform
-	 * values (height map texture and height scale) while
-	 * also creating an appearance for the terrain's texture
+	 * values (height map texture and height scale)
 	 */
 	setShader() {
 		this.shader = new CGFshader(this.scene.gl, "./shaders/terrain.vert", "./shaders/terrain.frag");
 		this.shader.setUniformsValues({uSampler2: 1, heightScale: this.heightscale});
-
-		this.appearance = new CGFappearance(this.scene);
-		this.appearance.setTexture(this.texture);
 	};
 
 	/**
 	 * Displays the terrain.
 	 *
-	 * Before doing that, sets the terrain's shader as active,
-	 * applies the terrain's appearance and binds the height map.
+	 * Before doing that, sets the terrain's shader as active and
+	 * binds the terrain's texture and height map.
 	 *
-	 * After displaying the terrain, it sets back the scene's default shader
+	 * After displaying the terrain, it sets back to the scene's default shader
 	 */
 	display() {
 		this.scene.setActiveShader(this.shader);
-		this.appearance.apply();
+		this.texture.bind();
 		this.heightmap.bind(1);
 		this.nurbsObject.display();
 		this.scene.setActiveShader(this.scene.defaultShader);
