@@ -59,6 +59,10 @@
     <texture id="stars" file="./scenes/images/stars.jpg" />
     <texture id="flag" file="./scenes/images/flag.jpg" />
     <texture id="floor" file="./scenes/images/floor.jpg" />
+    <texture id="nasabuilding1" file="./scenes/images/nasabuilding1.jpg" />
+    <texture id="nasabuilding2" file="./scenes/images/nasabuilding2.jpg" />
+    <texture id="nasabuilding3" file="./scenes/images/nasabuilding3.jpg" />
+    <texture id="nasabuilding4" file="./scenes/images/nasabuilding4.jpg" />
   </textures>
 
   <!--Materials-->
@@ -192,6 +196,7 @@
         <componentref id="terrains" />
         <componentref id="floor" />
         <componentref id="flag" />
+        <componentref id="nasabuilding" />
       </children>
     </component>
 
@@ -527,6 +532,301 @@
         <primitiveref id="vehicle" />
       </children>
     </component>
+
+    <component id="nasabuilding">
+      <transformation>
+        <!-- <rotate axis="y" angle="180"/> -->
+        <translate x="25" y="0" z="4.5"/>
+        <scale x="5.55" y="5" z="3"/>
+      </transformation>
+      <materials>
+        <material id="default" />
+      </materials>
+      <texture id="none" length_s="1" length_t="1" />
+      <children>
+        <componentref id="nasabuilding1" />
+        <componentref id="nasabuilding2" />
+        <componentref id="nasabuilding3" />
+        <componentref id="nasabuilding4" />
+        <componentref id="nasabuilding5" />
+        <componentref id="nasabuilding6" />
+        <componentref id="nasabuilding7" />
+      </children>
+    </component>
+
+
+    <component id="nasabuilding1">
+      <transformation>
+        <scale x="1.5" y="3.5" z="1.5"/>
+        <translate x="1" y="0" z="-1"/>
+      </transformation>
+      <materials>
+        <material id="inherit" />
+      </materials>
+      <animations>
+      </animations>
+      <texture id="inherit" length_s="1" length_t="1" />
+      <children>
+        <componentref id="face1" />
+        <componentref id="face2" />
+        <componentref id="face3" />
+        <componentref id="face4-3" />
+        <componentref id="face5" />
+        <componentref id="face6" />
+      </children>
+    </component>
+
+    <component id="nasabuilding2">
+      <transformation>
+        <scale x="1.5" y="3.5" z="1.5"/>
+        <translate x="0" y="0" z="-1"/>
+      </transformation>
+      <materials>
+        <material id="inherit" />
+      </materials>
+      <animations>
+      </animations>
+      <texture id="inherit" length_s="1" length_t="1" />
+      <children>
+        <componentref id="face1" />
+        <componentref id="face2" />
+        <componentref id="face3" />
+        <componentref id="face4-1" />
+        <componentref id="face5" />
+        <componentref id="face6" />
+      </children>
+    </component>
+
+    <component id="nasabuilding3">
+      <transformation>
+        <scale x="1.5" y="3.5" z="1.5"/>
+        <translate x="2" y="0" z="-1"/>
+      </transformation>
+      <materials>
+        <material id="inherit" />
+      </materials>
+      <animations>
+      </animations>
+      <texture id="inherit" length_s="1" length_t="1" />
+      <children>
+        <componentref id="face1" />
+        <componentref id="face2" />
+        <componentref id="face3" />
+        <componentref id="face4-2" />
+        <componentref id="face5" />
+        <componentref id="face6" />
+      </children>
+    </component>
+
+  <component id="nasabuilding4">
+    <transformation>
+      <scale x="1.25" y="1.5" z="1.25"/>
+      <translate x="1.3" y="0" z="1"/>
+    </transformation>
+    <materials>
+      <material id="inherit" />
+    </materials>
+    <animations>
+    </animations>
+    <texture id="inherit" length_s="1" length_t="1" />
+    <children>
+      <componentref id="face1" />
+      <componentref id="face2" />
+      <componentref id="face3" />
+      <componentref id="face4-4" />
+      <componentref id="face5" />
+      <componentref id="face6" />
+    </children>
+  </component>
+
+  <component id="nasabuilding5">
+    <transformation>
+      <scale x="1.5" y="3.5" z="1.5"/>
+      <translate x="1" y="0" z="0"/>
+    </transformation>
+    <materials>
+      <material id="inherit" />
+    </materials>
+    <animations>
+    </animations>
+    <texture id="inherit" length_s="1" length_t="1" />
+    <children>
+      <componentref id="face1" />
+      <componentref id="face2" />
+      <componentref id="face3" />
+      <componentref id="face4-3" />
+      <componentref id="face5" />
+      <componentref id="face6" />
+    </children>
+  </component>
+
+  <component id="nasabuilding6">
+    <transformation>
+      <scale x="1.5" y="3.5" z="1.5"/>
+    </transformation>
+    <materials>
+      <material id="inherit" />
+    </materials>
+    <animations>
+    </animations>
+    <texture id="inherit" length_s="1" length_t="1" />
+    <children>
+      <componentref id="face1" />
+      <componentref id="face2" />
+      <componentref id="face3" />
+      <componentref id="face4-1" />
+      <componentref id="face5" />
+      <componentref id="face6" />
+    </children>
+  </component>
+
+  <component id="nasabuilding7">
+    <transformation>
+      <scale x="1.5" y="3.5" z="1.5"/>
+      <translate x="2" y="0" z="0"/>
+    </transformation>
+    <materials>
+      <material id="inherit" />
+    </materials>
+    <animations>
+    </animations>
+    <texture id="inherit" length_s="1" length_t="1" />
+    <children>
+      <componentref id="face1" />
+      <componentref id="face2" />
+      <componentref id="face3" />
+      <componentref id="face4-2" />
+      <componentref id="face5" />
+      <componentref id="face6" />
+    </children>
+  </component>
+
+  <component id="face1">
+    <transformation>
+      <translate x="0.5" y="0" z="0.5"/>
+      <rotate axis="x" angle="180"/>
+    </transformation>
+    <materials>
+      <material id="inherit" />
+    </materials>
+    <texture id="inherit" length_s="1" length_t="1" />
+    <children>
+      <primitiveref id="plane" />
+    </children>
+  </component>
+
+   <component id="face2">
+    <transformation>
+      <translate x="0.5" y="1" z="0.5"/>
+    </transformation>
+    <materials>
+      <material id="inherit" />
+    </materials>
+    <animations>
+    </animations>
+    <texture id="inherit" length_s="1" length_t="1" />
+    <children>
+      <primitiveref id="plane" />
+    </children>
+  </component>
+
+  <component id="face3">
+    <transformation>
+      <translate x="0.5" y="0.5" z="0"/>
+      <rotate axis="x" angle="-90"/>
+    </transformation>
+    <materials>
+      <material id="inherit" />
+    </materials>
+    <texture id="inherit" length_s="1" length_t="1" />
+    <children>
+      <primitiveref id="plane" />
+    </children>
+  </component>
+
+  <component id="face4-1">
+    <transformation>
+      <translate x="0.5" y="0.5" z="1"/>
+      <rotate axis="x" angle="90"/>
+    </transformation>
+    <materials>
+      <material id="inherit" />
+    </materials>
+    <texture id="nasabuilding1" length_s="1" length_t="1" />
+    <children>
+      <primitiveref id="plane" />
+    </children>
+  </component>
+
+  <component id="face4-2">
+    <transformation>
+      <translate x="0.5" y="0.5" z="1"/>
+      <rotate axis="x" angle="90"/>
+    </transformation>
+    <materials>
+      <material id="inherit" />
+    </materials>
+    <texture id="nasabuilding2" length_s="1" length_t="1" />
+    <children>
+      <primitiveref id="plane" />
+    </children>
+  </component>
+
+  <component id="face4-3">
+    <transformation>
+      <translate x="0.5" y="0.5" z="1"/>
+      <rotate axis="x" angle="90"/>
+    </transformation>
+    <materials>
+      <material id="inherit" />
+    </materials>
+    <texture id="nasabuilding3" length_s="1" length_t="1" />
+    <children>
+      <primitiveref id="plane" />
+    </children>
+  </component>
+
+  <component id="face4-4">
+    <transformation>
+      <translate x="0.5" y="0.5" z="1"/>
+      <rotate axis="x" angle="90"/>
+    </transformation>
+    <materials>
+      <material id="inherit" />
+    </materials>
+    <texture id="nasabuilding4" length_s="1" length_t="1" />
+    <children>
+      <primitiveref id="plane" />
+    </children>
+  </component>
+
+  <component id="face5">
+    <transformation>
+      <translate x="1" y="0.5" z="0.5"/>
+      <rotate axis="z" angle="-90"/>
+    </transformation>
+    <materials>
+      <material id="inherit" />
+    </materials>
+    <texture id="inherit" length_s="1" length_t="1" />
+    <children>
+      <primitiveref id="plane" />
+    </children>
+  </component>
+
+  <component id="face6">
+    <transformation>
+      <translate x="0" y="0.5" z="0.5"/>
+      <rotate axis="z" angle="90"/>
+    </transformation>
+    <materials>
+      <material id="inherit" />
+    </materials>
+    <texture id="inherit" length_s="1" length_t="1" />
+    <children>
+      <primitiveref id="plane" />
+    </children>
+  </component>
 
 </components>
 </yas>
