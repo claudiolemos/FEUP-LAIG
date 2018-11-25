@@ -2,11 +2,32 @@
   <scene root="root" axis_length="5" />
 
   <!--Views-->
-  <views default="living room" >
-    <perspective id="living room" near="0.1" far="500" angle="23">
-      <from x="50" y="15" z="50" />
-      <to x="0" y="2" z="0" />
+  <views default="liftoff" >
+    <perspective id="liftoff" near="0.1" far="500" angle="23">
+      <from x="60" y="15" z="60" />
+      <to x="10" y="2" z="10" />
     </perspective>
+
+    <perspective id="moon" near="0.1" far="500" angle="23">
+      <from x="10" y="40" z="50" />
+      <to x="10" y="40" z="0" />
+    </perspective>
+
+    <perspective id="mountain" near="0.1" far="500" angle="23">
+      <from x="-50" y="30" z="0" />
+      <to x="0" y="5" z="-50" />
+    </perspective>
+
+    <ortho id="moon2"  near="0.1" far="500" left="-50" right="50" bottom="0" top="55">
+      <from x="0" y="0" z="50" />
+      <to x="0" y="0" z="0" />
+    </ortho>
+
+    <ortho id="top"  near="0.1" far="500" left="-50" right="50" bottom="-50" top="50">
+      <from x="0" y="100" z="0.1" />
+      <to x="0" y="0" z="0" />
+    </ortho>
+
   </views>
 
   <!--Ambient-->
@@ -112,12 +133,16 @@
       <controlpoint xx="0" yy="0" zz="0"/>
     </linear>
 
-    <circular id="orbit" span="22.5" center="-10 22.5 -10" radius="14,1421356237" startang="45" rotang="360"/>
+    <circular id="orbit" span="22.5" center="-6 22.5 -6" radius="8.4852813742" startang="45" rotang="360"/>
   </animations>
 
   <!--Primitives-->
 
   <primitives>
+    <primitive id="rectangle">
+      <rectangle x1="0" y1="0" x2="1" y2="1" />
+    </primitive>
+
     <primitive id="plane">
       <plane npartsU="1" npartsV="1" />
     </primitive>
@@ -379,6 +404,8 @@
         <componentref id="river1" />
         <componentref id="river2" />
         <componentref id="river3" />
+        <componentref id="riverwall1" />
+        <componentref id="riverwall2" />
       </children>
     </component>
 
@@ -421,6 +448,34 @@
       <texture id="none" length_s="1" length_t="1" />
       <children>
         <primitiveref id="water" />
+      </children>
+    </component>
+
+    <component id="riverwall1">
+      <transformation>
+        <scale x="50" y="3.5" z="1"/>
+      </transformation>
+      <materials>
+        <material id="default" />
+      </materials>
+      <texture id="none" length_s="0.1" length_t="1" />
+      <children>
+        <primitiveref id="rectangle" />
+      </children>
+    </component>
+
+    <component id="riverwall2">
+      <transformation>
+        <translate x="0" y="0" z="50"/>
+        <rotate axis="y" angle="90"/>
+        <scale x="50" y="3.5" z="1"/>
+      </transformation>
+      <materials>
+        <material id="default" />
+      </materials>
+      <texture id="none" length_s="0.1" length_t="1" />
+      <children>
+        <primitiveref id="rectangle" />
       </children>
     </component>
 

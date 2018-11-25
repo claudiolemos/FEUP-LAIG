@@ -15,7 +15,7 @@ class XMLscene extends CGFscene {
     this.lightValues = {};
     this.currentCamera;
     this.currentMaterial = 0;
-    this.showAxis = true;
+    this.showAxis = false;
     this.previous = -1;
     this.delta;
   }
