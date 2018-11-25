@@ -169,7 +169,7 @@
 
     <!-- Waiting animations. They don't move.  -->
     <circular id="wait5" span="5" center="0 0 0" radius="0" startang="0" rotang="0"/>
-    <circular id="wait30" span="50" center="0 4.5 0" radius="0" startang="180" rotang="0"/>
+    <circular id="wait50" span="50" center="0 4.5 0" radius="0" startang="180" rotang="0"/>
   </animations>
 
   <!--Primitives-->
@@ -226,7 +226,7 @@
     </primitive>
 
     <primitive id="water">
-      <water idtexture="water" idwavemap="wavemap" parts="200" heightscale="1.5" texscale="1"/>
+      <water idtexture="water" idwavemap="wavemap" parts="200" heightscale="1.5" texscale="2"/>
     </primitive>
 
     <primitive id="moon1">
@@ -1117,7 +1117,7 @@
       </transformation>
       <animations>
         <animationref id ="platformUp"/>
-        <animationref id ="wait30"/>
+        <animationref id ="wait50"/>
         <animationref id ="platformDown"/>
       </animations>
       <materials>

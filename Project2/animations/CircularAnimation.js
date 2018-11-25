@@ -34,13 +34,10 @@ class CircularAnimation extends Animation
 	/**
 	 * Updates the circular animation matrix, depending on
 	 * the current percentage of animation completed.
-	 *
 	 * While the percentage doesn't reach 100, it will update the current span and
 	 * percentage of animation, and update the animation matrix accordingly.
-	 *
 	 * When the percentage reaches 100, it will update
 	 * the matrix representing the completed animation.
-	 *
 	 * @param  {number} delta time in milliseconds since last update
 	 */
 	update(delta){
