@@ -104,15 +104,15 @@
   <animations>
     <linear id="up" span="10">
       <controlpoint xx="0" yy="0" zz="0"/>
-      <controlpoint xx="0" yy="37.5" zz="0"/>
+      <controlpoint xx="0" yy="22.5" zz="0"/>
     </linear>
 
     <linear id="down" span="10">
-      <controlpoint xx="0" yy="37.5" zz="0"/>
+      <controlpoint xx="0" yy="22.5" zz="0"/>
       <controlpoint xx="0" yy="0" zz="0"/>
     </linear>
 
-    <circular id="orbit" span="20" center="-10 37.5 -10" radius="14,1421356237" startang="45" rotang="360"/>
+    <circular id="orbit" span="22.5" center="-10 22.5 -10" radius="14,1421356237" startang="45" rotang="360"/>
   </animations>
 
   <!--Primitives-->
@@ -518,6 +518,7 @@
     <component id="rocket">
       <transformation>
         <translate x="10" y="0" z="10"/>
+        <scale x="1.5" y="1.5" z="1.5"/>
       </transformation>
       <materials>
         <material id="default" />
@@ -535,7 +536,6 @@
 
     <component id="nasabuilding">
       <transformation>
-        <!-- <rotate axis="y" angle="180"/> -->
         <translate x="25" y="0" z="4.5"/>
         <scale x="5.55" y="5" z="3"/>
       </transformation>
