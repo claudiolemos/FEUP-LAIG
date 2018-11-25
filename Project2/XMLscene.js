@@ -18,6 +18,7 @@ class XMLscene extends CGFscene {
     this.showAxis = false;
     this.previous = -1;
     this.delta;
+    this.paused = false;
   }
 
   /**
@@ -109,6 +110,9 @@ class XMLscene extends CGFscene {
     // Adds views group.
     this.interface.addViews(this.graph.views);
 
+    // Adds animations group.
+    this.interface.addAnimations();
+
     this.sceneInited = true;
     this.setUpdatePeriod(10);
   }
@@ -166,7 +170,34 @@ class XMLscene extends CGFscene {
       }
 
     this.popMatrix();
-  }
+  };
+
+  /**
+  * Sets paused to false, allowing animations to play
+  */
+  playAnimation(){
+    this.paused = false;
+  };
+
+  /**
+  * Sets paused to true, pausing the animations
+  */
+  pauseAnimation(){
+    this.paused = true;
+  };
+
+  /**
+   * Resets all animations
+   */
+  restartAnimation(){
+    for(var key1 in this.graph.components){
+      this.graph.components[key1].currentAnimation = 0;
+      for(var key2 in this.graph.components[key1].animations)
+        this.graph.components[key1].animations[key2].reset();
+    }
+
+    this.paused = false;
+  };
 
   /**
   * Updates delta (time since last update) and previous (previous currTime)

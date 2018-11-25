@@ -1688,7 +1688,7 @@ class MySceneGraph {
                 if(this.transformations[transformationID] != null)
                   this.components[id].transformation = this.transformations[transformationID];
                 else
-                  return "id '" + transformationID + "' is not a valid transformation reference on tag <transformation> on the <component> node with index " + i + " from the <components> block";
+                  return "id '" + transformationID + "' is not a valid component reference on tag <transformation> on the <component> node with index " + i + " from the <components> block";
 
                 transformationRef = true;
               }
@@ -1784,7 +1784,7 @@ class MySceneGraph {
                 if(this.materials[materialID] != null)
                   this.components[id].materials[materialID] = this.materials[materialID];
                 else
-                  return "id '" + materialID + "' is not a valid transformation reference on tag <material> with index " + j + " on tag <materials> on the <component> node with index " + i + " from the <components> block";
+                  return "id '" + materialID + "' is not a valid material reference on tag <material> with index " + j + " on tag <materials> on the <component> node with index " + i + " from the <components> block";
             }
             else
             this.onXMLMinorError("tag <" + materialsNodeNames[j] + "> is not valid on tag <material> with index " + j + " on tag <materials> on the <component> node with index " + i + " from the <components> block");
@@ -1848,7 +1848,7 @@ class MySceneGraph {
             if(this.textures[textureID] != null)
               this.components[id].texture = this.textures[textureID];
             else
-              return "id '" + textureID + "' is not a valid transformation reference on tag <texture> on the <component> node with index " + i + " from the <components> block";
+              return "id '" + textureID + "' is not a valid texture reference on tag <texture> on the <component> node with index " + i + " from the <components> block";
 
           // Sets length_s, length_t
           this.components[id].length_s = length_s;
@@ -1969,7 +1969,7 @@ class MySceneGraph {
 
       // Applies the node animation
       if(node.animations.length > 0){
-        if(!node.animations[node.currentAnimation].isFinished())
+        if(!node.animations[node.currentAnimation].isFinished() && !this.scene.paused)
           node.animations[node.currentAnimation].update(this.scene.delta);
 
         node.animations[node.currentAnimation].apply(this.scene);

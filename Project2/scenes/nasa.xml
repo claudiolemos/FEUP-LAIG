@@ -4,8 +4,13 @@
   <!--Views-->
   <views default="liftoff" >
     <perspective id="liftoff" near="0.1" far="500" angle="23">
-      <from x="60" y="15" z="60" />
-      <to x="10" y="2" z="10" />
+      <from x="50" y="35" z="50" />
+      <to x="10" y="10" z="10" />
+    </perspective>
+
+    <perspective id="landing" near="0.1" far="500" angle="23">
+      <from x="-30" y="30" z="-30" />
+      <to x="10" y="5" z="10" />
     </perspective>
 
     <perspective id="moon" near="0.1" far="500" angle="23">
@@ -13,20 +18,25 @@
       <to x="10" y="40" z="0" />
     </perspective>
 
+    <perspective id="nasa" near="0.1" far="500" angle="23">
+      <from  x="25" y="30" z="60" />
+      <to x="35" y="15" z="20" />
+    </perspective>
+
     <perspective id="mountain" near="0.1" far="500" angle="23">
-      <from x="-50" y="30" z="0" />
+      <from x="-55" y="15" z="35" />
       <to x="0" y="5" z="-50" />
     </perspective>
 
-    <ortho id="moon2"  near="0.1" far="500" left="-50" right="50" bottom="0" top="55">
+    <ortho id="ortho"  near="0.1" far="500" left="-50" right="50" bottom="0" top="55">
       <from x="0" y="0" z="50" />
       <to x="0" y="0" z="0" />
     </ortho>
 
-    <ortho id="top"  near="0.1" far="500" left="-50" right="50" bottom="-50" top="50">
-      <from x="0" y="100" z="0.1" />
-      <to x="0" y="0" z="0" />
-    </ortho>
+    <perspective id="space" near="0.1" far="500" angle="23">
+      <from x="75" y="125" z="75" />
+      <to x="0" y="65" z="0" />
+    </perspective>
 
   </views>
 
@@ -84,6 +94,8 @@
     <texture id="nasabuilding2" file="./scenes/images/nasabuilding2.jpg" />
     <texture id="nasabuilding3" file="./scenes/images/nasabuilding3.jpg" />
     <texture id="nasabuilding4" file="./scenes/images/nasabuilding4.jpg" />
+    <texture id="earth" file="./scenes/images/earth.jpg" />
+    <texture id="sun" file="./scenes/images/sun.jpg" />
   </textures>
 
   <!--Materials-->
@@ -123,13 +135,14 @@
 
   <!--Animations-->
   <animations>
+
     <linear id="rocketUp" span="10">
       <controlpoint xx="0" yy="0" zz="0"/>
-      <controlpoint xx="0" yy="19" zz="0"/>
+      <controlpoint xx="0" yy="20.5" zz="0"/>
     </linear>
 
     <linear id="rocketDown" span="10">
-      <controlpoint xx="0" yy="19" zz="0"/>
+      <controlpoint xx="0" yy="20.5" zz="0"/>
       <controlpoint xx="0" yy="0" zz="0"/>
     </linear>
 
@@ -144,7 +157,19 @@
     </linear>
 
 
-    <circular id="orbit" span="22.5" center="-6 19 -6" radius="8.4852813742" startang="45" rotang="360"/>
+    <circular id="orbit" span="30" center="-6 20.5 -6" radius="8.4852813742" startang="45" rotang="360"/>
+
+    <circular id="moonorbit" span="120" center="0 0 0" radius="2.5" startang="0" rotang="3600"/>
+
+    <circular id="earthorbit" span="120" center="0 0 0" radius="7" startang="0" rotang="360"/>
+
+    <circular id="earthrotate" span="120" center="0 0 0" radius="0" startang="0" rotang="7200"/>
+
+    <circular id="sunrotate" span="120" center="0 0 0" radius="0" startang="0" rotang="360"/>
+
+    <!-- Waiting animations. They don't move.  -->
+    <circular id="wait5" span="5" center="0 0 0" radius="0" startang="0" rotang="0"/>
+    <circular id="wait30" span="50" center="0 4.5 0" radius="0" startang="180" rotang="0"/>
   </animations>
 
   <!--Primitives-->
@@ -204,8 +229,20 @@
       <water idtexture="water" idwavemap="wavemap" parts="200" heightscale="1.5" texscale="1"/>
     </primitive>
 
-    <primitive id="moon">
+    <primitive id="moon1">
       <sphere radius="6" slices="30" stacks="30" />
+    </primitive>
+
+    <primitive id="moon2">
+      <sphere radius="0.5" slices="30" stacks="30" />
+    </primitive>
+
+    <primitive id="earth">
+      <sphere radius="1" slices="30" stacks="30" />
+    </primitive>
+
+    <primitive id="sun">
+      <sphere radius="2" slices="30" stacks="30" />
     </primitive>
 
     <primitive id="support">
@@ -239,11 +276,12 @@
       </animations>
       <texture id="none" length_s="1" length_t="1" />
       <children>
-        <componentref id="moon" />
+        <componentref id="moon1" />
         <componentref id="stars" />
         <componentref id="rivers" />
         <componentref id="terrains" />
         <componentref id="launchpad" />
+        <componentref id="space" />
       </children>
     </component>
 
@@ -333,6 +371,41 @@
 
     <component id="stars">
       <transformation>
+      </transformation>
+      <materials>
+        <material id="stars" />
+      </materials>
+      <animations>
+      </animations>
+      <texture id="stars" length_s="1" length_t="1" />
+      <children>
+        <componentref id="starwalls1" />
+        <componentref id="starwalls2" />
+      </children>
+    </component>
+
+    <component id="starwalls1">
+      <transformation>
+      </transformation>
+      <materials>
+        <material id="stars" />
+      </materials>
+      <animations>
+      </animations>
+      <texture id="stars" length_s="1" length_t="1" />
+      <children>
+        <componentref id="stars1" />
+        <componentref id="stars2" />
+        <componentref id="stars3" />
+        <componentref id="stars4" />
+        <componentref id="stars5" />
+      </children>
+    </component>
+
+    <component id="starwalls2">
+      <transformation>
+      <translate x="0" y="100" z="0"/>
+      <rotate axis="x" angle="180"/>
       </transformation>
       <materials>
         <material id="stars" />
@@ -596,7 +669,7 @@
       </children>
     </component>
 
-    <component id="moon">
+    <component id="moon1">
       <transformation>
         <translate x="0" y="40" z="0"/>
         <rotate axis="y" angle="45"/>
@@ -608,7 +681,7 @@
       </animations>
       <texture id="moon" length_s="1" length_t="1" />
       <children>
-        <primitiveref id="moon" />
+        <primitiveref id="moon1" />
       </children>
     </component>
 
@@ -621,6 +694,7 @@
         <material id="default" />
       </materials>
       <animations>
+        <animationref id="wait5" />
         <animationref id="rocketUp" />
         <animationref id="orbit" />
         <animationref id="rocketDown" />
@@ -927,7 +1001,7 @@
 
   <component id="support">
       <transformation>
-        <translate x="11.5" y="0.5" z="13"/>
+        <translate x="10.75" y="0.1" z="12"/>
         <rotate axis="y" angle="-90"/>
       </transformation>
       <materials>
@@ -1043,6 +1117,7 @@
       </transformation>
       <animations>
         <animationref id ="platformUp"/>
+        <animationref id ="wait30"/>
         <animationref id ="platformDown"/>
       </animations>
       <materials>
@@ -1109,6 +1184,84 @@
       <texture id="inherit" length_s="1" length_t="1" />
       <children>
         <primitiveref id="support" />
+      </children>
+    </component>
+
+    <component id="space">
+      <transformation>
+        <translate x="0" y="75" z="0"/>
+        <scale x="5" y="5" z="5"/>
+      </transformation>
+      <animations>
+      </animations>
+      <materials>
+        <material id="shiny" />
+      </materials>
+      <texture id="none" length_s="1" length_t="1" />
+      <children>
+        <componentref id="earthandmoon" />
+        <componentref id="sun" />
+      </children>
+    </component>
+
+    <component id="sun">
+      <transformation>
+      </transformation>
+      <animations>
+          <animationref id="sunrotate" />
+      </animations>
+      <materials>
+        <material id="inherit" />
+      </materials>
+      <texture id="sun" length_s="1" length_t="1" />
+      <children>
+        <primitiveref id="sun" />
+      </children>
+    </component>
+
+    <component id="earthandmoon">
+      <transformation>
+      </transformation>
+      <animations>
+          <animationref id="earthorbit" />
+      </animations>
+      <materials>
+        <material id="inherit" />
+      </materials>
+      <texture id="none" length_s="1" length_t="1" />
+      <children>
+        <componentref id="earth" />
+        <componentref id="moon2" />
+      </children>
+    </component>
+
+    <component id="earth">
+      <transformation>
+      </transformation>
+      <animations>
+          <animationref id="earthrotate" />
+      </animations>
+      <materials>
+        <material id="inherit" />
+      </materials>
+      <texture id="earth" length_s="1" length_t="1" />
+      <children>
+        <primitiveref id="earth" />
+      </children>
+    </component>
+
+    <component id="moon2">
+      <transformation>
+      </transformation>
+      <animations>
+          <animationref id="moonorbit" />
+      </animations>
+      <materials>
+        <material id="inherit" />
+      </materials>
+      <texture id="moon" length_s="1" length_t="1" />
+      <children>
+        <primitiveref id="moon2" />
       </children>
     </component>
 

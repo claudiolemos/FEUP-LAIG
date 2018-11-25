@@ -57,6 +57,18 @@ class MyInterface extends CGFinterface {
     }
 
     /**
+     * Adds a list of animation options
+     */
+    addAnimations(){
+      var group = this.gui.addFolder("Animations");
+      group.open();
+
+      group.add(this.scene, "playAnimation").name("Play");
+      group.add(this.scene, "pauseAnimation").name("Pause");
+      group.add(this.scene, "restartAnimation").name("Restart");
+    }
+
+    /**
     * Starts the keyboard event listener
     */
     initKeys() {

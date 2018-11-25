@@ -121,4 +121,12 @@ class LinearAnimation extends Animation
 				return Math.atan2(1,0) - Math.atan2(this.vectors[i][2],this.vectors[i][0]);
 	};
 
+	/**
+	* Resets the linear animation.
+	*/
+	reset(){
+		this.finished = false;
+		this.time = 0;
+		this.percentage = 0;
+	};
 };

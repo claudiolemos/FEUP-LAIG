@@ -71,4 +71,14 @@ class CircularAnimation extends Animation
 		this.matrix = matrix;
 	};
 
+	/**
+	* Resets the circular animation.
+	*/
+	reset(){
+		this.finished = false;
+		this.time = 0;
+		this.percentage = 0;
+		this.angle = this.startang;
+	};
+
 };
