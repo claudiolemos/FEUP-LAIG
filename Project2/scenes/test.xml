@@ -104,10 +104,12 @@
   <!--Animations-->
   <animations>
 
-  <linear id="test1" span="5.9">
+    <linear id="up" span="10">
       <controlpoint xx="0" yy="0" zz="0"/>
-      <controlpoint xx="0.5" yy="0.5" zz="0"/>
+      <controlpoint xx="0" yy="0" zz="2"/>
     </linear>
+
+    <circular id="rotate" span="20" center="0 0 0" radius="2" startang="0" rotang="360"/>
 
     <!-- <circular id="test3" span="5.9" center="0.5 0.5 0.5" radius="0.5" startang="0" rotang="90.999"/> -->
 
@@ -162,11 +164,42 @@
   <primitives>
 
     <primitive id="patch">
-      <patch npointsU="2" npointsV="2" npartsU="10" npartsV="10">
-        <controlpoint xx="-0.5" yy="0" zz="0.5"/>
-        <controlpoint xx="-0.5" yy="0" zz="-0.5"/>
-        <controlpoint xx="0.5" yy="0" zz="0.5"/>
-        <controlpoint xx="0.5" yy="0" zz="0.5"/>
+      <patch npointsU="9" npointsV="3" npartsU="30" npartsV="30">
+        <controlpoint xx="0" yy="0.75" zz="0"/>
+        <controlpoint xx="0" yy="0.5" zz="1"/>
+        <controlpoint xx="0" yy="0" zz="0"/>
+
+        <controlpoint xx="0" yy="0.75" zz="0"/>
+        <controlpoint xx="-1.25" yy="0.5" zz="1"/>
+        <controlpoint xx="0" yy="0" zz="0"/>
+
+        <controlpoint xx="0" yy="0.75" zz="0"/>
+        <controlpoint xx="-1.25" yy="0.5" zz="0"/>
+        <controlpoint xx="0" yy="0" zz="0"/>
+
+        <controlpoint xx="0" yy="0.75" zz="0"/>
+        <controlpoint xx="-1.25" yy="0.5" zz="-1"/>
+        <controlpoint xx="0" yy="0" zz="0"/>
+
+        <controlpoint xx="0" yy="0.75" zz="0"/>
+        <controlpoint xx="0" yy="0.5" zz="-1"/>
+        <controlpoint xx="0" yy="0" zz="0"/>
+
+        <controlpoint xx="0" yy="0.75" zz="0"/>
+        <controlpoint xx="1.25" yy="0.5" zz="-1"/>
+        <controlpoint xx="0" yy="0" zz="0"/>
+
+        <controlpoint xx="0" yy="0.75" zz="0"/>
+        <controlpoint xx="1.25" yy="0.5" zz="0"/>
+        <controlpoint xx="0" yy="0" zz="0"/>
+
+        <controlpoint xx="0" yy="0.75" zz="0"/>
+        <controlpoint xx="1.25" yy="0.5" zz="1"/>
+        <controlpoint xx="0" yy="0" zz="0"/>
+
+        <controlpoint xx="0" yy="0.75" zz="0"/>
+        <controlpoint xx="0" yy="0.5" zz="1"/>
+        <controlpoint xx="0" yy="0" zz="0"/> -->
       </patch>
     </primitive>
 
@@ -187,7 +220,7 @@
     </primitive>
 
     <primitive id="water">
-      <water idtexture="water" idwavemap="wavemap" parts="200" heightscale="-0.075" texscale="1"/>
+      <water idtexture="water" idwavemap="wavemap" parts="200" heightscale="2" texscale="1"/>
     </primitive>
 
     <primitive id="moon">
@@ -207,91 +240,16 @@
 
     <component id="root">
       <transformation>
+      <scale x="50" y="1" z="50"/>
       </transformation>
       <animations>
-        <animationref id="test1" />
-        <!--
-        <animationref id="test2" />
-        <animationref id="test3" />
-        <animationref id="test4" /> -->
-        <!-- <animationref id="test4" /> -->
-        <!-- <animationref id="up" />
-        <animationref id="orbit" />
-        <animationref id="down" /> -->
       </animations>
       <materials>
         <material id="default" />
       </materials>
-      <texture id="simpsons" length_s="1" length_t="1" />
-      <children>
-        <componentref id="cube" />
-        <!-- <primitiveref id="vehicle" /> -->
-        <!-- <componentref id="terrain" /> -->
-        <!-- <componentref id="river" />
-        <componentref id="terrain" /> -->
-        <!-- <primitiveref id="rectangle" /> -->
-      </children>
-    </component>
-
-    <component id="river1">
-      <transformation>
-        <!-- <translate x="2" y="0.5" z="1"/> -->
-        <!-- <scale x="6" y="5" z="8"/> -->
-      </transformation>
-      <materials>
-        <material id="default" />
-      </materials>
-      <texture id="none" length_s="1" length_t="1" />
+      <texture id="moon" length_s="1" length_t="1" />
       <children>
         <primitiveref id="water" />
-      </children>
-    </component>
-
-    <component id="terrain">
-      <transformation>
-        <scale x="10" y="10" z="20"/>
-      </transformation>
-      <materials>
-        <material id="default" />
-      </materials>
-      <animations>
-      </animations>
-      <texture id="none" length_s="1" length_t="1" />
-      <children>
-        <primitiveref id="terrain" />
-      </children>
-    </component>
-
-    <component id="moon">
-      <transformation>
-        <translate x="10" y="10" z="0"/>
-      </transformation>
-      <materials>
-        <material id="default" />
-      </materials>
-      <animations>
-      </animations>
-      <texture id="simpsons" length_s="1" length_t="1" />
-      <children>
-        <primitiveref id="moon" />
-      </children>
-    </component>
-
-    <component id="rocket">
-      <transformation>
-      </transformation>
-      <materials>
-        <material id="default" />
-      </materials>
-      <animations>
-        <!-- <animationref id="up" />
-        <animationref id="orbit" />
-        <animationref id="down" /> -->
-      </animations>
-      <texture id="simpsons" length_s="1" length_t="1" />
-      <children>
-        <primitiveref id="vehicle" />
-          <!-- <primitiveref id="plane" /> -->
       </children>
     </component>
 
@@ -303,6 +261,8 @@
       <material id="inherit" />
     </materials>
     <animations>
+      <animationref id="up" />
+      <animationref id="rotate" />
       <!-- <animationref id="test1" /> -->
       <!-- <animationref id="animation3" />
       <animationref id="animation1" />

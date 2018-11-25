@@ -10,6 +10,5 @@ uniform sampler2D uSampler2; // terrain's height map
 // Sets the color with the terrain's texture
 
 void main() {
-	vec4 color = texture2D(uSampler, vTextureCoord);
-	gl_FragColor = color;
+	gl_FragColor = texture2D(uSampler, vTextureCoord);
 }

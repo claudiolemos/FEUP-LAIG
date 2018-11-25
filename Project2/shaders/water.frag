@@ -13,6 +13,5 @@ uniform float delta;         // xz offset for the water's texture movement
 // the delta (water movement) and the texScale (texture repetition)
 
 void main() {
-	vec4 color = texture2D(uSampler, vTextureCoord*texScale+delta);
-	gl_FragColor = color;
+	gl_FragColor = texture2D(uSampler, vTextureCoord*texScale+delta);
 }

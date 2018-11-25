@@ -31,9 +31,7 @@ class MyWater extends MyPlane
 	 */
 	setShader() {
 		this.shader = new CGFshader(this.scene.gl, "./shaders/water.vert", "./shaders/water.frag");
-		this.shader.setUniformsValues({uSampler2: 1});
-		this.shader.setUniformsValues({heightScale: this.heightscale});
-		this.shader.setUniformsValues({texScale: this.texscale});
+		this.shader.setUniformsValues({uSampler2: 1, heightScale: this.heightscale, texScale: this.texscale});
 
 		this.appearance = new CGFappearance(this.scene);
 		this.appearance.setTexture(this.texture);
@@ -48,7 +46,7 @@ class MyWater extends MyPlane
 	 * After displaying the water, it sets back the scene's default shader
 	 */
 	display() {
-		this.offset = (this.offset + 0.0025) % 1;
+		this.offset = (this.offset + 0.001) % 1;
 		this.delta = this.offset - 0.5;
 		this.shader.setUniformsValues({delta: this.delta});
 		this.scene.setActiveShader(this.shader);

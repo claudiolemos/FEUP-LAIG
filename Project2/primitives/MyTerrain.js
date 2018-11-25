@@ -27,8 +27,7 @@ class MyTerrain extends MyPlane
 	 */
 	setShader() {
 		this.shader = new CGFshader(this.scene.gl, "./shaders/terrain.vert", "./shaders/terrain.frag");
-		this.shader.setUniformsValues({uSampler2: 1});
-		this.shader.setUniformsValues({heightScale: this.heightscale});
+		this.shader.setUniformsValues({uSampler2: 1, heightScale: this.heightscale});
 
 		this.appearance = new CGFappearance(this.scene);
 		this.appearance.setTexture(this.texture);
