@@ -43,7 +43,7 @@ class MyWater extends MyPlane
 	 * After displaying the water, it sets back the scene's default shader
 	 */
 	display() {
-		this.delta = (this.delta + 0.001) % 1;
+		this.delta = (this.delta + 0.0005) % 1;
 		this.shader.setUniformsValues({delta: this.delta});
 		this.scene.setActiveShader(this.shader);
 		this.appearance.apply();
