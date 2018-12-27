@@ -30,9 +30,12 @@ serialInclude(['../lib/CGF.js',
 './primitives/MyWater.js',
 './primitives/Board/MyBoardCell.js',
 './primitives/Board/MyBoard.js',
+'./primitives/Board/MyRock.js',
 './animations/Animation.js',
 './animations/LinearAnimation.js',
 './animations/CircularAnimation.js',
+'CGFOBJModel.js',
+'CGFResourceReader.js',
 
 main=function()
 {
