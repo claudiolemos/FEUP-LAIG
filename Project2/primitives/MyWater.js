@@ -38,14 +38,12 @@ class MyWater extends MyPlane
 
 	/**
 	 * Displays the water.
-	 *
 	 * Before doing that, calculates the delta for the water movement, sets the water's
 	 * shader as active and binds the water's texture and waves map.
-	 *
 	 * After displaying the water, it sets back the scene's default shader
 	 */
 	display() {
-		this.delta = (this.delta + 0.001) % 1;
+		this.delta = (this.delta + 0.0005) % 1;
 		this.shader.setUniformsValues({delta: this.delta});
 		this.scene.setActiveShader(this.shader);
 		this.appearance.apply();

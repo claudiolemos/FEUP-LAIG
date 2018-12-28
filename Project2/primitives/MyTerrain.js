@@ -31,10 +31,8 @@ class MyTerrain extends MyPlane
 
 	/**
 	 * Displays the terrain.
-	 *
 	 * Before doing that, sets the terrain's shader as active and
 	 * binds the terrain's texture and height map.
-	 *
 	 * After displaying the terrain, it sets back to the scene's default shader
 	 */
 	display() {
