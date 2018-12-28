@@ -28,12 +28,13 @@ serialInclude(['../lib/CGF.js',
 './primitives/MyCylinder2.js',
 './primitives/MyTerrain.js',
 './primitives/MyWater.js',
-'./game/Board/MyBoardCell.js',
-'./game/Board/MyBoard.js',
-'./game/Board/MyRock.js',
 './animations/Animation.js',
 './animations/LinearAnimation.js',
 './animations/CircularAnimation.js',
+'./game/Hawalis.js',
+'./game/Board.js',
+'./game/Pit.js',
+'./game/Seed.js',
 'CGFOBJModel.js',
 'CGFResourceReader.js',
 
@@ -51,7 +52,7 @@ main=function()
 
   myInterface.setActiveCamera(myScene.camera);
 
-	var filename=getUrlVars()['file'] || "nasa.xml";
+	var filename=getUrlVars()['file'] || "hawalis.xml";
 
 	var myGraph = new MySceneGraph(filename, myScene);
 

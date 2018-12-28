@@ -1595,18 +1595,11 @@ class MySceneGraph {
           // Sets terrain
           this.primitives[id] = new MyWater(this.scene, idtexture, idwavemap, parts, heightscale, texscale);
         }
-
-        else if(children[i].children[tagIndex].nodeName == "pit"){
-          this.primitives[id] = new MyBoardCell(this.scene);
-        }
-        else if(children[i].children[tagIndex].nodeName == "board"){
-          this.primitives[id] = new MyBoard(this.scene);
-        }
-        else if(children[i].children[tagIndex].nodeName == "rock"){
-          this.primitives[id] = new MyRock(this.scene);
+        else if(children[i].children[tagIndex].nodeName == "hawalis"){
+          this.primitives[id] = new Hawalis(this.scene);
         }
         else
-        this.onXMLMinorError("tag <" + children[i].children[tagIndex].nodeName + "> is not valid on the <primitive> node with index " + i + " from the <primitives> block");
+          this.onXMLMinorError("tag <" + children[i].children[tagIndex].nodeName + "> is not valid on the <primitive> node with index " + i + " from the <primitives> block");
       }
       else
       this.onXMLMinorError("<" + children[i].nodeName + "> node with index " + i + " is not valid on the <primitives> block");
