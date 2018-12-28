@@ -86,18 +86,6 @@
       <plane npartsU="1" npartsV="1" />
     </primitive>
 
-    <primitive id="vehicle">
-      <vehicle/>
-    </primitive>
-
-    <!-- <primitive id="terrain">
-      <terrain idtexture="terrain" idheightmap="terrainmap" parts="250" heightscale="0.25"/>
-    </primitive> -->
-
-    <!-- <primitive id="water">
-      <water idtexture="water" idwavemap="wavemap" parts="200" heightscale="1.25" texscale="2"/>
-    </primitive> -->
-
     <primitive id="sphere">
       <sphere radius="2" slices="30" stacks="30" />
     </primitive>
@@ -131,7 +119,7 @@
       </materials>
       <animations>
       </animations>
-      <texture id="none" length_s="1" length_t="1" />
+      <texture id="texture" length_s="1" length_t="1" />
       <children>
         <primitiveref id="plane" />
       </children>

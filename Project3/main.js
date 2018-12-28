@@ -31,6 +31,8 @@ serialInclude(['../lib/CGF.js',
 './animations/Animation.js',
 './animations/LinearAnimation.js',
 './animations/CircularAnimation.js',
+'./game/Hawalis.js',
+'./game/Server.js',
 
 main=function()
 {

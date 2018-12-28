@@ -8,7 +8,8 @@
 		<h1>Sicstus HTTP Test</h1>
 
 		<div>
-			<input id="query_field" type="Text" value="handshake"/>
+			<!-- <input id="query_field" type="textarea" value="handshake"/> -->
+			<textarea cols="100" rows="1" id="query_field"></textarea>
 			<br>
 			<button id="send_button" type="button" onClick="makeRequest();"> Send </button>
 		</div>
@@ -18,7 +19,7 @@
 		<script>
 			function getPrologRequest(requestString, onSuccess, onError, port)
 			{
-				var requestPort = port || 8080
+				var requestPort = port || 8081
 				var request = new XMLHttpRequest();
 				request.open('GET', 'http://localhost:'+requestPort+'/'+requestString, true);
 

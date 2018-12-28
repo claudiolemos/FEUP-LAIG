@@ -87,11 +87,8 @@ check_end_of_header(_).
 % print_header_line(LineCodes) :- catch((atom_codes(Line,LineCodes),write(Line),nl),_,fail), !.
 print_header_line(_).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%                                       Commands                                                  %%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Hawalis
 
-% Require your Prolog Files here
 :- consult('hawalis.pl').
 
 parse_input(quit, goodbye).
@@ -103,22 +100,22 @@ parse_input(checkGameStatus(Board,CurrentPlayer,Player1Seeds,Player2Seeds), Stat
 	checkGameStatus([Board,CurrentPlayer,Player1Seeds,Player2Seeds],Status).
 
 parse_input(isValidMove(Board,CurrentPlayer,Player1Seeds,Player2Seeds,Row,Column), IsValid):-
-	convertIndex(Row,Column,RowIndex,ColumnIndex),
-	getCurrentPlayer([Board,CurrentPlayer,Player1Seeds,Player2Seeds], PlayerIndex),
+	getPlayerIndex(CurrentPlayer, PlayerIndex),
 	validMoves([Board,CurrentPlayer,Player1Seeds,Player2Seeds], PlayerIndex, ValidMoves),
-	write(ValidMoves),
-	isValidMove(RowIndex,ColumnIndex,ValidMoves,IsValid).
+	isValidMove(Row,Column,ValidMoves,IsValid).
 
 parse_input(getBotMove(Board,CurrentPlayer,Player1Seeds,Player2Seeds,Difficulty), [RowIndex, ColumnIndex]):-
-	getCurrentPlayer([Board,CurrentPlayer,Player1Seeds,Player2Seeds], PlayerIndex),
+	getPlayerIndex(CurrentPlayer, PlayerIndex),
 	choose_move([Row, Column], PlayerIndex, Difficulty, [Board,CurrentPlayer,Player1Seeds,Player2Seeds]),
 	convertIndex(Row, Column, CurrentPlayer, RowIndex, ColumnIndex).
 
-% parse_input(makeMove(), Board):-
+parse_input(move(Board,CurrentPlayer,Player1Seeds,Player2Seeds,Row,Column), NewBoard):-
+	convertIndex(Row, Column, RowIndex, ColumnIndex),
+	move([RowIndex,ColumnIndex], [Board,CurrentPlayer,Player1Seeds,Player2Seeds], [NewBoard,_,_,_]).
 
-
-
-% initialize(Board)
-% checkGameStatus([[[0,2,2,2,2,2,2],[2,2,2,2,2,2,2]],[[2,2,2,2,2,2,2],[2,2,2,2,2,2,2]]],player1,0,0)
-% isValidMove([[[0,2,2,2,2,2,2],[2,2,2,2,2,2,2]],[[2,2,2,2,2,2,2],[2,2,2,2,2,2,2]]],player1,0,0,1,1)
-% getBotMove([[[0,2,2,2,2,2,2],[2,2,2,2,2,2,2]],[[2,2,2,2,2,2,2],[2,2,2,2,2,2,2]]],player1,0,0,1)
+% Tests
+% parse_input(init, Board).
+% parse_input(checkGameStatus([[[0,2,2,2,2,2,2],[2,2,2,2,2,2,2]],[[2,2,2,2,2,2,2],[2,2,2,2,2,2,2]]],player1,0,0), Status).
+% parse_input(isValidMove([[[0,2,2,2,2,2,2],[2,2,2,2,2,2,2]],[[2,2,2,2,2,2,2],[2,2,2,2,2,2,2]]],player1,0,0,1,1), IsValid).
+% parse_input(getBotMove([[[0,2,2,2,2,2,2],[2,2,2,2,2,2,2]],[[2,2,2,2,2,2,2],[2,2,2,2,2,2,2]]],player1,0,0,1), [RowIndex, ColumnIndex]).
+% parse_input(move([[[0,2,2,2,2,2,2],[0,2,2,2,2,2,2]],[[2,2,2,2,2,2,2],[2,2,2,2,2,2,2]]],player1,0,0,0,1), NewBoard).

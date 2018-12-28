@@ -28,7 +28,7 @@ valid_moves(Game, PlayerIndex, ValidMoves) :-
 % guarda em ValidMoves todas as jogadas possíveis para o jogador atual
 
 validMoves(Game, PlayerIndex, ValidMoves) :-
-  findall([X,Y], (checkValidPit(OldX, Y, PlayerIndex, Game), getRowIndex(X, OldX, PlayerIndex)), ValidMoves).
+  findall([X,Y], (checkValidPit(OldX, OldY, PlayerIndex, Game), getPlayerIndex(CurrentPlayer, PlayerIndex), convertIndex(OldX, OldY, CurrentPlayer, X, Y)), ValidMoves).
 
 /* predicado que verifica que é uma jogada possível
 quando o buraco tem mais do que 1 pedra */
