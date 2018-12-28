@@ -41,6 +41,7 @@ class XMLscene extends CGFscene {
     this.gl.depthFunc(this.gl.LEQUAL);
 
     this.axis = new CGFaxis(this);
+		this.setPickEnabled(true);
   }
 
   /**
