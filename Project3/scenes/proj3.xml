@@ -332,6 +332,10 @@
       <board/>
     </primitive>
 
+    <primitive id="rock">
+      <rock/>
+    </primitive>
+
     <!-- <primitive id="pit">
       <patch npointsU="5" npointsV="5" npartsU="30" npartsV="30">
 
@@ -385,8 +389,7 @@
       <children>
         <componentref id="livingroom" />
         <componentref id="boardgame" />
-        <!-- <componentref id="rowplayer2" /> -->
-        <!-- <componentref id="gameboard" /> -->
+        <!-- <primitiveref id="rock"/> -->
       </children>
     </component>
 
@@ -507,7 +510,7 @@
         <scale x="0.05" y="0.05" z="0.05"/>
       </transformation>
       <materials>
-        <material id="inherit" />
+        <material id="wood" />
       </materials>
       <texture id="wood" length_s="1" length_t="1" />
       <children>

@@ -19,6 +19,7 @@ class MyBoard extends CGFobject
 	init()
 	{
 		this.pit = new MyBoardCell(this.scene);
+		this.rock = new MyRock(this.scene);
 		this.division = new MyRectangle(this.scene, 0, 1, 0, 1);
 	};
 
@@ -49,6 +50,13 @@ class MyBoard extends CGFobject
 						this.scene.registerForPick((i*7)+j+1, this.pit);
 	    			this.pit.display();
 	    		this.scene.popMatrix();
+
+					this.scene.pushMatrix();
+						this.scene.scale(2,2,2);
+	    			this.scene.translate(i*2,j*2,0);
+	    			this.rock.display();
+	    		this.scene.popMatrix();
+
 				}
 
 				else if(i > 2) {
@@ -58,6 +66,12 @@ class MyBoard extends CGFobject
 						this.scene.rotate(-Math.PI/2,1,0,0);
 						this.scene.registerForPick((i*7)+j+1-7, this.pit);
 	    			this.pit.display();
+	    		this.scene.popMatrix();
+
+					this.scene.pushMatrix();
+						this.scene.scale(2,2,2);
+	    			this.scene.translate(i*2,j*2,0);
+	    			this.rock.display();
 	    		this.scene.popMatrix();
 				}
       }

@@ -1602,6 +1602,9 @@ class MySceneGraph {
         else if(children[i].children[tagIndex].nodeName == "board"){
           this.primitives[id] = new MyBoard(this.scene);
         }
+        else if(children[i].children[tagIndex].nodeName == "rock"){
+          this.primitives[id] = new MyRock(this.scene);
+        }
         else
         this.onXMLMinorError("tag <" + children[i].children[tagIndex].nodeName + "> is not valid on the <primitive> node with index " + i + " from the <primitives> block");
       }
