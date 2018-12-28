@@ -31,6 +31,12 @@ serialInclude(['../lib/CGF.js',
 './animations/Animation.js',
 './animations/LinearAnimation.js',
 './animations/CircularAnimation.js',
+'./game/Hawalis.js',
+'./game/Board.js',
+'./game/Pit.js',
+'./game/Seed.js',
+'CGFOBJModel.js',
+'CGFResourceReader.js',
 
 main=function()
 {
@@ -46,7 +52,7 @@ main=function()
 
   myInterface.setActiveCamera(myScene.camera);
 
-	var filename=getUrlVars()['file'] || "scene1.xml";
+	var filename=getUrlVars()['file'] || "hawalis.xml";
 
 	var myGraph = new MySceneGraph(filename, myScene);
 

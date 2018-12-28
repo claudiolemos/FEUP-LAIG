@@ -1,0 +1,92 @@
+<yas>
+  <scene root="root" axis_length="5" />
+
+  <!--Views-->
+  <views default="default" >
+    <perspective id="default" near="0.1" far="50" angle="23">
+      <from x="3.5" y="10" z="20" />
+      <to x="3.5" y="1" z="5" />
+    </perspective>
+  </views>
+
+  <!--Ambient-->
+
+  <ambient>
+    <ambient r="0.2" g="0.2" b="0.2" a="0.2" />
+    <background r="0.05" g="0.05" b="0.05" a="1" />
+  </ambient>
+
+  <!--Lights-->
+
+  <lights>
+    <omni id="living room 1" enabled="1">
+      <location x="3.5" y="3" z="2.5" w="1" />
+      <ambient r="0" g="0" b="0" a="1" />
+      <diffuse r="1" g="1" b="1" a="1" />
+      <specular r="0.5" g="0.5" b="0.5" a="1" />
+    </omni>
+  </lights>
+
+  <!--Textures-->
+
+  <textures>
+    <texture id="wood" file="./scenes/images/wood.jpg" />
+  </textures>
+
+  <!--Materials-->
+
+  <materials>
+    <material id="default" shininess = "1" >
+      <emission r="0" g="0" b="0" a="1" />
+      <ambient r="0" g="0" b="0" a="1" />
+      <diffuse r="1" g="1" b="1" a="1" />
+      <specular r="0.1" g="0.1" b="0.1" a="1" />
+    </material>
+  </materials>
+
+  <!--Transformations-->
+
+  <transformations>
+    <transformation id="transformation">
+      <translate x="1" y="0" z="3" />
+      <rotate axis="y" angle="10" />
+      <scale x="4" y="5" z="2" />
+    </transformation>
+  </transformations>
+
+  <!--Animations-->
+
+  <animations>
+  </animations>
+
+  <!--Primitives-->
+
+  <primitives>
+
+    <primitive id="hawalis">
+      <hawalis/>
+    </primitive>
+
+  </primitives>
+
+  <!--Components-->
+
+  <components>
+
+    <!--Root node-->
+
+    <component id="root">
+      <transformation>
+      </transformation>
+      <materials>
+        <material id="default" />
+      </materials>
+      <texture id="wood" length_s="1" length_t="1"/>
+      <children>
+        <primitiveref id="hawalis"/>
+      </children>
+    </component>
+
+
+  </components>
+</yas>
