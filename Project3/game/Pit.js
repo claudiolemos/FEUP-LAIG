@@ -3,7 +3,7 @@ class Pit extends CGFobject
 	constructor(scene)
 	{
 		super(scene);
-		this.pit = new CGFOBJModel(this.scene, './models/pit.obj');
+		this.pit = new OBJ(this.scene, './models/pit.obj');
 	};
 
 	display() {

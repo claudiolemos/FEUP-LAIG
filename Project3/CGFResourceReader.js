@@ -62,7 +62,7 @@ CGFresourceReader.prototype.getErrorMessage = function() {
 * @param {String} resource the url of the resource (xml file) to be read
 * @param {Object} callbackObj an object containing methods onResourceReady() and onResourceError(message)
 */
-CGFresourceReader.prototype.open = function(resource, callbackObj) 
+CGFresourceReader.prototype.open = function(resource, callbackObj)
 {
 	this.resource = resource;
 	if (! callbackObj.onResourceReady)
@@ -70,12 +70,12 @@ CGFresourceReader.prototype.open = function(resource, callbackObj)
 
 	if (! callbackObj.onResourceError)
 		console.error("CGFresourceReader.open: onResourceError handler not defined.");
-	
+
 	this.callbackObj = callbackObj;
 
 	if (window.XMLHttpRequest) {
 		this.xmlhttp=new XMLHttpRequest();                            // For all modern browsers
-	} 
+	}
 	else if (window.ActiveXObject) {
 		this.xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");   		// For (older) IE
 	}
@@ -84,7 +84,7 @@ CGFresourceReader.prototype.open = function(resource, callbackObj)
 
 		this.xmlhttp.onload = this.onStateChange;
 		this.xmlhttp.reader = this;
-		this.xmlhttp.open("GET", resource, true); //  (httpMethod,  URL,  asynchronous)			
+		this.xmlhttp.open("GET", resource, true); //  (httpMethod,  URL,  asynchronous)
 		this.xmlhttp.setRequestHeader("Content-Type", "text/xml");
 		this.xmlhttp.send(null);
 	}
@@ -103,22 +103,18 @@ CGFresourceReader.prototype.onStateChange = function() {
 		var reader = this.reader;
 		var response = this.reader.xmlhttp;
 		var text = response.responseText;
-		
+
 		reader.callbackObj.onResourceReady(text);
-		
+
 		if (reader.getErrorMessage() != null) {
 			reader.callbackObj.onResourceError(reader.getErrorMessage());
 			return;
 		}
-		
-	  } 
+
+	  }
 	  else {
 		var reader = this.reader;
 		reader.callbackObj.onResourceError(this.status + ": " + reader.resource + ", " + this.statusText);
-	  } 
-   }  
+	  }
+   }
 };
-
-	
-	
-	

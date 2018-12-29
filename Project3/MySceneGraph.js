@@ -1639,6 +1639,17 @@ class MySceneGraph {
           // Sets terrain
           this.primitives[id] = new MyWater(this.scene, idtexture, idwavemap, parts, heightscale, texscale);
         }
+        else if(children[i].children[tagIndex].nodeName == "obj"){
+          // Reads file
+          var file = this.reader.getString(children[i].children[tagIndex], 'file');
+
+          // Validates file
+          if(file == null)
+            return "unable to parse file component (null) on tag <obj> from the <primitive> node with index " + i + " from the <primitives> block";
+
+          // Sets obj
+          this.primitives[id] = new OBJ(this.scene, file);
+        }
         else if(children[i].children[tagIndex].nodeName == "hawalis"){
           this.primitives[id] = new Hawalis(this.scene);
         }
