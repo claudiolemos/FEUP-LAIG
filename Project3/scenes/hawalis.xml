@@ -73,10 +73,6 @@
       <hawalis/>
     </primitive>
 
-    <primitive id="navigator">
-      <obj file="./models/navigator.obj" />
-    </primitive>
-
   </primitives>
 
   <!--Components-->
@@ -96,7 +92,7 @@
       </animations>
       <texture id="wood" length_s="1" length_t="1"/>
       <children>
-        <primitiveref id="navigator"/>
+        <primitiveref id="hawalis"/>
       </children>
     </component>
 
