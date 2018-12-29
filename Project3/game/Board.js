@@ -9,11 +9,9 @@ class Board extends CGFobject
 	display() {
 		this.logPicking();
 
-		var offset = 0;
-
 		for(var i = 0; i < 7; i++){
 			for (var j = 0; j < 4; j++) {
-				offset = (j == 0 || j == 1)? 0 : 1;
+				var offset = (j == 0 || j == 1)? 0 : 1;
 
 				this.scene.pushMatrix();
 					this.scene.translate(i,0,j+offset);

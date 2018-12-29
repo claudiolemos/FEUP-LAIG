@@ -13,6 +13,7 @@ class Animation
 		this.finished = false;
 		this.time = 0;
 		this.percentage = 0;
+		this.matrix;
 	};
 
 	/**

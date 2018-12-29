@@ -10,8 +10,8 @@ class Hawalis extends CGFobject
     // this.difficulty;
 
     this.board = new Board(scene);
-    this.cells = Array(4).fill(null).map(()=>Array(7).fill([(new Seed(scene)),(new Seed(scene))]));
-
+    this.cells = Array(4).fill(null).map(()=>Array(7).fill([( new Seed(scene)), (new Seed(scene)) ,  (new Seed(scene)) ,  (new Seed(scene)) ,  (new Seed(scene)) ,  (new Seed(scene)) ]));
+		this.cells[0][0][4].animation = new BezierAnimation(20*1000,[[0,0,0],[0,0.2,0.25],[0,0.2,0.75],[0,0,1]])
 	};
 
   display() {
@@ -25,7 +25,11 @@ class Hawalis extends CGFobject
         for(var k = 0; k < this.cells[i][j].length; k++)
           if(!this.cells[i][j][k].animated){
             this.scene.pushMatrix();
-              (i == 0 || i == 1)? this.scene.translate(j+0.35,k*0.2+0.1,i+0.35) : this.scene.translate(j+0.65,k*0.2+0.1,i+1+0.65);
+              var offset = (i == 0 || i == 1)? 0 : 1;
+							var x = (k & 1)? 0.375 : 0.625;
+							var y = 0.1 + 0.2*~~(k/4);
+							var z = (k % 4 == 0 || k % 4 == 3)? 0.375 : 0.625;
+							this.scene.translate(j+x,y,i+z+offset)
               this.cells[i][j][k].display();
             this.scene.popMatrix();
           }

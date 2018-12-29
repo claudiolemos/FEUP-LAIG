@@ -1311,6 +1311,50 @@ class MySceneGraph {
         var centerVector = vec3.fromValues(centerX, centerY, centerZ);
         this.animations[id] = new CircularAnimation(span*1000, centerVector, radius, startang, rotang);
       }
+        if(children[i].nodeName == "bezier"){
+
+          // Reads id and span
+          var id = this.reader.getString(children[i], 'id');
+          var span = this.reader.getFloat(children[i], 'span');
+
+          // Validates id and span
+          if(id == null || span == null)
+            return "unable to parse id and span components (null) on the <bezier> node with index " + i + " from the <animations> block";
+          else if(isNaN(span))
+            return "unable to parse span component (NaN) on the <bezier> node with index " + i + " from the <animations> block";
+          else if(span <= 0)
+            return "unable to parse span component (out of range) on the <bezier> node with index " + i + " from the <animations> block";
+
+          var controlpoints = [];
+          var bezierChildren = children[i].children;
+
+          // Checks number of control points
+          if(bezierChildren.length != 4)
+            return "there should be four control points on the <bezier> node with index " + i + " from the <animations> block";
+
+          // Reads control points
+          for (var j = 0; j < bezierChildren.length; j++){
+            // Reads xx, yy, zz
+            var xx = this.reader.getFloat(bezierChildren[j], 'xx');
+            var yy = this.reader.getFloat(bezierChildren[j], 'yy');
+            var zz = this.reader.getFloat(bezierChildren[j], 'zz');
+
+            // Validates xx, yy, zz
+            if(isNaN(xx) || isNaN(yy) || isNaN(zz))
+              return "unable to parse xx, yy, zz components (NaN) on <controlpoint> with index " + j + " on the <bezier> node with index " + i + " from the <animations> block";
+            else if(xx == null || yy == null || zz == null)
+              return "unable to parse xx, yy, zz components (null) on <controlpoint> with index " + j + " on the <bezier> node with index " + i + " from the <animations> block";
+
+            controlpoints.push([xx,yy,zz]);
+          }
+
+          // Checks if id is unique
+          if(this.animations[id] != null)
+            return "id '" + id + "' on the <bezier> node with index " + i + " from the <animations> block is not unique";
+
+          // Sets bezier animation
+          this.animations[id] = new BezierAnimation(span*1000, controlpoints);
+        }
       else
         this.onXMLMinorError("<" + children[i].nodeName + "> node with index " + i + " is not valid on the <animations> block");
   }
