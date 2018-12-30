@@ -4,8 +4,6 @@ class Seed extends CGFobject
 		super(scene);
 		this.seed = new MySphere(this.scene,0.1,30,30);
 		this.coord = coord;
-		this.next = [];
-		this.animation;
 	};
 
 	display() {

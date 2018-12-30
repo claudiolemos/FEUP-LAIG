@@ -8,36 +8,20 @@ class Hawalis extends CGFobject
 		this.difficulty = 1;
 		this.mode = 1; // 1 - HvH / 2 - HvC / 3 - CvC
 		this.prologBoard = [[[2,2,2,2,2,2,2],[2,2,2,2,2,2,2]],[[2,2,2,2,2,2,2],[2,2,2,2,2,2,2]]];
-		console.log(this.prologBoard);
 		this.board = new Board(scene);
 		this.seeds = []; // seeds nos buracos
-		this.queue = []; // seeds em animação (de um buraco para o outro)
+		this.turnQueue = []; // seeds em animação de um buraco para o outro
+		this.scoreQueue = []; // seeds em animação de um buraco para o score board
 		this.score = [[],[]]; // seeds no score board
 		this.fillSeeds();
+
 	};
 
 	display() {
 		this.picking();
 		this.board.display();
-		this.displayQueuedSeeds();
 		this.displaySeeds();
-	};
-
-
-	picking() {
-		if (this.scene.pickMode == false) {
-			if (this.scene.pickResults != null && this.scene.pickResults.length > 0) {
-				for (var i=0; i< this.scene.pickResults.length; i++) {
-					var obj = this.scene.pickResults[i][0];
-					if (obj)
-					{
-						var cellID = this.scene.pickResults[i][1];
-						this.move(~~((cellID-1)/7),(cellID-1)%7);
-					}
-				}
-				this.scene.pickResults.splice(0,this.scene.pickResults.length);
-			}
-		}
+		this.displayQueuedSeeds();
 	};
 
 	displaySeeds(){
@@ -45,57 +29,113 @@ class Hawalis extends CGFobject
 			for(var j = 0; j < this.seeds[i].length; j++)
 				for(var k = 0; k < this.seeds[i][j].length; k++)
 					this.seeds[i][j][k].display();
+
+		for(var i = 0; i < this.score.length; i++)
+			for(var j = 0; j < this.score[i].length; j++)
+				this.score[i][j].display();
 	};
 
 	displayQueuedSeeds(){
-		for(var i = 1; i < this.queue.length; i++)
-			this.queue[i].display();
+		for(var i = 1; i < this.turnQueue.length; i++)
+			this.turnQueue[i].display();
 
-		if(this.queue.length >= 1)
-			this.animateSeed(this.queue[0]);
+		for(var i = 1; i < this.scoreQueue.length; i++)
+			this.scoreQueue[i].display();
+
+		if(this.turnQueue.length >= 1)
+			this.animateSeed(this.turnQueue[0], 'turn');
+
+		if(this.scoreQueue.length >= 1)
+			this.animateSeed(this.scoreQueue[0], 'score');
 	};
 
-	animateSeed(seed){
+	animateSeed(seed, type){
 		if(seed.animation != null && !seed.animation.finished){
 			this.scene.pushMatrix();
-				seed.animation.update(this.scene.delta);
+				seed.animation.update(this.scene.delta*this.scene.velocity);
 				seed.animation.apply(this.scene);
 				seed.display();
 			this.scene.popMatrix();
 		}
 		else if(seed.animation != null && seed.animation.finished){
-			var coord = this.getFreePosition(seed.next[0],seed.next[1]);
-			seed.coord = [coord[0],coord[1],coord[2]];
-			this.seeds[seed.next[0]][seed.next[1]].push(seed);
-			var next = seed.next;
-			seed.next = [];
-			seed.animation = null;
+			switch(type) {
+			  case 'turn':
+					var cell = this.addToCell(seed);
+					this.nextMove(cell);
+			    break;
+			  case 'score':
+					this.addToScore(seed);
+			    break;
+			}
 
-			this.queue.shift();
+			console.log(this.score[0].length);
+			console.log(this.score[1].length);
+		}
+	};
 
-			this.displaySeeds();
+	addToCell(seed){
+		var cell = seed.next;
+		seed.coord = this.getCellFreePosition(cell[0],cell[1]);
+		seed.animation = null;
+		// seed.next = [];
+		this.turnQueue.shift();
+		this.seeds[cell[0]][cell[1]].push(seed);
+		// seed.cell = [];
+		seed.display();
+		return cell;
+	};
 
-			if(this.queue.length == 0)
-				if(this.seeds[next[0]][next[1]].length > 1)
-					this.move(next[0], next[1]);
-				else if(this.seeds[next[0]][next[1]].length == 1){
-					this.boardToProlog();
-					console.log(this.prologBoard);
+	addToScore(seed){
+		seed.animation = null;
+		this.scoreQueue.shift();
+		this.score[seed.score].push(seed);
+		seed.coord = seed.nextCoord;
+		seed.display();
+	};
+
+	nextMove(cell){
+		if(this.turnQueue.length == 0)
+			if(this.seeds[cell[0]][cell[1]].length > 1)
+				this.move(cell[0], cell[1]);
+			else if(this.seeds[cell[0]][cell[1]].length == 1){
+				this.boardToProlog();
+				if(cell[0] == 1 || cell[0] == 2)
+					this.captureSeeds(cell);
+			}
+	};
+
+	captureSeeds(cell){
+		var player = cell[0] == 1? 1 : 2;
+		var coords = [];
+		coords[0] = cell[0] == 1? [2,cell[1]] : [1,cell[1]];
+		coords[1] = cell[0] == 1? [3,cell[1]] : [0,cell[1]];
+
+		if(this.seeds[coords[0][0]][coords[0][1]].length > 0){
+			var index = this.score[player-1].length;
+			for(var i = 0; i < 2; i++){
+				while(this.seeds[coords[i][0]][coords[i][1]].length > 0){
+					var seed = this.seeds[coords[i][0]][coords[i][1]].pop();
+					seed.score = player - 1;
+					seed.nextCoord = this.getScoreFreePosition(player-1,index);
+					seed.animation = this.getAnimation(seed.coord,seed.nextCoord);
+					this.scoreQueue.push(seed);
+					index++;
 				}
+			}
 		}
 	};
 
 	move(i,j){
 		var next = [i,j]
 		while(this.seeds[i][j].length > 0){
-			var seed = this.seeds[i][j].shift();
+			var seed = this.seeds[i][j].pop();
 			seed.next = (next = this.getNext(next[0],next[1]));
-			seed.animation = this.getAnimation(seed.coord,this.getFreePosition(next[0],next[1]));
-			this.queue.push(seed);
+			seed.animation = this.getAnimation(seed.coord,this.getCellFreePosition(next[0],next[1]));
+			this.turnQueue.push(seed);
 		}
-	}
+	};
 
-	getFreePosition(i, j){
+	getCellFreePosition(i, j){
 		var k = this.seeds[i][j].length;
 		var offset = (i == 0 || i == 1)? 0 : 1;
 		var x = (k & 1)? 0.625 : 0.375;
@@ -104,9 +144,10 @@ class Hawalis extends CGFobject
 		return vec3.fromValues(j+x,y,i+z+offset);
 	};
 
-	getScoreFreePosition(i){
-		return vec3.fromValues(7*i-(0.35+(0.2+(1/30))*this.score[i].length),0.25,2.25+0.5*i)
-	}
+	getScoreFreePosition(i, index){
+		let vec = i == 0? vec3.fromValues(7-(0.35+(0.2+(1/30))*index),0.25,2.25+0.5*i) : vec3.fromValues((0.35+(0.2+(1/30))*index),0.25,2.25+0.5*i);
+		return vec;
+	};
 
 	getAnimation(initial, final){
 		let p = [final[0]-initial[0], final[1]-initial[1], final[2]-initial[2]];
@@ -119,8 +160,8 @@ class Hawalis extends CGFobject
 			for(var j = 0; j < 7; j++){
 				this.seeds[i][j] = [];
 				var offset = (i == 0 || i == 1)? 0 : 1;
-				this.seeds[i][j].push(new Seed(this.scene, this.getFreePosition(i,j)));
-				this.seeds[i][j].push(new Seed(this.scene, this.getFreePosition(i,j)));
+				this.seeds[i][j].push(new Seed(this.scene, this.getCellFreePosition(i,j)));
+				this.seeds[i][j].push(new Seed(this.scene, this.getCellFreePosition(i,j)));
 			}}
 		};
 
@@ -142,7 +183,22 @@ class Hawalis extends CGFobject
 				this.prologBoard[1][0][j] = this.seeds[2][j].length;
 				this.prologBoard[1][1][j] = this.seeds[3][j].length;
 			}
-		}
+		};
+
+		picking() {
+			if (this.scene.pickMode == false) {
+				if (this.scene.pickResults != null && this.scene.pickResults.length > 0) {
+					for (var i=0; i< this.scene.pickResults.length; i++) {
+						var obj = this.scene.pickResults[i][0];
+						if (obj) {
+							var id = this.scene.pickResults[i][1];
+							this.move(~~((id-1)/7),(id-1)%7);
+						}
+					}
+					this.scene.pickResults.splice(0,this.scene.pickResults.length);
+				}
+			}
+		};
 
 		updateTexCoords(s,t){
 		};

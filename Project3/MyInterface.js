@@ -39,6 +39,15 @@ class MyInterface extends CGFinterface {
     }
 
     /**
+     * Adds a folder containing all the game settings
+     */
+    addGameSettings() {
+        var group = this.gui.addFolder("Game");
+        group.open();
+        group.add(this.scene, 'velocity',1,5).step(1).name("Speed");;
+    }
+
+    /**
      * Adds a list containing the IDs of the views passed as parameter.
      * @param {array} views
      */
@@ -54,18 +63,6 @@ class MyInterface extends CGFinterface {
       controller.onChange(function(value){
         scene.updateCamera(value);
       });
-    }
-
-    /**
-     * Adds a list of animation options
-     */
-    addAnimations(){
-      var group = this.gui.addFolder("Animations");
-      group.open();
-
-      group.add(this.scene, "playAnimation").name("Play");
-      group.add(this.scene, "pauseAnimation").name("Pause");
-      group.add(this.scene, "restartAnimation").name("Restart");
     }
 
     /**

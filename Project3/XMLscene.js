@@ -19,6 +19,7 @@ class XMLscene extends CGFscene {
     this.previous = -1;
     this.delta;
     this.paused = false;
+    this.velocity = 1;
   }
 
   /**
@@ -101,18 +102,17 @@ class XMLscene extends CGFscene {
 
     this.initLights();
 
-
     // Adds lights group.
     this.interface.addLightsGroup(this.graph.lights);
+
+    // Adds game settings.
+    this.interface.addGameSettings();
 
     // Adds show axis
     this.interface.gui.add(this, 'showAxis').name("Show axis");
 
     // Adds views group.
     this.interface.addViews(this.graph.views);
-
-    // Adds animations group.
-    this.interface.addAnimations();
 
     this.sceneInited = true;
     this.setUpdatePeriod(10);
