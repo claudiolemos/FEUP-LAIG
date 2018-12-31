@@ -73,10 +73,6 @@
       <hawalis/>
     </primitive>
 
-    <primitive id="sphere">
-      <sphere radius="0.1" slices="30" stacks="30" />
-    </primitive>
-
   </primitives>
 
   <!--Components-->
@@ -97,24 +93,6 @@
       <texture id="wood" length_s="1" length_t="1"/>
       <children>
         <primitiveref id="hawalis"/>
-        <componentref id="sphere"/>
-      </children>
-    </component>
-
-
-    <component id="sphere">
-      <transformation>
-        <translate x="6.65" y="0.25" z="2.75"/>
-      </transformation>
-      <materials>
-        <material id="default" />
-      </materials>
-      <animations>
-        <!-- <animationref id="bezier"/> -->
-      </animations>
-      <texture id="wood" length_s="1" length_t="1"/>
-      <children>
-        <primitiveref id="sphere"/>
       </children>
     </component>
 

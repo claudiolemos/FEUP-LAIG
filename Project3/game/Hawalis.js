@@ -4,15 +4,16 @@ class Hawalis extends CGFobject
 	{
 		super(scene);
     this.server = new Server();
-		this.currentPlayer = 1;
+		this.currentPlayer = 'player1';
 		this.difficulty = 1;
 		this.mode = 1; // 1 - HvH / 2 - HvC / 3 - CvC
-		this.prologBoard = [[[2,2,2,2,2,2,2],[2,2,2,2,2,2,2]],[[2,2,2,2,2,2,2],[2,2,2,2,2,2,2]]];
+		this.prologBoard = '[[[[2,2,2,2,2,2,2],[2,2,2,2,2,2,2]],[[2,2,2,2,2,2,2],[2,2,2,2,2,2,2]]],player1,0,0]';
 		this.board = new Board(scene);
 		this.seeds = []; // seeds nos buracos
 		this.turnQueue = []; // seeds em animação de um buraco para o outro
 		this.scoreQueue = []; // seeds em animação de um buraco para o score board
 		this.score = [[],[]]; // seeds no score board
+		this.points = [0,0];
 		this.fillSeeds();
 
 	};
@@ -67,9 +68,6 @@ class Hawalis extends CGFobject
 					this.addToScore(seed);
 			    break;
 			}
-
-			console.log(this.score[0].length);
-			console.log(this.score[1].length);
 		}
 	};
 
@@ -98,9 +96,9 @@ class Hawalis extends CGFobject
 			if(this.seeds[cell[0]][cell[1]].length > 1)
 				this.move(cell[0], cell[1]);
 			else if(this.seeds[cell[0]][cell[1]].length == 1){
-				this.boardToProlog();
 				if(cell[0] == 1 || cell[0] == 2)
 					this.captureSeeds(cell);
+				this.updateBoard();
 			}
 	};
 
@@ -116,6 +114,7 @@ class Hawalis extends CGFobject
 				while(this.seeds[coords[i][0]][coords[i][1]].length > 0){
 					var seed = this.seeds[coords[i][0]][coords[i][1]].pop();
 					seed.score = player - 1;
+					this.points[player - 1]++;
 					seed.nextCoord = this.getScoreFreePosition(player-1,index);
 					seed.animation = this.getAnimation(seed.coord,seed.nextCoord);
 					this.scoreQueue.push(seed);
@@ -176,13 +175,33 @@ class Hawalis extends CGFobject
 				return [i,j+1];
 		};
 
+		updateBoard(){
+			this.changePlayer();
+			this.boardToProlog();
+			console.log(this.prologBoard);
+		};
+
+		changePlayer(){
+			this.currentPlayer = (this.currentPlayer == 'player1')? 'player2' : 'player1';
+		};
+
 		boardToProlog(){
-			for(var j = 0; j < 7; j++){
-				this.prologBoard[0][0][j] = this.seeds[0][j].length;
-				this.prologBoard[0][1][j] = this.seeds[1][j].length;
-				this.prologBoard[1][0][j] = this.seeds[2][j].length;
-				this.prologBoard[1][1][j] = this.seeds[3][j].length;
+			this.prologBoard = '[[';
+			for(var i = 0; i < 4; i+=2){
+				this.prologBoard += '[';
+				for(var j = 0; j < 2; j++){
+					this.prologBoard += '[';
+					for(var k = 0; k < 7; k++){
+						this.prologBoard += this.seeds[i+j][k].length;
+						this.prologBoard += (k < 6)? ',' : '';
+					}
+					this.prologBoard += ']';
+					this.prologBoard += (j < 1)? ',' : '';
+				}
+				this.prologBoard += ']';
+				this.prologBoard += (i < 2)? ',' : '';
 			}
+			this.prologBoard += `],${this.currentPlayer},${this.points[0]},${this.points[1]}]`;
 		};
 
 		picking() {
@@ -192,7 +211,9 @@ class Hawalis extends CGFobject
 						var obj = this.scene.pickResults[i][0];
 						if (obj) {
 							var id = this.scene.pickResults[i][1];
-							this.move(~~((id-1)/7),(id-1)%7);
+							// this.move(~~((id-1)/7),(id-1)%7);
+							var request = `isValidMove(${this.prologBoard},${~~((id-1)/7)},${(id-1)%7})`
+							this.server.makeRequest(request);
 						}
 					}
 					this.scene.pickResults.splice(0,this.scene.pickResults.length);

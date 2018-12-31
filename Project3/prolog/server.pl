@@ -93,25 +93,19 @@ print_header_line(_).
 
 parse_input(quit, goodbye).
 
-parse_input(init, Board):-
-	initialize([Board, player1, 0, 0]).
-
-parse_input(checkGameStatus(Board,CurrentPlayer,Player1Seeds,Player2Seeds), Status):-
+parse_input(checkGameStatus([Board,CurrentPlayer,Player1Seeds,Player2Seeds]), Status):-
 	checkGameStatus([Board,CurrentPlayer,Player1Seeds,Player2Seeds],Status).
 
-parse_input(isValidMove(Board,CurrentPlayer,Player1Seeds,Player2Seeds,Row,Column), IsValid):-
+parse_input(isValidMove([Board,CurrentPlayer,Player1Seeds,Player2Seeds],Row,Column), IsValid):-
 	getPlayerIndex(CurrentPlayer, PlayerIndex),
 	validMoves([Board,CurrentPlayer,Player1Seeds,Player2Seeds], PlayerIndex, ValidMoves),
+	write(ValidMoves),
 	isValidMove(Row,Column,ValidMoves,IsValid).
 
-parse_input(getBotMove(Board,CurrentPlayer,Player1Seeds,Player2Seeds,Difficulty), [RowIndex, ColumnIndex]):-
+parse_input(getBotMove([Board,CurrentPlayer,Player1Seeds,Player2Seeds],Difficulty), [RowIndex, ColumnIndex]):-
 	getPlayerIndex(CurrentPlayer, PlayerIndex),
 	choose_move([Row, Column], PlayerIndex, Difficulty, [Board,CurrentPlayer,Player1Seeds,Player2Seeds]),
 	convertIndex(Row, Column, CurrentPlayer, RowIndex, ColumnIndex).
-
-parse_input(move(Board,CurrentPlayer,Player1Seeds,Player2Seeds,Row,Column), NewBoard):-
-	convertIndex(Row, Column, RowIndex, ColumnIndex),
-	move([RowIndex,ColumnIndex], [Board,CurrentPlayer,Player1Seeds,Player2Seeds], [NewBoard,_,_,_]).
 
 % Tests
 % parse_input(init, Board).
