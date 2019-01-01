@@ -96,7 +96,7 @@ parse_input(quit, goodbye).
 parse_input(checkGameStatus([Board,CurrentPlayer,Player1Seeds,Player2Seeds]), Status):-
 	checkGameStatus([Board,CurrentPlayer,Player1Seeds,Player2Seeds],Status).
 
-parse_input(isValidMove([Board,CurrentPlayer,Player1Seeds,Player2Seeds],Row,Column), IsValid):-
+parse_input(isValidMove([Board,CurrentPlayer,Player1Seeds,Player2Seeds],Row,Column), [IsValid,Row,Column]):-
 	getPlayerIndex(CurrentPlayer, PlayerIndex),
 	validMoves([Board,CurrentPlayer,Player1Seeds,Player2Seeds], PlayerIndex, ValidMoves),
 	write(ValidMoves),

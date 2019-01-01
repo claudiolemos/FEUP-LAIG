@@ -5,22 +5,20 @@ class Server
     this.port = 8081;
 	};
 
-  defaultOnSuccess(data){
-    console.log('Request successful. Reply ' + data.target.response);
+  onSuccess(data){
+    console.log(data.target.response);
   };
 
-  defaultOnError(data){
-    console.log('Error waiting for response');
+  onError(data){
+    console.log('Error waiting for the server response');
   };
 
-  makeRequest(requestString, onSuccess, onError) {
+  makeRequest(requestString, onSuccess) {
     let request = new XMLHttpRequest();
-    let url = 'http://localhost:' + this.port + '/' + requestString;
-    console.log(url);
     request.open('GET', 'http://localhost:' + this.port + '/' + requestString, true);
 
-    request.onload = onSuccess || this.defaultOnSuccess;
-    request.onerror = onError || this.defaultOnError;
+    request.onload = onSuccess;
+    request.onerror = this.onError;
 
     request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
     request.send();

@@ -44,7 +44,7 @@ class MyInterface extends CGFinterface {
     addGameSettings() {
         var group = this.gui.addFolder("Game");
         group.open();
-        group.add(this.scene, 'velocity',1,5).step(1).name("Speed");;
+        group.add(this.scene, 'velocity',1,10).step(1).name("Speed");
     }
 
     /**
