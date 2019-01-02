@@ -3,47 +3,54 @@ class Hawalis extends CGFobject {
     super(scene);
 
     this.mode = {
-      PvP: 1,
-      PvC: 2,
-      CvC: 3
+      PvP: '1',
+      PvC: '2',
+      CvC: '3'
     };
 
     this.state = {
-      continue: 0,
-      playerOneWon: 1,
-      playerTwoWon: 2,
-			playerTurn: 3,
-      botTurn: 4,
-			movingSeeds: 5,
-
+      start: '0',
+      playerOneWon: '1',
+      playerTwoWon: '2',
+			playerTurn: '3',
+      botTurn: '4',
+			movingSeeds: '5',
+      waiting: '6'
     };
 
     this.difficulty = {
-      easy: 1,
-      hard: 2
+      easy: '1',
+      hard: '2'
     };
 
     this.server = new Server();
     this.currentPlayer = 'player1';
-    this.difficulty = 1;
-    this.gameState = this.state.botTurn;
-    this.gameDifficulty = 2;
-    this.gameMode = this.mode.CvC;
+    this.gameState = this.state.waiting;
+    this.gameDifficulty = this.difficulty.hard;
+    this.gameMode = this.mode.PvP;
     this.prologBoard = '[[[[2,2,2,2,2,2,2],[2,2,2,2,2,2,2]],[[2,2,2,2,2,2,2],[2,2,2,2,2,2,2]]],player1,0,0]';
     this.board = new Board(scene);
     this.seeds = []; // seeds nos buracos
     this.turnQueue = []; // seeds em animação de um buraco para o outro
     this.scoreQueue = []; // seeds em animação de um buraco para o score board
-    this.score = [
-      [],
-      []
-    ]; // seeds no score board
+    this.score = [[],[]]; // seeds no score board
     this.points = [0, 0];
+    this.velocity = 1;
     this.init();
 
   };
 
+  getKeyByValue(object, value) {
+  return Object.keys(object).find(key => object[key] == value);
+};
+
+  getLogs(){
+    console.log([this.gameState, this.gameMode, this.gameDifficulty]);
+    console.log([this.getKeyByValue(this.state,this.gameState),this.getKeyByValue(this.mode,this.gameMode), this.getKeyByValue(this.difficulty,this.gameDifficulty)]);
+  }
+
   display() {
+    this.updateHTML();
     this.checkState();
     this.board.display();
     this.displaySeeds();
@@ -58,8 +65,35 @@ class Hawalis extends CGFobject {
 			case this.state.botTurn:
   			this.getBotMove();
   			break;
+			case this.state.start:
+  			this.startGame();
+  			break;
   	}
   };
+
+  startGame(){
+    this.init();
+    this.gameState = this.state.playing;
+    this.updateState();
+  }
+
+  quitGame(){
+    this.gameState = this.state.quit;
+  }
+
+  undo(){}
+
+  playMovie(){}
+
+  updateHTML(){
+    document.getElementById("score").innerText = `${this.score[0].length} seeds : ${this.score[1].length} seeds`;
+    if(this.gameState == this.state.botTurn || this.gameState == this.state.playerTurn)
+      document.getElementById("info").innerText = (this.currentPlayer == 'player1')? "Player 1's turn" : "Player 2's turn\n";
+  }
+
+  addMessage(message){
+    document.getElementById("info").innerText = message;
+  }
 
 	updateState(){
 		switch (this.gameMode) {
@@ -103,7 +137,7 @@ class Hawalis extends CGFobject {
   animateSeed(seed, type) {
     if (seed.animation != null && !seed.animation.finished) {
       this.scene.pushMatrix();
-      seed.animation.update(this.scene.delta * this.scene.velocity);
+      seed.animation.update(this.scene.delta * this.velocity);
       seed.animation.apply(this.scene);
       seed.display();
       this.scene.popMatrix();
@@ -278,8 +312,12 @@ class Hawalis extends CGFobject {
     this.server.makeRequest(request, function(data) {
       var response = JSON.parse(data.target.response);
 
-      if (response[0])
+      if (response[0]){
         hawalis.move(response[1], response[2]);
+        hawalis.addMessage('Moving seeds');
+      }
+      else
+        hawalis.addMessage('Invalid pit');
     });
   };
 

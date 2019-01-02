@@ -19,7 +19,6 @@ class XMLscene extends CGFscene {
     this.previous = -1;
     this.delta;
     this.paused = false;
-    this.velocity = 1;
   }
 
   /**
