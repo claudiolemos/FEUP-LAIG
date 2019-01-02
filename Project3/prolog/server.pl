@@ -91,6 +91,7 @@ print_header_line(_).
 
 :- consult('hawalis.pl').
 
+parse_input(start, ok).
 parse_input(quit, goodbye).
 
 parse_input(checkGameStatus([Board,CurrentPlayer,Player1Seeds,Player2Seeds]), Status):-
@@ -106,10 +107,3 @@ parse_input(getBotMove([Board,CurrentPlayer,Player1Seeds,Player2Seeds],Difficult
 	getPlayerIndex(CurrentPlayer, PlayerIndex),
 	choose_move([Row, Column], PlayerIndex, Difficulty, [Board,CurrentPlayer,Player1Seeds,Player2Seeds]),
 	convertIndex(Row, Column, CurrentPlayer, RowIndex, ColumnIndex).
-
-% Tests
-% parse_input(init, Board).
-% parse_input(checkGameStatus([[[0,2,2,2,2,2,2],[2,2,2,2,2,2,2]],[[2,2,2,2,2,2,2],[2,2,2,2,2,2,2]]],player1,0,0), Status).
-% parse_input(isValidMove([[[0,2,2,2,2,2,2],[2,2,2,2,2,2,2]],[[2,2,2,2,2,2,2],[2,2,2,2,2,2,2]]],player1,0,0,1,1), IsValid).
-% parse_input(getBotMove([[[0,2,2,2,2,2,2],[2,2,2,2,2,2,2]],[[2,2,2,2,2,2,2],[2,2,2,2,2,2,2]]],player1,0,0,1), [RowIndex, ColumnIndex]).
-% parse_input(move([[[0,2,2,2,2,2,2],[0,2,2,2,2,2,2]],[[2,2,2,2,2,2,2],[2,2,2,2,2,2,2]]],player1,0,0,0,1), NewBoard).

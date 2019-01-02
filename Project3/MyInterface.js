@@ -72,7 +72,7 @@ class MyInterface extends CGFinterface {
     controller.onChange(function(value) {
       scene.updateCamera(value);
     });
-  }
+  };
 
   /**
    * Starts the keyboard event listener

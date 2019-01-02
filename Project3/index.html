@@ -39,7 +39,7 @@ canvas {
     margin: 0;
     padding: 1em 0;
 }
-#time, #player, #score {
+#time, #player, #score, #time {
     font-size: 1em;
     text-align: center;
 }
@@ -53,12 +53,16 @@ canvas {
 <body>
 
 <script src="main.js"></script>
+<script src="css/dist/sweetalert.min.js"></script>
+<link rel="stylesheet" type="text/css" href="css/dist/sweetalert.css">
 
 <div id="panel">
     <h1>Hawalis</h1>
     <p id="time"></p>
     <p id="score"></p>
     <p id="info"></p>
+    <p id="state"></p>
+    <p id="pick"></p>
 </div>
 
 </body>
