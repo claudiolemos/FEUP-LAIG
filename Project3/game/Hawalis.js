@@ -115,8 +115,12 @@ class Hawalis extends CGFobject {
     // if(this.gameState != this.state.waiting)
     // document.getElementById("score").innerText = `${this.score[0].length} seeds : ${this.score[1].length} seeds`;
 
-    if(this.gameState == this.state.botTurn || this.gameState == this.state.playerTurn || this.gameState == this.state.movingSeeds)
+    if(this.gameState == this.state.botTurn || this.gameState == this.state.playerTurn || this.gameState == this.state.movingSeeds){
+      if(this.gameState == this.state.playerTurn)
+        document.getElementById("time").innerText = `${("00"+parseInt(this.time / 60)).slice(-"00".length)}:${    ("00"+parseInt(this.time % 60)).slice(-"00".length)}`;
+      document.getElementById("score").innerText = `${this.score[0].length} seeds : ${this.score[1].length} seeds`;
       document.getElementById("turn").innerText = (this.currentPlayer == 'player1')? "Player 1's turn" : "Player 2's turn\n";
+    }
     else
       document.getElementById("turn").innerText = "";
 
