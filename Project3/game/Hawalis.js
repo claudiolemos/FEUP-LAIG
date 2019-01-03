@@ -15,7 +15,8 @@ class Hawalis extends CGFobject {
 			playerTurn: '3',
       botTurn: '4',
 			movingSeeds: '5',
-      waiting: '6'
+      waiting: '6',
+      playMovie: '7'
     };
 
     this.difficulty = {
@@ -33,6 +34,7 @@ class Hawalis extends CGFobject {
     this.seeds = []; // seeds nos buracos
     this.turnQueue = []; // seeds em animação de um buraco para o outro
     this.scoreQueue = []; // seeds em animação de um buraco para o score board
+    this.allMoves = []; // seeds em animação de um buraco para o score board
     this.score = [[],[]]; // seeds no score board
     this.points = [0, 0];
     this.velocity = 1;
@@ -45,6 +47,8 @@ class Hawalis extends CGFobject {
 };
 
   getLogs(){
+    console.log(this.seeds);
+    console.log(this.allMoves);
     console.log([this.gameState, this.gameMode, this.gameDifficulty]);
     console.log([this.getKeyByValue(this.state,this.gameState),this.getKeyByValue(this.mode,this.gameMode), this.getKeyByValue(this.difficulty,this.gameDifficulty)]);
   }
@@ -68,11 +72,16 @@ class Hawalis extends CGFobject {
 			case this.state.start:
   			this.startGame();
   			break;
+			case this.state.playMovie:
+  			this.movie();
+  			break;
   	}
   };
 
   startGame(){
     this.init();
+    this.allMoves = [];
+    this.score = [[],[]];
     this.gameState = this.state.playing;
     this.updateState();
   }
@@ -83,7 +92,22 @@ class Hawalis extends CGFobject {
 
   undo(){}
 
-  playMovie(){}
+  playMovie(){
+    this.init();
+    this.prologBoard = '[[[[2,2,2,2,2,2,2],[2,2,2,2,2,2,2]],[[2,2,2,2,2,2,2],[2,2,2,2,2,2,2]]],player1,0,0]';
+    this.score = [[],[]];
+    this.turnQueue = [];
+    this.scoreQueue = [];
+    this.points = [0, 0];
+    this.gameState = this.state.playMovie;
+  }
+
+  movie(){
+    // for (var i = 0; i < this.allMoves.length; i++) {
+      this.moveMovie(this.allMoves[0][0], this.allMoves[0][1]);
+      this.gameState = this.state.movingSeeds;
+    // }
+  }
 
   updateHTML(){
     document.getElementById("score").innerText = `${this.score[0].length} seeds : ${this.score[1].length} seeds`;
@@ -306,6 +330,23 @@ class Hawalis extends CGFobject {
     }
   };
 
+  moveMovie(i, j) {
+    var hawalis = this;
+    var request = `isValidMove(${this.prologBoard},${i},${j})`;
+    this.server.makeRequest(request, function(data) {
+      var response = JSON.parse(data.target.response);
+      console.log(response);
+
+      if (response[0]){
+        hawalis.move(response[1], response[2]);
+        hawalis.allMoves.push([response[1], response[2]]);
+        hawalis.addMessage('Moving seeds');
+      }
+      else
+        hawalis.addMessage('Invalid pit');
+    });
+  };
+
   isValidMove(id) {
     var hawalis = this;
     var request = `isValidMove(${this.prologBoard},${~~((id-1)/7)},${(id-1)%7})`;
@@ -314,6 +355,7 @@ class Hawalis extends CGFobject {
 
       if (response[0]){
         hawalis.move(response[1], response[2]);
+        hawalis.allMoves.push([response[1], response[2]]);
         hawalis.addMessage('Moving seeds');
       }
       else
@@ -348,6 +390,7 @@ class Hawalis extends CGFobject {
     this.server.makeRequest(request, function(data) {
 			var response = JSON.parse(data.target.response);
 			hawalis.move(response[0], response[1]);
+      hawalis.allMoves.push([response[0], response[1]]);
     });
 		this.gameState = this.state.movingSeeds;
   };
