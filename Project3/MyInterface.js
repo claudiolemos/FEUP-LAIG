@@ -46,11 +46,12 @@ class MyInterface extends CGFinterface {
 
     var group = this.gui.addFolder("Game");
     group.open();
-    group.add(hawalis, 'startGame').name("Start Game");
+    group.add(hawalis, 'startGame').name("Start");
     group.add(hawalis, 'undo').name("Undo");
-    group.add(hawalis, 'playMovie').name("Play Movie");
-    group.add(hawalis, 'quitGame').name("Quit Game");
+    group.add(hawalis, 'playMovie').name("Movie");
+    group.add(hawalis, 'quitGame').name("Quit");
     group.add(hawalis, 'velocity', 1, 10).step(1).name("Speed");
+    group.add(hawalis, 'timeout', 5, 120).step(5).name("Timeout");
     group.add(hawalis, 'gameDifficulty', {Easy: '1', Hard: '2'}).name("Difficulty");
     group.add(hawalis, 'gameMode', {'Player v Player': '1', 'Player v Bot': '2', 'Bot v Bot': '3'}).name("Mode");
     group.add(hawalis, 'getLogs').name("Log");

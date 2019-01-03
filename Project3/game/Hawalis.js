@@ -9,14 +9,12 @@ class Hawalis extends CGFobject {
     };
 
     this.state = {
-      start: '0',
-      playerOneWon: '1',
-      playerTwoWon: '2',
-			playerTurn: '3',
-      botTurn: '4',
-			movingSeeds: '5',
-      waiting: '6',
-      quit: '7'
+      // start: '0',
+			playerTurn: '1',
+      botTurn: '2',
+			movingSeeds: '3',
+      waiting: '4',
+      quit: '5'
     };
 
     this.difficulty = {
@@ -38,13 +36,12 @@ class Hawalis extends CGFobject {
     // this.points = [0, 0];
     this.velocity = 1;
     this.time = 0;
-    this.timeout = 30000;
+    this.timeout = 30;
     this.init();
     this.scene.setPickEnabled(false);
   };
 
   display() {
-    // this.time += this.scene.delta;
     this.updateHTML();
     this.checkState();
     this.board.display();
@@ -65,21 +62,32 @@ class Hawalis extends CGFobject {
   	switch (this.gameState) {
   		case this.state.playerTurn:
   			this.picking();
+        this.checkTimeout();
   			break;
 			case this.state.botTurn:
   			this.getBotMove();
   			break;
-			case this.state.start:
-  			this.startGame();
-  			break;
+			// case this.state.start:
+  		// 	this.startGame();
+  		// 	break;
   	}
   };
 
+  checkTimeout(){
+    this.time += this.scene.delta/1000;
+    if(this.time > this.timeout){
+      this.updateBoard();
+      this.updateState();
+      this.time = 0;
+    }
+  }
+
   startGame(){
     var hawalis = this;
-    this.server.makeRequest('init',function(data){
+    this.server.makeRequest('start',function(data){
+      hawalis.scene.setPickEnabled(true);
       hawalis.init();
-      hawalis.gameState = hawalis.state.start;
+      // hawalis.gameState = hawalis.state.start;
       hawalis.turnQueue = [];
       hawalis.time = 0;
       hawalis.scoreQueue = [];
@@ -88,7 +96,6 @@ class Hawalis extends CGFobject {
       hawalis.currentPlayer = 'player1';
       hawalis.prologBoard = '[[[[2,2,2,2,2,2,2],[2,2,2,2,2,2,2]],[[2,2,2,2,2,2,2],[2,2,2,2,2,2,2]]],player1,0,0]';
       hawalis.updateState();
-
     });
   }
 
@@ -102,13 +109,34 @@ class Hawalis extends CGFobject {
   playMovie(){}
 
   updateHTML(){
-    // document.getElementById("time").innerText = `${("00"+parseInt((this.time/1000) / 60)).slice(-"00".length)}:${    ("00"+parseInt((this.time/1000) % 60)).slice(-"00".length)}`;
-    document.getElementById("state").innerText = this.getKeyByValue(this.state,this.gameState);
-    document.getElementById("pick").innerText = `${this.scene.pickResults.length}`;
-    if(this.gameState != this.state.waiting)
-    document.getElementById("score").innerText = `${this.score[0].length} seeds : ${this.score[1].length} seeds`;
-    if(this.gameState == this.state.botTurn || this.gameState == this.state.playerTurn)
-      document.getElementById("info").innerText = (this.currentPlayer == 'player1')? "Player 1's turn" : "Player 2's turn\n";
+    // document.getElementById("time").innerText = `${("00"+parseInt(this.time / 60)).slice(-"00".length)}:${    ("00"+parseInt(this.time % 60)).slice(-"00".length)}`;
+    // document.getElementById("state").innerText = this.getKeyByValue(this.state,this.gameState);
+    // document.getElementById("pick").innerText = `${this.scene.pickResults.length}`;
+    // if(this.gameState != this.state.waiting)
+    // document.getElementById("score").innerText = `${this.score[0].length} seeds : ${this.score[1].length} seeds`;
+
+    if(this.gameState == this.state.botTurn || this.gameState == this.state.playerTurn || this.gameState == this.state.movingSeeds)
+      document.getElementById("turn").innerText = (this.currentPlayer == 'player1')? "Player 1's turn" : "Player 2's turn\n";
+    else
+      document.getElementById("turn").innerText = "";
+
+    switch (this.gameState) {
+      case this.state.waiting:
+        document.getElementById("info").innerText = "Start a game";
+        break;
+      case this.state.quit:
+        document.getElementById("info").innerText = "You've exited the game";
+        break;
+      case this.state.playerTurn:
+        document.getElementById("info").innerText = "Please select your pit";
+        break;
+      case this.state.movingSeeds:
+        document.getElementById("info").innerText = "Moving seeds";
+        break;
+      default:
+        document.getElementById("info").innerText = "";
+        break;
+    }
   }
 
   addMessage(message){
@@ -119,10 +147,12 @@ class Hawalis extends CGFobject {
 		switch (this.gameMode) {
 			case this.mode.PvP:
 				this.gameState = this.state.playerTurn;
-        this.scene.setPickEnabled(true);
+          this.scene.setPickEnabled(true);
 				break;
 			case this.mode.PvC:
 				this.gameState = (this.currentPlayer == 'player1')? this.state.playerTurn : this.state.botTurn;
+        if(this.gameState == this.state.playerTurn)
+          this.scene.setPickEnabled(true);
 				break;
 			case this.mode.CvC:
 				this.gameState = this.state.botTurn;
@@ -321,7 +351,8 @@ class Hawalis extends CGFobject {
 
       if (response[0]){
         hawalis.move(response[1], response[2]);
-        this.scene.setPickEnabled(false);
+        hawalis.scene.setPickEnabled(false);
+        hawalis.gameState = hawalis.state.movingSeeds;
       }
       else
         swal("Invalid pit", "Please select a valid pit in your board", "error");
@@ -372,9 +403,11 @@ class Hawalis extends CGFobject {
     if (this.scene.pickMode == false) {
       if (this.scene.pickResults != null && this.scene.pickResults.length > 0) {
         for (var i = 0; i < this.scene.pickResults.length; i++) {
+          console.log(1);
           var obj = this.scene.pickResults[i][0];
           if (obj){
             this.isValidMove(this.scene.pickResults[i][1]);
+            console.log(1);
           }
         }
         this.scene.pickResults.splice(0, this.scene.pickResults.length);

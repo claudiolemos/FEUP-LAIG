@@ -57,12 +57,6 @@
   <!--Animations-->
 
   <animations>
-    <bezier id="bezier" span="5">
-      <controlpoint xx="0" yy="0" zz="0"/>
-      <controlpoint xx="1" yy="5" zz="0"/>
-      <controlpoint xx="4" yy="5" zz="0"/>
-      <controlpoint xx="5" yy="0" zz="0"/>
-    </bezier>
   </animations>
 
   <!--Primitives-->
@@ -87,9 +81,6 @@
       <materials>
         <material id="default" />
       </materials>
-      <animations>
-        <!-- <animationref id="bezier"/> -->
-      </animations>
       <texture id="wood" length_s="1" length_t="1"/>
       <children>
         <primitiveref id="hawalis"/>
