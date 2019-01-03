@@ -407,11 +407,9 @@ class Hawalis extends CGFobject {
     if (this.scene.pickMode == false) {
       if (this.scene.pickResults != null && this.scene.pickResults.length > 0) {
         for (var i = 0; i < this.scene.pickResults.length; i++) {
-          console.log(1);
           var obj = this.scene.pickResults[i][0];
           if (obj){
             this.isValidMove(this.scene.pickResults[i][1]);
-            console.log(1);
           }
         }
         this.scene.pickResults.splice(0, this.scene.pickResults.length);

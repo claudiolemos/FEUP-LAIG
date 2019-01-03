@@ -119,12 +119,16 @@ class XMLscene extends CGFscene {
   /**
   * Updates camera appropriately depending on the view, whether it's perspective or ortho
   * @param {string} newCamera id for the new camera
+  * @param {boolean} animated if true, there needs to be animation moving to the next camera
   */
-  updateCamera(newCamera){
+  updateCamera(newCamera, animated){
     this.currentCamera = newCamera;
 
     if(this.graph.views[newCamera].type == "perspective")
-      this.camera = new CGFcamera(this.graph.views[newCamera].angle, this.graph.views[newCamera].near, this.graph.views[newCamera].far, vec3.fromValues(this.graph.views[newCamera].from.x, this.graph.views[newCamera].from.y, this.graph.views[newCamera].from.z), vec3.fromValues(this.graph.views[newCamera].to.x, this.graph.views[newCamera].to.y, this.graph.views[newCamera].to.z));
+      if(animated)
+        this.animation = new CameraAnimation(this.camera, (new CGFcamera(this.graph.views[newCamera].angle, this.graph.views[newCamera].near, this.graph.views[newCamera].far, vec3.fromValues(this.graph.views[newCamera].from.x, this.graph.views[newCamera].from.y, this.graph.views[newCamera].from.z), vec3.fromValues(this.graph.views[newCamera].to.x, this.graph.views[newCamera].to.y, this.graph.views[newCamera].to.z))));
+      else
+        this.camera = new CGFcamera(this.graph.views[newCamera].angle, this.graph.views[newCamera].near, this.graph.views[newCamera].far, vec3.fromValues(this.graph.views[newCamera].from.x, this.graph.views[newCamera].from.y, this.graph.views[newCamera].from.z), vec3.fromValues(this.graph.views[newCamera].to.x, this.graph.views[newCamera].to.y, this.graph.views[newCamera].to.z));
     else if(this.graph.views[newCamera].type == "ortho")
       this.camera = new CGFcameraOrtho(this.graph.views[newCamera].left, this.graph.views[newCamera].right, this.graph.views[newCamera].bottom, this.graph.views[newCamera].top, this.graph.views[newCamera].near, this.graph.views[newCamera].far, vec3.fromValues(this.graph.views[newCamera].from.x, this.graph.views[newCamera].from.y, this.graph.views[newCamera].from.z), vec3.fromValues(this.graph.views[newCamera].to.x, this.graph.views[newCamera].to.y, this.graph.views[newCamera].to.z), vec3.fromValues(0,1,0));
 
@@ -137,6 +141,9 @@ class XMLscene extends CGFscene {
   display() {
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+
+    if(this.animation != null)
+      this.animateCamera(this.delta);
 
     this.updateProjectionMatrix();
     this.loadIdentity();
@@ -210,4 +217,82 @@ class XMLscene extends CGFscene {
 
     this.previous = currTime;
   }
+
+  animateCamera(delta) {
+
+	var animation = this.animation;
+	var camera = this.camera
+
+	if (this.lastCurrTime != 0)
+		if (Math.abs(animation.travelledPosDist[0]) < Math.abs(animation.posDist[0]) ||
+			Math.abs(animation.travelledPosDist[1]) < Math.abs(animation.posDist[1]) ||
+			Math.abs(animation.travelledPosDist[2]) < Math.abs(animation.posDist[2]) ||
+			Math.abs(animation.travelledDirDist[0]) < Math.abs(animation.dirDist[0]) ||
+			Math.abs(animation.travelledDirDist[1]) < Math.abs(animation.dirDist[1]) ||
+			Math.abs(animation.travelledDirDist[2]) < Math.abs(animation.dirDist[2]) ) {
+
+
+			var distPosX = animation.velPos[0] * delta;
+			var distPosY = animation.velPos[1] * delta;
+			var distPosZ = animation.velPos[2] * delta;
+
+			if(Math.abs(animation.travelledPosDist[0]) < Math.abs(animation.posDist[0])) {
+
+				camera.position[0] += distPosX;
+				animation.travelledPosDist[0] += distPosX;
+
+			}
+
+			if(Math.abs(animation.travelledPosDist[1]) < Math.abs(animation.posDist[1])) {
+
+				camera.position[1] += distPosY;
+				animation.travelledPosDist[1] += distPosY;
+
+			}
+
+			if(Math.abs(animation.travelledPosDist[2]) < Math.abs(animation.posDist[2])) {
+
+				camera.position[2] += distPosZ;
+				animation.travelledPosDist[2] += distPosZ;
+
+			}
+
+			var distDirX = animation.velDir[0] * delta;
+			var distDirY = animation.velDir[1] * delta;
+			var distDirZ = animation.velDir[2] * delta;
+
+			if(Math.abs(animation.travelledDirDist[0]) < Math.abs(animation.dirDist[0])) {
+
+				camera.target[0] += distDirX;
+				camera.direction[0] += distDirX;
+				animation.travelledDirDist[0] += distDirX;
+
+			}
+
+			if(Math.abs(animation.travelledDirDist[1]) < Math.abs(animation.dirDist[1])) {
+
+				camera.target[1] += distDirY;
+				camera.direction[1] += distDirY;
+				animation.travelledDirDist[1] += distDirY;
+
+			}
+
+			if(Math.abs(animation.travelledDirDist[2]) < Math.abs(animation.dirDist[2])) {
+
+				camera.target[2] += distDirZ;
+				camera.direction[2] += distDirZ;
+				animation.travelledDirDist[2] += distDirZ;
+
+			}
+
+		} else {
+
+			vec3.copy(camera.position, animation.destinationPerspective.position);
+			vec3.copy(camera.direction, animation.destinationPerspective.direction);
+			vec3.copy(camera.target, animation.destinationPerspective.target);
+			this.cameraAnimation = null;
+
+		}
+
+}
 }
