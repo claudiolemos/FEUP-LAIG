@@ -32,6 +32,7 @@ class XMLscene extends CGFscene {
     this.sceneInited = false;
 
     this.initCameras();
+    this.hawalis = new Hawalis(this);
 
     this.enableTextures(true);
 
@@ -100,6 +101,7 @@ class XMLscene extends CGFscene {
     this.gl.clearColor(this.graph.background.r, this.graph.background.g, this.graph.background.b, this.graph.background.a);
 
     this.initLights();
+    this.currentScene = this.graph.filename.slice(0,-4);
 
     // Adds lights group.
     this.interface.addLightsGroup(this.graph.lights);
@@ -238,5 +240,10 @@ class XMLscene extends CGFscene {
     }
     else
       this.animation = null;
+  }
+
+  changeScene(filename){
+    this.graph.changeScene = true;
+    this.graph.reader.open('scenes/' + filename + '.xml', this.graph);
   }
 }

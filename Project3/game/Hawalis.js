@@ -408,7 +408,6 @@ class Hawalis extends CGFobject {
 
   win(player){
     swal(`Player ${player} won the game`, `${this.score[0].length} seeds : ${this.score[1].length} seeds`, "success");
-    console.log(this.moves);
     this.gameState = this.state.waiting;
   };
 

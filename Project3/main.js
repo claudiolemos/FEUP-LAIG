@@ -55,7 +55,7 @@ main=function()
 
   myInterface.setActiveCamera(myScene.camera);
 
-	var filename=getUrlVars()['file'] || "hawalis.xml";
+	var filename=getUrlVars()['file'] || "classic.xml";
 
 	var myGraph = new MySceneGraph(filename, myScene);
 

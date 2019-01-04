@@ -41,18 +41,23 @@ class MyInterface extends CGFinterface {
    * Adds a folder containing all the game settings
    */
   addGameSettings() {
-    var hawalis = this.scene.graph.primitives['hawalis'];
-
     var group = this.gui.addFolder("Game");
-    group.add(hawalis, 'startGame').name("Start");
-    group.add(hawalis, 'undo').name("Undo");
-    group.add(hawalis, 'playMovie').name("Movie");
-    group.add(hawalis, 'quitGame').name("Quit");
-    group.add(hawalis, 'velocity', 1, 1000).step(1).name("Speed");
-    group.add(hawalis, 'timeout', 5, 120).step(5).name("Timeout");
-    group.add(hawalis, 'gameDifficulty', {Easy: '1', Hard: '2'}).name("Difficulty");
-    group.add(hawalis, 'gameMode', {'Player v Player': '1', 'Player v Bot': '2', 'Bot v Bot': '3'}).name("Mode");
-    group.add(hawalis, 'getLogs').name("Log");
+    var scene = this.scene;
+
+    group.add(this.scene.hawalis, 'startGame').name("Start");
+    group.add(this.scene.hawalis, 'undo').name("Undo");
+    group.add(this.scene.hawalis, 'playMovie').name("Movie");
+    group.add(this.scene.hawalis, 'quitGame').name("Quit");
+    group.add(this.scene.hawalis, 'velocity', 1, 10).step(1).name("Speed");
+    group.add(this.scene.hawalis, 'timeout', 5, 120).step(5).name("Timeout");
+    group.add(this.scene.hawalis, 'gameDifficulty', {Easy: '1', Hard: '2'}).name("Difficulty");
+    group.add(this.scene.hawalis, 'gameMode', {'Player v Player': '1', 'Player v Bot': '2', 'Bot v Bot': '3'}).name("Mode");
+    group.add(this.scene.hawalis, 'getLogs').name("Log");
+
+    var controller = group.add(this.scene, 'currentScene', ["classic","zen"]).name("Scene");
+    controller.onChange(function(value) {
+      scene.changeScene(value);
+    });
   }
 
   /**

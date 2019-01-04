@@ -37,6 +37,7 @@ class MySceneGraph {
 
     // File reading
     this.reader = new CGFXMLreader();
+    this.filename = filename;
 
     /*
      * Read the contents of the xml file, and refer to this class for loading and error handlers.
@@ -66,7 +67,8 @@ class MySceneGraph {
     this.loadedOk = true;
 
     // As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
-    this.scene.onGraphLoaded();
+    if(!this.changeScene)
+      this.scene.onGraphLoaded();
   }
 
   /**
@@ -1608,7 +1610,7 @@ class MySceneGraph {
           // Sets obj
           this.primitives[id] = new OBJ(this.scene, file);
         } else if (children[i].children[tagIndex].nodeName == "hawalis") {
-          this.primitives[id] = new Hawalis(this.scene);
+          this.primitives[id] = this.scene.hawalis;
         } else
           this.onXMLMinorError("tag <" + children[i].children[tagIndex].nodeName + "> is not valid on the <primitive> node with index " + i + " from the <primitives> block");
       } else

@@ -38,7 +38,7 @@
   <!--Textures-->
 
   <textures>
-    <texture id="wood" file="./scenes/images/wood.jpg" />
+    <texture id="wood" file="./images/wood.jpg" />
   </textures>
 
   <!--Materials-->
@@ -75,6 +75,10 @@
       <hawalis/>
     </primitive>
 
+    <primitive id="moon">
+      <sphere radius="6" slices="30" stacks="30" />
+    </primitive>
+
   </primitives>
 
   <!--Components-->
@@ -92,6 +96,7 @@
       <texture id="wood" length_s="1" length_t="1"/>
       <children>
         <primitiveref id="hawalis"/>
+        <primitiveref id="moon"/>
       </children>
     </component>
 
