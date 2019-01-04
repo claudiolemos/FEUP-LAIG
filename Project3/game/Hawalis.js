@@ -9,13 +9,13 @@ class Hawalis extends CGFobject {
     };
 
     this.state = {
-      start: '0',
-      playerOneWon: '1',
-      playerTwoWon: '2',
-			playerTurn: '3',
-      botTurn: '4',
-			movingSeeds: '5',
-      waiting: '6'
+      // start: '0',
+			playerTurn: '1',
+      botTurn: '2',
+			movingSeeds: '3',
+      waiting: '4',
+      quit: '5',
+      movie: '6'
     };
 
     this.difficulty = {
@@ -24,30 +24,24 @@ class Hawalis extends CGFobject {
     };
 
     this.server = new Server();
-    this.currentPlayer = 'player1';
+    // this.currentPlayer = 'player1';
     this.gameState = this.state.waiting;
     this.gameDifficulty = this.difficulty.hard;
     this.gameMode = this.mode.PvP;
-    this.prologBoard = '[[[[2,2,2,2,2,2,2],[2,2,2,2,2,2,2]],[[2,2,2,2,2,2,2],[2,2,2,2,2,2,2]]],player1,0,0]';
+    // this.prologBoard = '[[[[2,2,2,2,2,2,2],[2,2,2,2,2,2,2]],[[2,2,2,2,2,2,2],[2,2,2,2,2,2,2]]],player1,0,0]';
     this.board = new Board(scene);
     this.seeds = []; // seeds nos buracos
     this.turnQueue = []; // seeds em animação de um buraco para o outro
     this.scoreQueue = []; // seeds em animação de um buraco para o score board
     this.score = [[],[]]; // seeds no score board
-    this.points = [0, 0];
+    // this.points = [0, 0];
     this.velocity = 1;
+    this.time = 0;
+    this.timeout = 30;
+    this.moves = [];
     this.init();
-
+    this.scene.setPickEnabled(false);
   };
-
-  getKeyByValue(object, value) {
-  return Object.keys(object).find(key => object[key] == value);
-};
-
-  getLogs(){
-    console.log([this.gameState, this.gameMode, this.gameDifficulty]);
-    console.log([this.getKeyByValue(this.state,this.gameState),this.getKeyByValue(this.mode,this.gameMode), this.getKeyByValue(this.difficulty,this.gameDifficulty)]);
-  }
 
   display() {
     this.updateHTML();
@@ -57,38 +51,102 @@ class Hawalis extends CGFobject {
     this.displayQueuedSeeds();
   };
 
+  getKeyByValue(object, value) {
+  return Object.keys(object).find(key => object[key] == value);
+};
+
+  getLogs(){
+    console.log(this.moves);
+    console.log(this.turnQueue);
+    console.log(this.getKeyByValue(this.state,this.gameState));
+  }
+
   checkState(){
   	switch (this.gameState) {
   		case this.state.playerTurn:
   			this.picking();
+        this.checkTimeout();
   			break;
 			case this.state.botTurn:
   			this.getBotMove();
   			break;
-			case this.state.start:
-  			this.startGame();
-  			break;
   	}
   };
 
+  checkTimeout(){
+    this.time += this.scene.delta/1000;
+    if(this.time > this.timeout){
+      this.updateBoard();
+      this.updateState();
+      this.time = 0;
+    }
+  }
+
   startGame(){
-    this.init();
-    this.gameState = this.state.playing;
-    this.updateState();
+    var hawalis = this;
+    this.server.makeRequest('start',function(data){
+      hawalis.scene.setPickEnabled(true);
+      hawalis.init();
+      // hawalis.gameState = hawalis.state.start;
+      hawalis.turnQueue = [];
+      hawalis.time = 0;
+      hawalis.scoreQueue = [];
+      hawalis.score = [[],[]];
+      hawalis.points = [0, 0];
+      hawalis.currentPlayer = 'player1';
+      hawalis.prologBoard = '[[[[2,2,2,2,2,2,2],[2,2,2,2,2,2,2]],[[2,2,2,2,2,2,2],[2,2,2,2,2,2,2]]],player1,0,0]';
+      hawalis.updateState();
+    });
   }
 
   quitGame(){
     this.gameState = this.state.quit;
+    this.scene.setPickEnabled(false);
   }
 
   undo(){}
 
-  playMovie(){}
+  playMovie(){
+    this.init();
+    this.turnQueue = [];
+    this.time = 0;
+    this.scoreQueue = [];
+    this.score = [[],[]];
+    this.points = [0, 0];
+    this.currentPlayer = 'player1';
+    this.prologBoard = '[[[[2,2,2,2,2,2,2],[2,2,2,2,2,2,2]],[[2,2,2,2,2,2,2],[2,2,2,2,2,2,2]]],player1,0,0]';
+    this.gameState = this.state.movie;
+    var move = this.moves.shift();
+    this.move(move[0],move[1]);
+  }
 
   updateHTML(){
-    document.getElementById("score").innerText = `${this.score[0].length} seeds : ${this.score[1].length} seeds`;
-    if(this.gameState == this.state.botTurn || this.gameState == this.state.playerTurn)
-      document.getElementById("info").innerText = (this.currentPlayer == 'player1')? "Player 1's turn" : "Player 2's turn\n";
+    if(this.gameState == this.state.botTurn || this.gameState == this.state.playerTurn || this.gameState == this.state.movingSeeds){
+      if(this.gameState == this.state.playerTurn)
+        document.getElementById("time").innerText = `${("00"+parseInt(this.time / 60)).slice(-"00".length)}:${    ("00"+parseInt(this.time % 60)).slice(-"00".length)}`;
+      document.getElementById("score").innerText = `${this.score[0].length} seeds : ${this.score[1].length} seeds`;
+      document.getElementById("turn").innerText = (this.currentPlayer == 'player1')? "Player 1's turn" : "Player 2's turn\n";
+    }
+    else
+      document.getElementById("turn").innerText = "";
+
+    switch (this.gameState) {
+      case this.state.waiting:
+        document.getElementById("info").innerText = "Start a game";
+        break;
+      case this.state.quit:
+        document.getElementById("info").innerText = "You've exited the game";
+        break;
+      case this.state.playerTurn:
+        document.getElementById("info").innerText = "Please select your pit";
+        break;
+      case this.state.movingSeeds:
+        document.getElementById("info").innerText = "Moving seeds";
+        break;
+      default:
+        document.getElementById("info").innerText = "";
+        break;
+    }
   }
 
   addMessage(message){
@@ -99,9 +157,12 @@ class Hawalis extends CGFobject {
 		switch (this.gameMode) {
 			case this.mode.PvP:
 				this.gameState = this.state.playerTurn;
+          this.scene.setPickEnabled(true);
 				break;
 			case this.mode.PvC:
 				this.gameState = (this.currentPlayer == 'player1')? this.state.playerTurn : this.state.botTurn;
+        if(this.gameState == this.state.playerTurn)
+          this.scene.setPickEnabled(true);
 				break;
 			case this.mode.CvC:
 				this.gameState = this.state.botTurn;
@@ -137,20 +198,20 @@ class Hawalis extends CGFobject {
   animateSeed(seed, type) {
     if (seed.animation != null && !seed.animation.finished) {
       this.scene.pushMatrix();
-      seed.animation.update(this.scene.delta * this.velocity);
-      seed.animation.apply(this.scene);
-      seed.display();
+        seed.animation.update(this.scene.delta * this.velocity);
+        seed.animation.apply(this.scene);
+        seed.display();
       this.scene.popMatrix();
     } else if (seed.animation != null && seed.animation.finished) {
-      switch (type) {
-        case 'turn':
-          var cell = this.addToCell(seed);
-          this.nextMove(cell);
-          break;
-        case 'score':
-          this.addToScore(seed);
-          break;
-      }
+        switch (type) {
+          case 'turn':
+            var cell = this.addToCell(seed);
+            this.nextMove(cell);
+            break;
+          case 'score':
+            this.addToScore(seed);
+            break;
+        }
     }
   };
 
@@ -158,21 +219,22 @@ class Hawalis extends CGFobject {
     var cell = seed.next;
     seed.coord = this.getCellFreePosition(cell[0], cell[1]);
     seed.animation = null;
-    // seed.next = [];
-    this.turnQueue.shift();
+    if (this.gameState != this.state.quit)
+      this.turnQueue.shift();
     this.seeds[cell[0]][cell[1]].push(seed);
-    // seed.cell = [];
     seed.display();
     return cell;
   };
 
   addToScore(seed) {
     seed.animation = null;
-    this.scoreQueue.shift();
+    if (this.gameState != this.state.quit)
+      this.scoreQueue.shift();
     this.score[seed.score].push(seed);
     seed.coord = seed.nextCoord;
     seed.display();
-		if (this.scoreQueue.length == 0) this.checkGameStatus();
+		if (this.scoreQueue.length == 0)
+      this.checkGameStatus();
   };
 
   nextMove(cell) {
@@ -180,9 +242,11 @@ class Hawalis extends CGFobject {
       if (this.seeds[cell[0]][cell[1]].length > 1)
         this.move(cell[0], cell[1]);
       else if (this.seeds[cell[0]][cell[1]].length == 1) {
-	      if (cell[0] == 1 || cell[0] == 2) this.captureSeeds(cell);
+	      if (cell[0] == 1 || cell[0] == 2)
+          this.captureSeeds(cell);
 	      this.updateBoard();
-				if (this.scoreQueue.length == 0) this.checkGameStatus();
+				if (this.scoreQueue.length == 0)
+          this.checkGameStatus();
     }
   };
 
@@ -270,10 +334,6 @@ class Hawalis extends CGFobject {
     this.boardToProlog();
   };
 
-  changePlayer() {
-    this.currentPlayer = (this.currentPlayer == 'player1') ? 'player2' : 'player1';
-  };
-
   boardToProlog() {
     this.prologBoard = '[[';
     for (var i = 0; i < 4; i += 2) {
@@ -293,19 +353,6 @@ class Hawalis extends CGFobject {
     this.prologBoard += `],${this.currentPlayer},${this.points[0]},${this.points[1]}]`;
   };
 
-  picking() {
-    if (this.scene.pickMode == false) {
-      if (this.scene.pickResults != null && this.scene.pickResults.length > 0) {
-        for (var i = 0; i < this.scene.pickResults.length; i++) {
-          var obj = this.scene.pickResults[i][0];
-          if (obj)
-            this.isValidMove(this.scene.pickResults[i][1]);
-        }
-        this.scene.pickResults.splice(0, this.scene.pickResults.length);
-      }
-    }
-  };
-
   isValidMove(id) {
     var hawalis = this;
     var request = `isValidMove(${this.prologBoard},${~~((id-1)/7)},${(id-1)%7})`;
@@ -314,10 +361,12 @@ class Hawalis extends CGFobject {
 
       if (response[0]){
         hawalis.move(response[1], response[2]);
-        hawalis.addMessage('Moving seeds');
+        hawalis.moves.push([response[1], response[2]]);
+        hawalis.scene.setPickEnabled(false);
+        hawalis.gameState = hawalis.state.movingSeeds;
       }
       else
-        hawalis.addMessage('Invalid pit');
+        swal("Invalid pit", "Please select a valid pit in your board", "error");
     });
   };
 
@@ -328,15 +377,19 @@ class Hawalis extends CGFobject {
 			var response = data.target.response;
 			switch (response) {
 				case 'player1':
-					hawalis.gameState = hawalis.state.playerOneWon;
-					console.log(1);
+					hawalis.win(1);
 					break;
 				case 'player2':
-					hawalis.gameState = hawalis.state.playerTwoWon;
-					console.log(2);
+          hawalis.win(2);
 					break;
 				case 'continue':
-					hawalis.updateState();
+          if(hawalis.gameState != hawalis.state.quit && hawalis.gameState != hawalis.state.movie)
+            hawalis.updateState();
+          else if(hawalis.gameState == hawalis.state.movie){
+            var move = hawalis.moves.shift();
+            hawalis.move(move[0],move[1]);
+          }
+          hawalis.time = 0;
 					break;
 			}
     });
@@ -348,8 +401,33 @@ class Hawalis extends CGFobject {
     this.server.makeRequest(request, function(data) {
 			var response = JSON.parse(data.target.response);
 			hawalis.move(response[0], response[1]);
+      hawalis.moves.push([response[0], response[1]]);
     });
 		this.gameState = this.state.movingSeeds;
+  };
+
+  win(player){
+    swal(`Player ${player} won the game`, `${this.score[0].length} seeds : ${this.score[1].length} seeds`, "success");
+    console.log(this.moves);
+    this.gameState = this.state.waiting;
+  };
+
+  changePlayer() {
+    this.currentPlayer = (this.currentPlayer == 'player1') ? 'player2' : 'player1';
+  };
+
+  picking() {
+    if (this.scene.pickMode == false) {
+      if (this.scene.pickResults != null && this.scene.pickResults.length > 0) {
+        for (var i = 0; i < this.scene.pickResults.length; i++) {
+          var obj = this.scene.pickResults[i][0];
+          if (obj){
+            this.isValidMove(this.scene.pickResults[i][1]);
+          }
+        }
+        this.scene.pickResults.splice(0, this.scene.pickResults.length);
+      }
+    }
   };
 
   updateTexCoords(s, t) {};

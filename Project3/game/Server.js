@@ -10,7 +10,7 @@ class Server
   };
 
   onError(data){
-    console.log('Error waiting for the server response');
+		swal("Oops...", "Please connect to Prolog server", "error");
   };
 
   makeRequest(requestString, onSuccess) {
