@@ -54,8 +54,7 @@ class Hawalis extends CGFobject {
 };
 
   getLogs(){
-    console.log([this.gameState, this.gameMode, this.gameDifficulty]);
-    console.log([this.getKeyByValue(this.state,this.gameState),this.getKeyByValue(this.mode,this.gameMode), this.getKeyByValue(this.difficulty,this.gameDifficulty)]);
+    console.log(this.scene.camera);
   }
 
   checkState(){

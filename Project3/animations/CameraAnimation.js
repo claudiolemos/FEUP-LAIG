@@ -1,42 +1,35 @@
-/**
- * constructor of the camera Animation
- * @constructor CameraAnimation
- *
- */
+class CameraAnimation {
 
- function CameraAnimation(originPerspective, destinationPerspective) {
+  constructor(span, from, to){
+    this.from = from;
+    this.to = to;
+    this.span = span;
+    this.init();
+    this.calculate();
+  };
 
- 	this.originPerspective = originPerspective;
- 	this.destinationPerspective = destinationPerspective;
- 	this.time = 750;
+  init(){
+    this.fromPosition = vec3.fromValues(this.from.position[0],this.from.position[1],this.from.position[2]);
+    this.fromDirection = vec3.fromValues(this.from.direction[0],this.from.direction[1],this.from.direction[2]);
+    this.toPosition = vec3.fromValues(this.to.position[0],this.to.position[1],this.to.position[2]);
+    this.toDirection = vec3.fromValues(this.to.direction[0],this.to.direction[1],this.to.direction[2]);
+    this.position = vec3.create();
+    this.direction = vec3.create();
+    this.currentPosition = vec3.fromValues(0,0,0);
+    this.currentDirection = vec3.fromValues(0,0,0);
+  };
 
-  var originPos = vec3.fromValues(this.originPerspective.position[0],this.originPerspective.position[1],this.originPerspective.position[2]);
- 	var destinationPos = vec3.fromValues(this.destinationPerspective.position[0],this.destinationPerspective.position[1],this.destinationPerspective.position[2]);
+  calculate(){
+    vec3.subtract(this.position, this.toPosition, this.fromPosition);
+    this.positionVelocity = vec3.fromValues(this.position[0]/this.span,this.position[1]/this.span,this.position[2]/this.span);
+    vec3.subtract(this.direction, this.toDirection, this.fromDirection);
+    this.directionVelocity = vec3.fromValues(this.direction[0]/this.span,this.direction[1]/this.span,this.direction[2]/this.span);
+  };
 
- 	this.posDist = vec3.create();
+  finished(){
+    return (Math.abs(this.currentPosition[0]) >= Math.abs(this.position[0]) && Math.abs(this.currentPosition[1]) >= Math.abs(this.position[1]) &&
+      Math.abs(this.currentPosition[2]) >= Math.abs(this.position[2]) && Math.abs(this.currentDirection[0]) >= Math.abs(this.direction[0]) &&
+      Math.abs(this.currentDirection[1]) >= Math.abs(this.direction[1]) && Math.abs(this.currentDirection[2]) >= Math.abs(this.direction[2]))
+  };
 
- 	vec3.subtract(this.posDist, destinationPos, originPos);
-
-	this.velPos = vec3.create();
- 	this.velPos[0] = this.posDist[0] / this.time;
- 	this.velPos[1] = this.posDist[1] / this.time;
- 	this.velPos[2] = this.posDist[2] / this.time;
-
- 	this.travelledPosDist = vec3.create(0, 0, 0);
-
-
- 	var originDir = vec3.fromValues(this.originPerspective.direction[0],this.originPerspective.direction[1],this.originPerspective.direction[2]);
- 	var destinationDir = vec3.fromValues(this.destinationPerspective.direction[0],this.destinationPerspective.direction[1],this.destinationPerspective.direction[2]);
-
- 	this.dirDist = vec3.create();
-
- 	vec3.subtract(this.dirDist, destinationDir, originDir);
-
-	this.velDir = vec3.create();
- 	this.velDir[0] = this.dirDist[0] / this.time;
- 	this.velDir[1] = this.dirDist[1] / this.time;
- 	this.velDir[2] = this.dirDist[2] / this.time;
-
- 	this.travelledDirDist = vec3.create(0, 0, 0);
-
- }
+};

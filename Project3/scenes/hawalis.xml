@@ -2,15 +2,19 @@
   <scene root="root" axis_length="5" />
 
   <!--Views-->
-  <views default="view2" >
-    <perspective id="default" near="0.1" far="50" angle="23">
-      <from x="3.5" y="15" z="2.51" />
+  <views default="neutral" >
+    <perspective id="neutral" near="0.1" far="500" angle="23">
+      <from x="2.5" y="20" z="2.5" />
       <to x="3.5" y="0" z="2.5" />
     </perspective>
-      <perspective id="view2" near="0.1" far="50" angle="23">
-        <from x="8.5" y="15" z="7.5" />
-        <to x="3.5" y="0" z="2.5" />
-      </perspective>
+    <perspective id="player1" near="0.1" far="500" angle="23">
+      <from x="-10" y="13" z="-10" />
+      <to x="3.5" y="3" z="2.5" />
+    </perspective>
+    <perspective id="player2" near="0.1" far="500" angle="23">
+      <from x="10" y="15" z="10" />
+      <to x="3.5" y="0" z="2.5" />
+    </perspective>
   </views>
 
   <!--Ambient-->

@@ -1,13 +1,13 @@
-var DEGREE_TO_RAD = Math.PI / 180;
+DEGREE_TO_RAD = Math.PI / 180;
 
 /**
-* XMLscene class, representing the scene that is to be rendered.
-*/
+ * XMLscene class, representing the scene that is to be rendered.
+ */
 class XMLscene extends CGFscene {
   /**
-  * @constructor
-  * @param {MyInterface} myinterface
-  */
+   * @constructor
+   * @param {MyInterface} myinterface
+   */
   constructor(myinterface) {
     super();
 
@@ -22,9 +22,9 @@ class XMLscene extends CGFscene {
   }
 
   /**
-  * Initializes the scene, setting some WebGL defaults, initializing the camera and the axis.
-  * @param {CGFApplication} application
-  */
+   * Initializes the scene, setting some WebGL defaults, initializing the camera and the axis.
+   * @param {CGFApplication} application
+   */
   init(application) {
     super.init(application);
 
@@ -43,21 +43,21 @@ class XMLscene extends CGFscene {
   }
 
   /**
-  * Initializes the scene cameras.
-  */
+   * Initializes the scene cameras.
+   */
   initCameras() {
     this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 10, 15), vec3.fromValues(0, 0, 0));
   }
 
   /**
-  * Initializes the scene lights with the values read from the XML file.
-  */
+   * Initializes the scene lights with the values read from the XML file.
+   */
   initLights() {
     var i = 0;
 
     for (var key in this.graph.lights) {
       if (i >= 8)
-      break;
+        break;
 
       if (this.graph.lights.hasOwnProperty(key)) {
         var light = this.graph.lights[key];
@@ -67,7 +67,7 @@ class XMLscene extends CGFscene {
         this.lights[i].setDiffuse(light.diffuse.r, light.diffuse.g, light.diffuse.b, light.diffuse.a);
         this.lights[i].setSpecular(light.specular.r, light.specular.g, light.specular.b, light.specular.a);
 
-        if(light.type == "spot"){
+        if (light.type == "spot") {
           this.lights[i].setSpotCutOff(light.angle);
           this.lights[i].setSpotExponent(light.exponent);
           this.lights[i].setSpotDirection(light.target.x - light.location.x, light.target.y - light.location.y, light.target.z - light.location.z);
@@ -76,9 +76,9 @@ class XMLscene extends CGFscene {
         this.lights[i].setVisible(true);
 
         if (light.enabled)
-        this.lights[i].enable();
+          this.lights[i].enable();
         else
-        this.lights[i].disable();
+          this.lights[i].disable();
 
         this.lights[i].update();
 
@@ -88,8 +88,8 @@ class XMLscene extends CGFscene {
   }
 
   /* Handler called when the graph is finally loaded.
-  * As loading is asynchronous, this may be called already after the application has started the run loop
-  */
+   * As loading is asynchronous, this may be called already after the application has started the run loop
+   */
   onGraphLoaded() {
     this.updateCamera(this.graph.default);
 
@@ -117,32 +117,32 @@ class XMLscene extends CGFscene {
   }
 
   /**
-  * Updates camera appropriately depending on the view, whether it's perspective or ortho
-  * @param {string} newCamera id for the new camera
-  * @param {boolean} animated if true, there needs to be animation moving to the next camera
-  */
-  updateCamera(newCamera, animated){
+   * Updates camera appropriately depending on the view, whether it's perspective or ortho
+   * @param {string} newCamera id for the new camera
+   * @param {boolean} animated if true, there needs to be animation moving to the next camera
+   */
+  updateCamera(newCamera, animated) {
     this.currentCamera = newCamera;
 
-    if(this.graph.views[newCamera].type == "perspective")
-      if(animated)
-        this.animation = new CameraAnimation(this.camera, (new CGFcamera(this.graph.views[newCamera].angle, this.graph.views[newCamera].near, this.graph.views[newCamera].far, vec3.fromValues(this.graph.views[newCamera].from.x, this.graph.views[newCamera].from.y, this.graph.views[newCamera].from.z), vec3.fromValues(this.graph.views[newCamera].to.x, this.graph.views[newCamera].to.y, this.graph.views[newCamera].to.z))));
+    if (this.graph.views[newCamera].type == "perspective")
+      if (animated)
+        this.animation = new CameraAnimation(1000, this.camera, (new CGFcamera(this.graph.views[newCamera].angle, this.graph.views[newCamera].near, this.graph.views[newCamera].far, vec3.fromValues(this.graph.views[newCamera].from.x, this.graph.views[newCamera].from.y, this.graph.views[newCamera].from.z), vec3.fromValues(this.graph.views[newCamera].to.x, this.graph.views[newCamera].to.y, this.graph.views[newCamera].to.z))));
       else
         this.camera = new CGFcamera(this.graph.views[newCamera].angle, this.graph.views[newCamera].near, this.graph.views[newCamera].far, vec3.fromValues(this.graph.views[newCamera].from.x, this.graph.views[newCamera].from.y, this.graph.views[newCamera].from.z), vec3.fromValues(this.graph.views[newCamera].to.x, this.graph.views[newCamera].to.y, this.graph.views[newCamera].to.z));
-    else if(this.graph.views[newCamera].type == "ortho")
-      this.camera = new CGFcameraOrtho(this.graph.views[newCamera].left, this.graph.views[newCamera].right, this.graph.views[newCamera].bottom, this.graph.views[newCamera].top, this.graph.views[newCamera].near, this.graph.views[newCamera].far, vec3.fromValues(this.graph.views[newCamera].from.x, this.graph.views[newCamera].from.y, this.graph.views[newCamera].from.z), vec3.fromValues(this.graph.views[newCamera].to.x, this.graph.views[newCamera].to.y, this.graph.views[newCamera].to.z), vec3.fromValues(0,1,0));
+    else if (this.graph.views[newCamera].type == "ortho")
+      this.camera = new CGFcameraOrtho(this.graph.views[newCamera].left, this.graph.views[newCamera].right, this.graph.views[newCamera].bottom, this.graph.views[newCamera].top, this.graph.views[newCamera].near, this.graph.views[newCamera].far, vec3.fromValues(this.graph.views[newCamera].from.x, this.graph.views[newCamera].from.y, this.graph.views[newCamera].from.z), vec3.fromValues(this.graph.views[newCamera].to.x, this.graph.views[newCamera].to.y, this.graph.views[newCamera].to.z), vec3.fromValues(0, 1, 0));
 
     this.interface.setActiveCamera(this.camera);
   }
 
   /**
-  * Displays the scene.
-  */
+   * Displays the scene.
+   */
   display() {
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
-    if(this.animation != null)
+    if (this.animation != null)
       this.animateCamera(this.delta);
 
     this.updateProjectionMatrix();
@@ -152,53 +152,52 @@ class XMLscene extends CGFscene {
 
     this.pushMatrix();
 
-      if (this.sceneInited) {
-        if(this.showAxis)
-          this.axis.display();
+    if (this.sceneInited) {
+      if (this.showAxis)
+        this.axis.display();
 
-        var i = 0;
-        for (var key in this.lightValues) {
-          if (this.lightValues.hasOwnProperty(key)) {
-            if (this.lightValues[key]) {
-              this.lights[i].setVisible(true);
-              this.lights[i].enable();
-            }
-            else {
-              this.lights[i].setVisible(false);
-              this.lights[i].disable();
-            }
-            this.lights[i].update();
-            i++;
+      var i = 0;
+      for (var key in this.lightValues) {
+        if (this.lightValues.hasOwnProperty(key)) {
+          if (this.lightValues[key]) {
+            this.lights[i].setVisible(true);
+            this.lights[i].enable();
+          } else {
+            this.lights[i].setVisible(false);
+            this.lights[i].disable();
           }
+          this.lights[i].update();
+          i++;
         }
-
-        this.graph.displayScene();
       }
+
+      this.graph.displayScene();
+    }
 
     this.popMatrix();
   };
 
   /**
-  * Sets paused to false, allowing animations to play
-  */
-  playAnimation(){
+   * Sets paused to false, allowing animations to play
+   */
+  playAnimation() {
     this.paused = false;
   };
 
   /**
-  * Sets paused to true, pausing the animations
-  */
-  pauseAnimation(){
+   * Sets paused to true, pausing the animations
+   */
+  pauseAnimation() {
     this.paused = true;
   };
 
   /**
    * Resets all animations
    */
-  restartAnimation(){
-    for(var key1 in this.graph.components){
+  restartAnimation() {
+    for (var key1 in this.graph.components) {
       this.graph.components[key1].currentAnimation = 0;
-      for(var key2 in this.graph.components[key1].animations)
+      for (var key2 in this.graph.components[key1].animations)
         this.graph.components[key1].animations[key2].reset();
     }
 
@@ -206,11 +205,11 @@ class XMLscene extends CGFscene {
   };
 
   /**
-  * Updates delta (time since last update) and previous (previous currTime)
-  * @param {number} currTime current time in milliseconds
-  */
+   * Updates delta (time since last update) and previous (previous currTime)
+   * @param {number} currTime current time in milliseconds
+   */
   update(currTime) {
-    if(this.previous == -1)
+    if (this.previous == -1)
       this.delta = 0;
     else
       this.delta = currTime - this.previous;
@@ -219,80 +218,24 @@ class XMLscene extends CGFscene {
   }
 
   animateCamera(delta) {
+    if (!this.animation.finished()) {
+      var pos = [this.animation.positionVelocity[0] * delta,this.animation.positionVelocity[1] * delta,this.animation.positionVelocity[2] * delta];
+      var dir = [this.animation.directionVelocity[0] * delta,this.animation.directionVelocity[1] * delta,this.animation.directionVelocity[2] * delta];
 
-	var animation = this.animation;
-	var camera = this.camera
+      for(var i = 0; i < 3; i++){
+        if (Math.abs(this.animation.currentPosition[i]) < Math.abs(this.animation.position[i])) {
+          this.camera.position[i] += pos[i];
+          this.animation.currentPosition[i] += pos[i];
+        }
 
-	if (this.lastCurrTime != 0)
-		if (Math.abs(animation.travelledPosDist[0]) < Math.abs(animation.posDist[0]) ||
-			Math.abs(animation.travelledPosDist[1]) < Math.abs(animation.posDist[1]) ||
-			Math.abs(animation.travelledPosDist[2]) < Math.abs(animation.posDist[2]) ||
-			Math.abs(animation.travelledDirDist[0]) < Math.abs(animation.dirDist[0]) ||
-			Math.abs(animation.travelledDirDist[1]) < Math.abs(animation.dirDist[1]) ||
-			Math.abs(animation.travelledDirDist[2]) < Math.abs(animation.dirDist[2]) ) {
-
-
-			var distPosX = animation.velPos[0] * delta;
-			var distPosY = animation.velPos[1] * delta;
-			var distPosZ = animation.velPos[2] * delta;
-
-			if(Math.abs(animation.travelledPosDist[0]) < Math.abs(animation.posDist[0])) {
-
-				camera.position[0] += distPosX;
-				animation.travelledPosDist[0] += distPosX;
-
-			}
-
-			if(Math.abs(animation.travelledPosDist[1]) < Math.abs(animation.posDist[1])) {
-
-				camera.position[1] += distPosY;
-				animation.travelledPosDist[1] += distPosY;
-
-			}
-
-			if(Math.abs(animation.travelledPosDist[2]) < Math.abs(animation.posDist[2])) {
-
-				camera.position[2] += distPosZ;
-				animation.travelledPosDist[2] += distPosZ;
-
-			}
-
-			var distDirX = animation.velDir[0] * delta;
-			var distDirY = animation.velDir[1] * delta;
-			var distDirZ = animation.velDir[2] * delta;
-
-			if(Math.abs(animation.travelledDirDist[0]) < Math.abs(animation.dirDist[0])) {
-
-				camera.target[0] += distDirX;
-				camera.direction[0] += distDirX;
-				animation.travelledDirDist[0] += distDirX;
-
-			}
-
-			if(Math.abs(animation.travelledDirDist[1]) < Math.abs(animation.dirDist[1])) {
-
-				camera.target[1] += distDirY;
-				camera.direction[1] += distDirY;
-				animation.travelledDirDist[1] += distDirY;
-
-			}
-
-			if(Math.abs(animation.travelledDirDist[2]) < Math.abs(animation.dirDist[2])) {
-
-				camera.target[2] += distDirZ;
-				camera.direction[2] += distDirZ;
-				animation.travelledDirDist[2] += distDirZ;
-
-			}
-
-		} else {
-
-			vec3.copy(camera.position, animation.destinationPerspective.position);
-			vec3.copy(camera.direction, animation.destinationPerspective.direction);
-			vec3.copy(camera.target, animation.destinationPerspective.target);
-			this.cameraAnimation = null;
-
-		}
-
-}
+        if (Math.abs(this.animation.currentDirection[i]) < Math.abs(this.animation.direction[i])) {
+          this.camera.target[i] += dir[i];
+          this.camera.direction[i] += dir[i];
+          this.animation.currentDirection[i] += dir[i];
+        }
+      }
+    }
+    else
+      this.animation = null;
+  }
 }
