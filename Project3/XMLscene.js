@@ -14,6 +14,7 @@ class XMLscene extends CGFscene {
     this.interface = myinterface;
     this.lightValues = {};
     this.currentCamera;
+    this.cameraAnimation = true;
     this.currentMaterial = 0;
     this.showAxis = true;
     this.previous = -1;
@@ -106,11 +107,11 @@ class XMLscene extends CGFscene {
     // Adds game settings.
     this.interface.addGameSettings();
 
-    // Adds show axis
-    this.interface.gui.add(this, 'showAxis').name("Show axis");
-
     // Adds views group.
     this.interface.addViews(this.graph.views);
+
+    // Adds show axis
+    this.interface.gui.add(this, 'showAxis').name("Show axis");
 
     this.sceneInited = true;
     this.setUpdatePeriod(10);

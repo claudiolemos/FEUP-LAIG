@@ -28,7 +28,6 @@ class MyInterface extends CGFinterface {
   addLightsGroup(lights) {
 
     var group = this.gui.addFolder("Lights");
-    group.open();
 
     for (var key in lights) {
       if (lights.hasOwnProperty(key)) {
@@ -45,12 +44,11 @@ class MyInterface extends CGFinterface {
     var hawalis = this.scene.graph.primitives['hawalis'];
 
     var group = this.gui.addFolder("Game");
-    group.open();
     group.add(hawalis, 'startGame').name("Start");
     group.add(hawalis, 'undo').name("Undo");
     group.add(hawalis, 'playMovie').name("Movie");
     group.add(hawalis, 'quitGame').name("Quit");
-    group.add(hawalis, 'velocity', 1, 10).step(1).name("Speed");
+    group.add(hawalis, 'velocity', 1, 1000).step(1).name("Speed");
     group.add(hawalis, 'timeout', 5, 120).step(5).name("Timeout");
     group.add(hawalis, 'gameDifficulty', {Easy: '1', Hard: '2'}).name("Difficulty");
     group.add(hawalis, 'gameMode', {'Player v Player': '1', 'Player v Bot': '2', 'Bot v Bot': '3'}).name("Mode");
@@ -62,16 +60,18 @@ class MyInterface extends CGFinterface {
    * @param {array} views
    */
   addViews(views) {
+    var group = this.gui.addFolder("Views");
     var scene = this.scene;
 
     var viewsID = [];
     for (var key in views)
       viewsID.push(key);
 
-    var controller = this.gui.add(this.scene, 'currentCamera', viewsID).name("Camera");
+    var controller = group.add(this.scene, 'currentCamera', viewsID).name("Camera");
+    group.add(this.scene, 'cameraAnimation').name("Animation");
 
     controller.onChange(function(value) {
-      scene.updateCamera(value, true);
+      scene.updateCamera(value, scene.cameraAnimation);
     });
   };
 

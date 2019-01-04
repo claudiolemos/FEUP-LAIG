@@ -14,7 +14,8 @@ class Hawalis extends CGFobject {
       botTurn: '2',
 			movingSeeds: '3',
       waiting: '4',
-      quit: '5'
+      quit: '5',
+      movie: '6'
     };
 
     this.difficulty = {
@@ -37,6 +38,7 @@ class Hawalis extends CGFobject {
     this.velocity = 1;
     this.time = 0;
     this.timeout = 30;
+    this.moves = [];
     this.init();
     this.scene.setPickEnabled(false);
   };
@@ -54,7 +56,9 @@ class Hawalis extends CGFobject {
 };
 
   getLogs(){
-    console.log(this.scene.camera);
+    console.log(this.moves);
+    console.log(this.turnQueue);
+    console.log(this.getKeyByValue(this.state,this.gameState));
   }
 
   checkState(){
@@ -66,9 +70,6 @@ class Hawalis extends CGFobject {
 			case this.state.botTurn:
   			this.getBotMove();
   			break;
-			// case this.state.start:
-  		// 	this.startGame();
-  		// 	break;
   	}
   };
 
@@ -105,15 +106,21 @@ class Hawalis extends CGFobject {
 
   undo(){}
 
-  playMovie(){}
+  playMovie(){
+    this.init();
+    this.turnQueue = [];
+    this.time = 0;
+    this.scoreQueue = [];
+    this.score = [[],[]];
+    this.points = [0, 0];
+    this.currentPlayer = 'player1';
+    this.prologBoard = '[[[[2,2,2,2,2,2,2],[2,2,2,2,2,2,2]],[[2,2,2,2,2,2,2],[2,2,2,2,2,2,2]]],player1,0,0]';
+    this.gameState = this.state.movie;
+    var move = this.moves.shift();
+    this.move(move[0],move[1]);
+  }
 
   updateHTML(){
-    // document.getElementById("time").innerText = `${("00"+parseInt(this.time / 60)).slice(-"00".length)}:${    ("00"+parseInt(this.time % 60)).slice(-"00".length)}`;
-    // document.getElementById("state").innerText = this.getKeyByValue(this.state,this.gameState);
-    // document.getElementById("pick").innerText = `${this.scene.pickResults.length}`;
-    // if(this.gameState != this.state.waiting)
-    // document.getElementById("score").innerText = `${this.score[0].length} seeds : ${this.score[1].length} seeds`;
-
     if(this.gameState == this.state.botTurn || this.gameState == this.state.playerTurn || this.gameState == this.state.movingSeeds){
       if(this.gameState == this.state.playerTurn)
         document.getElementById("time").innerText = `${("00"+parseInt(this.time / 60)).slice(-"00".length)}:${    ("00"+parseInt(this.time % 60)).slice(-"00".length)}`;
@@ -354,6 +361,7 @@ class Hawalis extends CGFobject {
 
       if (response[0]){
         hawalis.move(response[1], response[2]);
+        hawalis.moves.push([response[1], response[2]]);
         hawalis.scene.setPickEnabled(false);
         hawalis.gameState = hawalis.state.movingSeeds;
       }
@@ -375,8 +383,12 @@ class Hawalis extends CGFobject {
           hawalis.win(2);
 					break;
 				case 'continue':
-          if(hawalis.gameState != hawalis.state.quit)
+          if(hawalis.gameState != hawalis.state.quit && hawalis.gameState != hawalis.state.movie)
             hawalis.updateState();
+          else if(hawalis.gameState == hawalis.state.movie){
+            var move = hawalis.moves.shift();
+            hawalis.move(move[0],move[1]);
+          }
           hawalis.time = 0;
 					break;
 			}
@@ -389,12 +401,14 @@ class Hawalis extends CGFobject {
     this.server.makeRequest(request, function(data) {
 			var response = JSON.parse(data.target.response);
 			hawalis.move(response[0], response[1]);
+      hawalis.moves.push([response[0], response[1]]);
     });
 		this.gameState = this.state.movingSeeds;
   };
 
   win(player){
     swal(`Player ${player} won the game`, `${this.score[0].length} seeds : ${this.score[1].length} seeds`, "success");
+    console.log(this.moves);
     this.gameState = this.state.waiting;
   };
 
