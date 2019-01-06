@@ -1,14 +1,13 @@
 /**
-* MyGraphNode class, which represents a node in the scene graph
-*/
+ * MyGraphNode class, which represents a node in the scene graph
+ */
 class MyGraphNode {
   /**
-  * @constructor
-  * @param {MySceneGraph} graph graph that represents the whole scene
-  * @param {string}       id    node's id
-  */
-  constructor(graph, id)
-  {
+   * @constructor
+   * @param {MySceneGraph} graph graph that represents the whole scene
+   * @param {string}       id    node's id
+   */
+  constructor(graph, id) {
     this.graph = graph;
     this.id = id;
     this.transformation = mat4.create();
@@ -24,29 +23,26 @@ class MyGraphNode {
   };
 
   /**
-  * Adds a child to the chidlren array
-  * @param {string} id id of the new child
-  */
-  addChild(id)
-  {
+   * Adds a child to the chidlren array
+   * @param {string} id id of the new child
+   */
+  addChild(id) {
     this.children.push(id);
   };
 
   /**
-  * Adds a primitive to the primitives array
-  * @param {string} id id of the new primitive
-  */
-  addPrimitive(id)
-  {
+   * Adds a primitive to the primitives array
+   * @param {string} id id of the new primitive
+   */
+  addPrimitive(id) {
     this.primitives.push(id);
   };
 
   /**
-  * Adds an animation to the animations array
-  * @param {string} id id of the new animation
-  */
-  addAnimation(id)
-  {
+   * Adds an animation to the animations array
+   * @param {string} id id of the new animation
+   */
+  addAnimation(id) {
     this.animations.push(id);
   };
 

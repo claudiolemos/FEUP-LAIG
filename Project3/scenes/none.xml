@@ -1,0 +1,126 @@
+<yas>
+  <scene root="root" axis_length="5"/>
+
+  <!--Views-->
+  <views default="neutral">
+    <perspective id="neutral" near="0.1" far="500" angle="23">
+      <from x="4.75" y="15" z="5"/>
+      <to x="5" y="2" z="5"/>
+    </perspective>
+    <perspective id="player1" near="0.1" far="500" angle="23">
+      <from x="5" y="10" z="0"/>
+      <to x="5" y="2" z="5"/>
+    </perspective>
+    <perspective id="top1" near="0.1" far="500" angle="23">
+      <from x="5" y="10" z="4.5"/>
+      <to x="5" y="2" z="5"/>
+    </perspective>
+    <perspective id="player2" near="0.1" far="500" angle="23">
+      <from x="5" y="10" z="10"/>
+      <to x="5" y="2" z="5"/>
+    </perspective>
+    <perspective id="top2" near="0.1" far="500" angle="23">
+      <from x="5" y="10" z="5.5"/>
+      <to x="5" y="2" z="5"/>
+    </perspective>
+  </views>
+
+  <!--Ambient-->
+
+  <ambient>
+    <ambient r="0.2" g="0.2" b="0.2" a="0.2"/>
+    <background r="0.05" g="0.05" b="0.05" a="1"/>
+  </ambient>
+
+  <!--Lights-->
+
+  <lights>
+    <omni id="1" enabled="1">
+      <location x="10" y="25" z="10" w="1"/>
+      <ambient r="0" g="0" b="0" a="1"/>
+      <diffuse r="0.75" g="0.75" b="0.75" a="1"/>
+      <specular r="0.5" g="0.5" b="0.5" a="1"/>
+    </omni>
+    <omni id="2" enabled="1">
+      <location x="0" y="0" z="0" w="1"/>
+      <ambient r="0" g="0" b="0" a="1"/>
+      <diffuse r="0.3" g="0.3" b="0.3" a="1"/>
+      <specular r="0.5" g="0.5" b="0.5" a="1"/>
+    </omni>
+    <omni id="3" enabled="1">
+      <location x="5" y="1.5" z="5" w="1"/>
+      <ambient r="0" g="0" b="0" a="1"/>
+      <diffuse r="0.5" g="0.5" b="0.5" a="1"/>
+      <specular r="0.5" g="0.5" b="0.5" a="1"/>
+    </omni>
+  </lights>
+
+  <!--Textures-->
+
+  <textures>
+    <texture id="wood" file="./images/wood.jpg"/>
+  </textures>
+
+  <!--Materials-->
+
+  <materials>
+    <material id="default" shininess="1">
+      <emission r="0" g="0" b="0" a="1"/>
+      <ambient r="0" g="0" b="0" a="1"/>
+      <diffuse r="1" g="1" b="1" a="1"/>
+      <specular r="0.25" g="0.25" b="0.25" a="1"/>
+    </material>
+  </materials>
+
+  <!--Transformations-->
+
+  <transformations>
+    <transformation id="transformation">
+      <translate x="0" y="0" z="0"/>
+    </transformation>
+  </transformations>
+
+  <!--Animations-->
+
+  <animations></animations>
+
+  <!--Primitives-->
+
+  <primitives>
+    <primitive id="hawalis">
+      <hawalis/>
+    </primitive>
+  </primitives>
+
+  <!--Components-->
+
+  <components>
+
+    <!--Root node-->
+
+    <component id="root">
+      <transformation></transformation>
+      <materials>
+        <material id="default"/>
+      </materials>
+      <texture id="wood" length_s="1" length_t="1"/>
+      <children>
+        <componentref id="hawalis"/>
+      </children>
+    </component>
+
+    <component id="hawalis">
+      <transformation>
+        <translate x="3.25" y="2" z="3.75"/>
+        <scale x="0.5" y="0.5" z="0.5"/>
+      </transformation>
+      <materials>
+        <material id="default"/>
+      </materials>
+      <texture id="wood" length_s="1" length_t="1"/>
+      <children>
+        <primitiveref id="hawalis"/>
+      </children>
+    </component>
+  </components>
+</yas>

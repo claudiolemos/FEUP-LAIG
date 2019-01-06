@@ -16,7 +16,7 @@ class XMLscene extends CGFscene {
     this.currentCamera;
     this.cameraAnimation = true;
     this.currentMaterial = 0;
-    this.showAxis = true;
+    this.showAxis = false;
     this.previous = -1;
     this.delta;
     this.paused = false;
@@ -75,7 +75,7 @@ class XMLscene extends CGFscene {
           this.lights[i].setSpotDirection(light.target.x - light.location.x, light.target.y - light.location.y, light.target.z - light.location.z);
         }
 
-        this.lights[i].setVisible(true);
+        this.lights[i].setVisible(false);
 
         if (light.enabled)
           this.lights[i].enable();
@@ -101,13 +101,14 @@ class XMLscene extends CGFscene {
     this.gl.clearColor(this.graph.background.r, this.graph.background.g, this.graph.background.b, this.graph.background.a);
 
     this.initLights();
-    this.currentScene = this.graph.filename.slice(0,-4);
+    this.currentScene = this.graph.filename.slice(0, -4);
+
+    // Adds game settings.
+    this.interface.addGameSettings();
 
     // Adds lights group.
     this.interface.addLightsGroup(this.graph.lights);
 
-    // Adds game settings.
-    this.interface.addGameSettings();
 
     // Adds views group.
     this.interface.addViews(this.graph.views);
@@ -163,7 +164,7 @@ class XMLscene extends CGFscene {
       for (var key in this.lightValues) {
         if (this.lightValues.hasOwnProperty(key)) {
           if (this.lightValues[key]) {
-            this.lights[i].setVisible(true);
+            this.lights[i].setVisible(false);
             this.lights[i].enable();
           } else {
             this.lights[i].setVisible(false);
@@ -220,12 +221,16 @@ class XMLscene extends CGFscene {
     this.previous = currTime;
   }
 
+  /**
+   * animates the camera until it reaches its final destination
+   * @param  {number} delta time in milliseconds since last update
+   */
   animateCamera(delta) {
     if (!this.animation.finished()) {
-      var pos = [this.animation.positionVelocity[0] * delta,this.animation.positionVelocity[1] * delta,this.animation.positionVelocity[2] * delta];
-      var dir = [this.animation.directionVelocity[0] * delta,this.animation.directionVelocity[1] * delta,this.animation.directionVelocity[2] * delta];
+      var pos = [this.animation.positionVelocity[0] * delta, this.animation.positionVelocity[1] * delta, this.animation.positionVelocity[2] * delta];
+      var dir = [this.animation.directionVelocity[0] * delta, this.animation.directionVelocity[1] * delta, this.animation.directionVelocity[2] * delta];
 
-      for(var i = 0; i < 3; i++){
+      for (var i = 0; i < 3; i++) {
         if (Math.abs(this.animation.currentPosition[i]) < Math.abs(this.animation.position[i])) {
           this.camera.position[i] += pos[i];
           this.animation.currentPosition[i] += pos[i];
@@ -237,12 +242,15 @@ class XMLscene extends CGFscene {
           this.animation.currentDirection[i] += dir[i];
         }
       }
-    }
-    else
+    } else
       this.animation = null;
   }
 
-  changeScene(filename){
+  /**
+   * changes the current scene
+   * @param  {string} filename name of the XML file of the next scene
+   */
+  changeScene(filename) {
     this.graph.changeScene = true;
     this.graph.reader.open('scenes/' + filename + '.xml', this.graph);
   }
